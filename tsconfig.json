@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -13,8 +18,61 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@data/*": [
+        "data/*"
+      ],
+      "@hook/*": [
+        "hooks/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@context/*": [
+        "contexts/*"
+      ],
+      "@reducer/*": [
+        "reducers/*"
+      ],
+      "@component/*": [
+        "components/*"
+      ],
+      "@sections/*": [
+        "page-sections/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@supabaseutils/*": [
+        "supabase/*"
+      ],
+      "@integrations/*": [
+        "integrations/*"
+      ],
+      "@routes/*": [
+        "routes/*"
+      ]
+    },
+    "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./src/components/icon/Icon.tsx",
+    "**/auth/confirm*"
+  ]
 }

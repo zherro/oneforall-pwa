@@ -1,10 +1,14 @@
+// components/layout.tsx
+import { ReactNode } from "react";
 import Head from "next/head";
-import "../styles/globals.css";
-import { AppProps } from "next/app";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
   return (
-    <>
+    <html>
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -32,7 +36,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
       </Head>
-      <Component {...pageProps} />
-    </>
+      <body>
+        <main>{children}</main>
+      </body>
+    </html>
   );
-}
+};
+
+export default Layout;
