@@ -1,6 +1,16 @@
 // components/layout.tsx
 import { ReactNode } from "react";
 import Head from "next/head";
+// THEME PROVIDER
+import StyledComponentsRegistry from "@lib/registry";
+// APP PROVIDER
+import { AppProvider } from "@context/app-context";
+import StyledContext from "@context/StyledContext";
+// import { ChakraProvider } from "@chakra-ui/react";
+import SupabaseProvider from "@supabaseutils/supabase.provider";
+import { Open_Sans } from "next/font/google";
+
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 interface LayoutProps {
   children: ReactNode;
@@ -36,8 +46,16 @@ const Layout = ({ children }: LayoutProps) => {
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
       </Head>
-      <body>
-        <main>{children}</main>
+      <body className={openSans.className}>
+        <StyledComponentsRegistry>
+          {/* <ChakraProvider> */}
+            <AppProvider>
+              <SupabaseProvider>
+                <StyledContext>{children}</StyledContext>
+              </SupabaseProvider>
+            </AppProvider>
+          {/* </ChakraProvider> */}
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
