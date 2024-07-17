@@ -62,14 +62,14 @@ export async function signup(formData: any) {
 
   const { data, error } = await supabase.auth.signUp(data1);
 
-  if (error) {
+  if (error && error?.code == 'user_already_exists') {
+    redirect(`/user-exists?email=${data1.email}`);
+  }else if (error) {
     LOG.debug("Signup error", error);
     redirect("/error");
-  } else if (data.user?.identities?.length === 0) {
-    
   }
 
-  console.log(error)
+  console.log(error);
 
   // const signUpUser = async () => {
   //   try {

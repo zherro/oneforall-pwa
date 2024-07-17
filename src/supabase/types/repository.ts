@@ -1,7 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@supabaseutils/utils/server";
 
-export default class SupabaseRepository {
+export default abstract class SupabaseRepository {
   protected supabase: SupabaseClient;
   protected TABLE: string;
 

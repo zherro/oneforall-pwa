@@ -1,8 +1,8 @@
 import Recovery from "@sections/auth/Recovery";
-import { signup } from "../actions";
+import { recovery } from "../actions-mailer";
 
 const RecoveryPassPage = () => {
-  return <Recovery formAction={signup} />;
+  return <Recovery formAction={recovery} />;
 };
 
 export default RecoveryPassPage;

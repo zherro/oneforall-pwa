@@ -63,7 +63,7 @@ export default function Recovery({ formAction }: { formAction: any }) {
           formAction={formAction}
           fullwidth
         >
-          Entrar
+          Enviar Pedido
         </Button>
 
         <FlexBox justifyContent="center" mb="1.25rem">
