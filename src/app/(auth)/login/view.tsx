@@ -8,26 +8,21 @@ import APP_ROUTES from "@routes/app.routes";
 import Login from "@sections/auth/Login";
 
 const metadata: Metadata = {
-  title: "Login - The Best React eCommerce Template",
-  description:
-    "Bonik is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store",
-  authors: [{ name: "UI-LIB", url: "https://ui-lib.com" }],
-  keywords: ["e-commerce", "e-commerce template", "next.js", "react", "bonik"]
+  title: `Login - ${process.env.APP_META_TITLE}`,
+  description: "Faça login para ter acesso a recursos incriveis.",
+  // authors: [{ name: "UI-LIB", url: "https://ui-lib.com" }],
+  // keywords: ["e-commerce", "e-commerce template", "next.js", "react", "bonik"],
 };
-
-
 
 export default function LoginView() {
   const { session } = useSession();
-  
+
   useEffect(() => {
-    if(session != null) redirect(APP_ROUTES.DASHBOARD.HOME);
+    if (session != null) redirect(APP_ROUTES.DASHBOARD.HOME);
   }, [session]);
- 
 
   return <Login formAction={login} />;
 }
-
 
 // import { login, signup } from './actions'
 

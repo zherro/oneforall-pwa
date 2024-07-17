@@ -175,7 +175,7 @@ export default function Login({ formAction }: { formAction: any }) {
 
       <FlexBox justifyContent="center" bg="gray.200" py="19px">
         <SemiSpan>Esqueceu sua senha?</SemiSpan>
-        <Link href="/">
+        <Link href={`/recovery?email=${values.email}`}>
           <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
             Recuperar Senha
           </H6>

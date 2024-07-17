@@ -1,4 +1,4 @@
-"use server";;
+"use server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -21,10 +21,10 @@ export async function login(formData: any) {
 
   if (error) {
     LOG.debug("Login error", error);
-    if(isAuthError(error)) {
-      redirect('/login?retry=true');
+    if (isAuthError(error)) {
+      redirect("/login?retry=true");
     } else {
-      redirect('/error');
+      redirect("/error");
     }
   }
 
@@ -55,40 +55,50 @@ export async function signup(formData: any) {
     password: formData.get("password"),
     options: {
       data: {
-        completed: false
-      }
-    }
+        completed: false,
+      },
+    },
   };
 
+  const { data, error } = await supabase.auth.signUp(data1);
 
-  const signUpUser = async () => {
-    try {
-      const response = await fetch('https://api.boracuiaba.com/auth/v1/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-        },
-        body: JSON.stringify(data1)
-      })
-  
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error_description || errorData.message)
-      }
-  
-      const data = await response.json()
-      console.log('User signed up:', data)
-    } catch (error) {
-      LOG.debug("Signup error", error);
-      redirect("/error");
-      console.error('Signup error:', error.message)
-    }
+  if (error) {
+    LOG.debug("Signup error", error);
+    redirect("/error");
+  } else if (data.user?.identities?.length === 0) {
+    
   }
-  
-  await signUpUser()
 
-  
+  console.log(error)
+
+  // const signUpUser = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+  //         },
+  //         body: JSON.stringify(data1),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error_description || errorData.message);
+  //     }
+
+  //     const data = await response.json();
+  //     console.log("User signed up:", data);
+  //   } catch (error) {
+  //     LOG.debug("Signup error", error);
+  //     redirect("/error");
+  //   }
+  // };
+
+  // await signUpUser();
 
   // const { error } = await supabase.auth.signUp(data);
 
