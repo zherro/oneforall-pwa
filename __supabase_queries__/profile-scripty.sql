@@ -76,5 +76,7 @@ CREATE TABLE public.profile_recovery (
 );
 
 
-create policy "Anyone can request recovery by email." on public.profile_recovery
-  for insert with check (true);
+alter table "profile_recovery" enable row level security;
+
+create policy "Anyone can get recovery by email." on "public"."profile_recovery" as permissive for insert to public with check (true);
+create policy "Anyone can request recovery by email." on "public"."profile_recovery" as permissive for select to public using (true);

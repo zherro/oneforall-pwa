@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -14,7 +14,7 @@ import { StyledRoot } from "./styles";
 export default function Recovery({ formAction }: { formAction: any }) {
   const query = useSearchParams();
 
-  const initialValues = { email: query.get("email") || ""};
+  const initialValues = { email: query.get("email") || "" };
 
   const formSchema = yup.object().shape({
     email: yup
@@ -27,12 +27,19 @@ export default function Recovery({ formAction }: { formAction: any }) {
     console.log(values);
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: formSchema,
-    });
+  const {
+    isValid,
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema: formSchema,
+  });
 
   return (
     <StyledRoot mx="auto" my="2rem" boxShadow="large" borderRadius={8}>
@@ -60,6 +67,7 @@ export default function Recovery({ formAction }: { formAction: any }) {
           mt="2rem"
           variant="contained"
           color="primary"
+          disabled={!isValid}
           formAction={formAction}
           fullwidth
         >

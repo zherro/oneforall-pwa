@@ -9,6 +9,7 @@ import StyledContext from "@context/StyledContext";
 // import { ChakraProvider } from "@chakra-ui/react";
 import SupabaseProvider from "@supabaseutils/supabase.provider";
 import { Open_Sans } from "next/font/google";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -48,13 +49,13 @@ const Layout = ({ children }: LayoutProps) => {
       </Head>
       <body className={openSans.className}>
         <StyledComponentsRegistry>
-          {/* <ChakraProvider> */}
+          <ChakraProvider>
             <AppProvider>
               <SupabaseProvider>
                 <StyledContext>{children}</StyledContext>
               </SupabaseProvider>
             </AppProvider>
-          {/* </ChakraProvider> */}
+          </ChakraProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

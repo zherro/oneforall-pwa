@@ -29,6 +29,7 @@ const nextConfig = {
     theme: "DEFAULT",
   },
   env: {
+    SITE_URI: 'http://localhost:3000',
     APP_META_TITLE: 'Bimo App',
     APP_NAME: "bony-clyde",
     APP_LANGUAGE: "portuguese", // portuguese, english

@@ -1,17 +1,19 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@supabaseutils/utils/server";
 
-export default abstract class SupabaseRepository {
+export default abstract class SupabaseRepository<T> {
   protected supabase: SupabaseClient;
   protected TABLE: string;
+  protected from;
 
   constructor(table: string, supabase?: SupabaseClient) {
     this.TABLE = table;
     this.supabase = supabase ? supabase : createClient();
+    this.from = this.supabase.from(this.TABLE);
   }
 
-  public save(entity: any) {
-    return this.supabase.from(this.TABLE).upsert(entity).select();
+  public save(entity: T) {
+    return this.supabase.from(this.TABLE).upsert(entity).select().single();
   }
 
   public findById(id: string) {

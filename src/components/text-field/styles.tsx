@@ -39,6 +39,7 @@ export const TextFieldWrapper = styled.div.withConfig({
 })<TextFieldProps & SpaceProps>(
   (props) =>
     (): any => systemCss({
+      display: props.display,
       position: "relative",
       width: props.fullwidth ? "100%" : "inherit",
 

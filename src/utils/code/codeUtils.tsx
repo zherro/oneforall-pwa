@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 
 export default class CodeUtils {
   /**
@@ -35,6 +36,43 @@ export default class CodeUtils {
   static uuid() {
     return uuidv4();
   }
+
+  /**
+   * Codifica uma string usando uma chave secreta.
+   * @param text - A string a ser codificada.
+   * @param secretKey - A chave secreta usada para codificar.
+   * @returns {string} A string codificada.
+   */
+  static encrypt(text: string, secretKey: string): string {
+    const iv = crypto.randomBytes(16); // Vetor de inicialização de 16 bytes
+    const key = crypto.createHash("sha256").update(secretKey).digest(); // Cria uma chave de 256 bits a partir da chave secreta
+
+    const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+    let encrypted = cipher.update(text, "utf8", "hex");
+    encrypted += cipher.final("hex");
+
+    return iv.toString("hex") + ":" + encrypted;
+  }
+
+  /**
+   * Descriptografa uma string usando uma chave secreta.
+   * @param encryptedText - A string codificada.
+   * @param secretKey - A chave secreta usada para descriptografar.
+   * @returns {string} A string descriptografada.
+   */
+  static decrypt(encryptedText: string, secretKey: string): string {
+    const textParts = encryptedText.split(":");
+    const iv = Buffer.from(textParts.shift()!, "hex"); // Extrai o IV do texto criptografado
+    const encryptedTextPart = textParts.join(":"); // Obtém a parte criptografada do texto
+
+    const key = crypto.createHash("sha256").update(secretKey).digest(); // Cria uma chave de 256 bits a partir da chave secreta
+
+    const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
+    let decrypted = decipher.update(encryptedTextPart, "hex", "utf8");
+    decrypted += decipher.final("utf8");
+
+    return decrypted;
+  }
 }
 
 const generateDigitsCode = (digits: number) =>
@@ -45,4 +83,9 @@ const generateCharacterCode = (digits: number) =>
 
 const getUuid = () => CodeUtils.uuid();
 
-export { getUuid, generateDigitsCode, generateCharacterCode };
+const encrypt = (text: string, secretKey: string): string =>
+  CodeUtils.encrypt(text, secretKey);
+const decrypt = (encryptedText: string, secretKey: string): string =>
+  CodeUtils.decrypt(encryptedText, secretKey);
+
+export { encrypt, decrypt, getUuid, generateDigitsCode, generateCharacterCode };

@@ -6,6 +6,11 @@ import { createClient } from "@supabaseutils/utils/server";
 import APP_ROUTES from "routes/app.routes";
 import { LOG } from "@utils/log";
 import { isAuthError } from "@supabase/supabase-js";
+import { sendEmailUseCase } from "@supabaseutils/use-cases/sendEmail.usecase";
+import { IngestionDataBuilder } from "@supabaseutils/use-cases/processor/ingestion-data";
+import { addCharacterAfterEach } from "@utils/helpers/String.utils";
+import ProfileRecoveryRepository from "@supabaseutils/repositories/profileRecovery.repository";
+import { generateCharacterCode, getUuid } from "@utils/code/codeUtils";
 
 export async function login(formData: any) {
   const supabase = createClient();
@@ -53,6 +58,7 @@ export async function signup(formData: any) {
   const data1 = {
     email: formData.get("email"),
     password: formData.get("password"),
+    email_confirm: false, // Certifique-se de desativar a confirmação de email
     options: {
       data: {
         completed: false,
@@ -62,14 +68,41 @@ export async function signup(formData: any) {
 
   const { data, error } = await supabase.auth.signUp(data1);
 
-  if (error && error?.code == 'user_already_exists') {
-    redirect(`/user-exists?email=${data1.email}`);
-  }else if (error) {
+  if (error && error.code == "user_already_exists") {
     LOG.debug("Signup error", error);
+    redirect("/user-exists");
+  } else if (error) {
     redirect("/error");
   }
 
-  console.log(error);
+  const repository = new ProfileRecoveryRepository();
+  const { data: data2, error: error1 } = await repository.save({
+    email: data1.email,
+    recovery_code: generateCharacterCode(6),
+    recovery_hash: getUuid(),
+  });
+
+  if (error1) {
+    LOG.debug("error", error1);
+    redirect(`/error`);
+  }
+
+  try {
+    await sendEmailUseCase(
+      IngestionDataBuilder.of()
+        .addInput({
+          email: formData.get("email"),
+          subject: "Seja Bem Vindo - BIMOAPP",
+          template: "recovery",
+          code: addCharacterAfterEach(data2?.recovery_code, " "),
+          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${data2?.recovery_code}&email=${formData.get("email")}`,
+        })
+        .build()
+    );
+  } catch (error) {
+    console.error(error);
+    redirect(`/error`);
+  }
 
   // const signUpUser = async () => {
   //   try {
