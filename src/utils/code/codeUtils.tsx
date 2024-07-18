@@ -21,7 +21,7 @@ export default class CodeUtils {
    * @returns {string} O código aleatório de 6 caracteres.
    */
   static generateCharacterCode(digits: number): string {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // abcdefghijklmnopqrstuvwxyz;
+    const characters = "BCDFGHIJKLMNPQRSTVWXYZ123456789"; // abcdefghijklmnopqrstuvwxyz;
     const charactersLength = characters.length;
     let result = "";
 

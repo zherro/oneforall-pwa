@@ -80,6 +80,7 @@ export async function signup(formData: any) {
     email: data1.email,
     recovery_code: generateCharacterCode(6),
     recovery_hash: getUuid(),
+    created_at: new Date(),
   });
 
   if (error1) {
@@ -93,7 +94,7 @@ export async function signup(formData: any) {
         .addInput({
           email: formData.get("email"),
           subject: "Seja Bem Vindo - BIMOAPP",
-          template: "recovery",
+          template: "signup",
           code: addCharacterAfterEach(data2?.recovery_code, " "),
           recoveryLink: `${process.env.SITE_URI}/reset-password?code=${data2?.recovery_code}&email=${formData.get("email")}`,
         })
@@ -141,5 +142,5 @@ export async function signup(formData: any) {
   // }
 
   revalidatePath("/", "layout");
-  redirect(APP_ROUTES.AUTH.LOGIN);
+  redirect(`/welcome?email=${data1.email}`);
 }

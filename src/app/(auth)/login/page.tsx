@@ -2,11 +2,7 @@ import { Suspense } from "react";
 import LoginView from "./view";
 
 const LoginPage = () => {
-  return (
-    <Suspense>
-      <LoginView />
-    </Suspense>
-  );
+  return <LoginView />;
 };
 
 export default LoginPage;

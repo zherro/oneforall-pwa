@@ -3,6 +3,7 @@
 import transporter from "@lib/nodemailer";
 import ProfileRecoveryRepository from "@supabaseutils/repositories/profileRecovery.repository";
 import { IngestionDataBuilder } from "@supabaseutils/use-cases/processor/ingestion-data";
+import { saveProfileRecoveryUsecase } from "@supabaseutils/use-cases/saveProfileRecovery.usecase";
 import { sendEmailUseCase } from "@supabaseutils/use-cases/sendEmail.usecase";
 import { generateCharacterCode, getUuid } from "@utils/code/codeUtils";
 import { addCharacterAfterEach } from "@utils/helpers/String.utils";
@@ -13,15 +14,22 @@ import { redirect } from "next/navigation";
 export async function recovery(formData: any) {
   const email = formData.get("email");
 
-  const repository = new ProfileRecoveryRepository();
-  const { data, error } = await repository.save({
-    email,
-    recovery_code: generateCharacterCode(6),
-    recovery_hash: getUuid(),
-  });
+  const result = await saveProfileRecoveryUsecase(
+    new IngestionDataBuilder()
+      .addInput({
+        email,
+        recovery_code: generateCharacterCode(6),
+        recovery_hash: getUuid(),
+      })
+      .build()
+  );
 
-  if (error) {
-    LOG.debug("error", error);
+  const output = result.output;
+
+  console.log(output)
+
+  if (output?.error) {
+    LOG.debug("error", output.error);
     redirect(`/error`);
   }
 
@@ -32,8 +40,8 @@ export async function recovery(formData: any) {
           email,
           subject: "Recupera Senha - BIMOAPP",
           template: "recovery",
-          code: addCharacterAfterEach(data?.recovery_code, " "),
-          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${data?.recovery_code}&email=${email}`,
+          code: addCharacterAfterEach(output.data?.recovery_code, " "),
+          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${output.data?.recovery_code}&email=${email}`,
         })
         .build()
     );

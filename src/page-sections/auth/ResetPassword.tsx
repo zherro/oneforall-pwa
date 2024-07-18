@@ -29,7 +29,18 @@ export default function ResetPassword({ formAction }: { formAction: any }) {
     re_password: "",
   };
 
+  const validatePass: any = hasToken
+    ? {
+        password: yup.string().required("Campo obrigatório"),
+        re_password: yup
+          .string()
+          .oneOf([yup.ref("password"), undefined], "A senhas devem ser iguais")
+          .required("Para continuar, digite a senha novamente"),
+      }
+    : {};
+
   const formSchema = yup.object().shape({
+    ...validatePass,
     email: yup
       .string()
       .email("Informe um email válido")
@@ -59,7 +70,7 @@ export default function ResetPassword({ formAction }: { formAction: any }) {
     <StyledRoot mx="auto" my="2rem" boxShadow="large" borderRadius={8}>
       <form className="content">
         <H3 textAlign="center" mb="2rem">
-          Redefinir Senha {"" + hasToken}
+          Redefinir Senha
         </H3>
 
         <TextField
@@ -97,12 +108,14 @@ export default function ResetPassword({ formAction }: { formAction: any }) {
           </HStack>
         </FlexBox>
 
+        <input type="hidden" id="code" name="code" value={values.code} />
+
         <TextField
           display={hasToken ? "block" : "none"}
           fullwidth
-          mb="0.75rem"
+          mb="1rem"
           name="password"
-          label="Senha"
+          label="Nova Senha"
           placeholder="*********"
           onBlur={handleBlur}
           value={values.password}

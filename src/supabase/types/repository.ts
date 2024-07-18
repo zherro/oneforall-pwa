@@ -13,7 +13,11 @@ export default abstract class SupabaseRepository<T> {
   }
 
   public save(entity: T) {
-    return this.supabase.from(this.TABLE).upsert(entity).select().single();
+    return this.saveAndFlush(entity).select().single();
+  }
+
+  public saveAndFlush(entity: T) {
+    return this.supabase.from(this.TABLE).upsert(entity);
   }
 
   public findById(id: string) {
