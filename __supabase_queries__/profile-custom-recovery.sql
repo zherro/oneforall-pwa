@@ -15,6 +15,8 @@ CREATE TABLE public.profile_recovery (
 	recovery_hash varchar NOT NULL,
 	email varchar NOT NULL,
 	used_at timestamp NULL,
+	pass varchar NULL,
+	user_id uuid NULL,
 	CONSTRAINT profile_recovery_pkey PRIMARY KEY (id)
 );
 

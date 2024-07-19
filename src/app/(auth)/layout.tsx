@@ -1,13 +1,13 @@
-import { PropsWithChildren } from "react";
-import FlexBox from "@component/FlexBox";
 import SupabaseProvider from "@supabaseutils/supabase.provider";
+import AppLayout from "@component/layout/layout-1";
+// import SubFooter from "@component/footer/SubFooter";
 
-export default function Layout({ children }: PropsWithChildren) {
+export default function Layout({ children }) {
   return (
     <SupabaseProvider>
-      <FlexBox minHeight="100vh" alignItems="center" flexDirection="column" justifyContent="center">
+      <AppLayout>
         {children}
-      </FlexBox>
+      </AppLayout>
     </SupabaseProvider>
   );
 }
