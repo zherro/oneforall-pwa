@@ -76,6 +76,7 @@ export default function SupabaseProvider({
     };
   }, [router, supabase, session]);
 
+  console.log(path);
   return (
     <SupabaseContext.Provider value={{ supabase, session }}>
       <>{children}</>

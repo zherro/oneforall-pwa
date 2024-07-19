@@ -35,6 +35,10 @@ const nextConfig = {
     APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
 
+    // AUTH
+    APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO: "/minhaconta",
+    APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES: "/login,/signup",
+
     // trace log mode
     TRACE_MODE: "on", // on, off
 
