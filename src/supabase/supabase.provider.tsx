@@ -7,11 +7,9 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { usePathname, useRouter } from "next/navigation";
-import { Database } from "./database.type";
 import { createClient } from "./utils/client";
 import APP_ROUTES from "@routes/app.routes";
-import { isNull } from "@utils/objects";
-import { UserData } from "@models/user/UserData";
+import { UserData } from "./model/user/UserData";
 
 type MaybeSession = Session | UserData | null;
 
@@ -30,7 +28,7 @@ export default function SupabaseProvider({
   // session: MaybeSession
 }) {
   const supabaseClient = createClient();
-  const supabase = createClientComponentClient<Database>();
+  const supabase = createClientComponentClient<any>();
   const router = useRouter();
   const [session, setSession] = useState<any>(null);
   const [sessionUpdate, setSessionUpdate] = useState<any>(null);

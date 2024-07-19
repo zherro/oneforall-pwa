@@ -14,6 +14,8 @@ import StyledHeader from "./styles";
 import { useRouter } from "next/navigation";
 import APP_ROUTES from "@routes/app.routes";
 import { H1 } from "../Typography";
+import { useSession } from "@supabaseutils/supabase.provider";
+import { isAuthenticated } from "@utils/session";
 
 // ====================================================================
 type HeaderProps = { isFixed?: boolean; className?: string };
@@ -21,6 +23,7 @@ type HeaderProps = { isFixed?: boolean; className?: string };
 
 export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
   const { state } = useAppContext();
+  const { session } = useSession();
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const router = useRouter();
@@ -74,30 +77,36 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
         </FlexBox>
 
         <FlexBox className="header-right" alignItems="center">
-          <Link
-            href="#"
-            style={{ border: "1px solid #cdcdcd", borderRadius: 6 }}
-          >
-            <Button>Entrar</Button>
-          </Link>
-          <Link
-            href="#"
-            style={{
-              border: "1px solid #cdcdcd",
-              borderRadius: 6,
-              marginLeft: "1rem",
-            }}
-          >
-            <Button>Criar Conta</Button>
-          </Link>
-          <IconButton
-            onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}
-            ml="1rem"
-            bg="gray.200"
-            p="8px"
-          >
-            <Icon size="28px">user</Icon>
-          </IconButton>
+          {(!isAuthenticated(session) || false) && (
+            <>
+              <Link
+                href="/login"
+                style={{ border: "1px solid #cdcdcd", borderRadius: 6 }}
+              >
+                <Button>Entrar</Button>
+              </Link>
+              <Link
+                href="/signup"
+                style={{
+                  border: "1px solid #cdcdcd",
+                  borderRadius: 6,
+                  marginLeft: "1rem",
+                }}
+              >
+                <Button>Criar Conta</Button>
+              </Link>
+            </>
+          )}
+          {(isAuthenticated(session) || false) && (
+            <IconButton
+              onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}
+              ml="1rem"
+              bg="gray.200"
+              p="8px"
+            >
+              <Icon size="28px">user</Icon>
+            </IconButton>
+          )}
           {/* <Sidenav
             open={open}
             width={380}

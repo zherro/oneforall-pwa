@@ -66,7 +66,7 @@ const reducer = (state: InitialState, action: ActionType) => {
   }
 };
 
-export function AppProvider({ children }: PropsWithChildren) {
+export function AppProvider({ children }: PropsWithChildren<any>) {
   const router = useRouter()
   const toast = useToast()
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
