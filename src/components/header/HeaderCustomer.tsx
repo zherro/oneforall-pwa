@@ -97,7 +97,7 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
               </Link>
             </>
           )}
-          {(isAuthenticated(session) || false) && (
+          {isAuthenticated(session) && (
             <IconButton
               onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}
               ml="1rem"
@@ -115,6 +115,7 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
             toggleSidenav={toggleSidenav}>
             <MiniCart toggleSidenav={toggleSidenav} />
           </Sidenav> */}
+          { JSON.stringify(session)}
         </FlexBox>
       </Container>
     </StyledHeader>

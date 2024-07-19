@@ -39,9 +39,7 @@ export async function validateResetCredentials(formData: any) {
   }
 
   const token = encrypt(`${code + email}`, data[0]?.recovery_hash);
-  redirect(
-    `/reset-password?token=${token}&code=${code}&email=${email}`
-  );
+  redirect(`/reset-password?token=${token}&code=${code}&email=${email}`);
 }
 
 export async function updatePassword(formData: any) {
@@ -59,7 +57,6 @@ export async function updatePassword(formData: any) {
   // Calcula a data e hora que representa 6 horas atrás
   const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
 
-  console.log(data)
   if (
     error ||
     !data ||
@@ -89,5 +86,5 @@ export async function updatePassword(formData: any) {
   }
 
   revalidatePath("/", "layout");
-  // redirect(`/login`);
+  redirect(`/login`);
 }

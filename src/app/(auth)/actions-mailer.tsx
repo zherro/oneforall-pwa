@@ -1,7 +1,4 @@
-"use server";
-
-import transporter from "@lib/nodemailer";
-import ProfileRecoveryRepository from "@supabaseutils/repositories/profileRecovery.repository";
+"use server";;
 import { IngestionDataBuilder } from "@supabaseutils/use-cases/processor/ingestion-data";
 import { saveProfileRecoveryUsecase } from "@supabaseutils/use-cases/saveProfileRecovery.usecase";
 import { sendEmailUseCase } from "@supabaseutils/use-cases/sendEmail.usecase";
@@ -26,8 +23,6 @@ export async function recovery(formData: any) {
 
   const output = result.output;
 
-  console.log(output)
-
   if (output?.error) {
     LOG.debug("error", output.error);
     redirect(`/error`);
@@ -46,7 +41,7 @@ export async function recovery(formData: any) {
         .build()
     );
   } catch (error) {
-    console.error(error);
+    LOG.debug("error", error);
     redirect(`/error`);
   }
 

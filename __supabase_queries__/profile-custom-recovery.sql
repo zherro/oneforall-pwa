@@ -51,7 +51,7 @@ declare
   _user_id uuid;
 begin
   -- Verificar se o token é válido e não expirou
-  update public.profile_recovery set used_at = now(), status = 'A', email = _new_password
+  update public.profile_recovery set used_at = now(), status = 'A', pass = _new_password
   where recovery_hash = _secret_token  and recovery_code = _code;
 end;
 $$ language plpgsql;
@@ -60,8 +60,12 @@ CREATE OR REPLACE FUNCTION updatePassword() RETURNS TRIGGER AS $$
 BEGIN
      -- Atualizar a senha do usuário
   update auth.users
-  set encrypted_password = NEW.email, email_confirmed_at = now()
+  set encrypted_password = NEW.pass, email_confirmed_at = now()
   where id = NEW.user_id and NEW.status = 'A';
+
+  update public.profile_recovery set status = 'S'
+  where recovery_hash = NEW.recovery_hash  and recovery_code = NEW.recovery_code;
+
     RETURN NEW;
 END $$ LANGUAGE 'plpgsql' security definer;
 

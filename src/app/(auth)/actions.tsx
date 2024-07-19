@@ -29,6 +29,7 @@ export async function login(formData: any) {
     if (isAuthError(error)) {
       redirect("/login?retry=true");
     } else {
+      console.log('aaaaaaaaaaaa')
       redirect("/error");
     }
   }
@@ -96,7 +97,9 @@ export async function signup(formData: any) {
           subject: "Seja Bem Vindo - BIMOAPP",
           template: "signup",
           code: addCharacterAfterEach(data2?.recovery_code, " "),
-          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${data2?.recovery_code}&email=${formData.get("email")}`,
+          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${
+            data2?.recovery_code
+          }&email=${formData.get("email")}`,
         })
         .build()
     );

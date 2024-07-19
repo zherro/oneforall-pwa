@@ -18,7 +18,6 @@ export default class SaveProfileRecoveryUsecase extends UnitProcessor<any> {
 
     const { data: dataUser } = await profileRepository.getByEmail(entity.email);
 
-    console.log(entity.email);
     if (
       ObjectUtils.isNull(dataUser) ||
       dataUser.length <= 0 ||

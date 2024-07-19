@@ -16,7 +16,6 @@ type MaybeSession = Session | UserData | null;
 type Context = {
   supabase: SupabaseClient<any, string>;
   session: MaybeSession;
-  sessionUpdate: Date | null;
 };
 
 export const SupabaseContext = createContext<Context | undefined>(undefined);
@@ -31,42 +30,26 @@ export default function SupabaseProvider({
   const supabase = createClientComponentClient<any>();
   const router = useRouter();
   const [session, setSession] = useState<any>(null);
-  const [sessionUpdate, setSessionUpdate] = useState<any>(null);
 
   const [changeView, setView] = useState("");
   const path: any = usePathname();
 
-  useEffect(() => {
-    if (session == null) setSessionUpdate(null);
-  }, [session]);
+  supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
+    await setSession(sessionNew);
+  });
 
   useEffect(() => {
-    async () => {
+    const run = async () => {
       const sessionNew: any = await supabaseClient.auth.getUser();
-
-      let updateDate: any =
-        sessionUpdate != null && session == null && session != sessionNew
-          ? null
-          : new Date();
       await setSession(sessionNew);
-      await setSessionUpdate(updateDate);
     };
 
-    supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
-      let updateDate =
-        sessionUpdate != null && sessionNew == null && session != sessionNew
-          ? null
-          : new Date();
-      await setSession(sessionNew);
-      await setSessionUpdate(updateDate);
-    });
+    run();
   }, [changeView]);
 
-  useEffect(() => {
-    if (path != changeView) {
-      setView(path);
-    }
-  }, [path]);
+  if (path != changeView) {
+    setView(path);
+  }
 
   useEffect(() => {
     const {
@@ -85,7 +68,7 @@ export default function SupabaseProvider({
   }, [router, supabase, session]);
 
   return (
-    <SupabaseContext.Provider value={{ supabase, session, sessionUpdate }}>
+    <SupabaseContext.Provider value={{ supabase, session }}>
       <>{children}</>
     </SupabaseContext.Provider>
   );
@@ -136,18 +119,17 @@ export const AuthGuard = ({ children }) => {
 };
 
 export function SupabaseAuthGuard({ children }: { children: React.ReactNode }) {
-  const { session, sessionUpdate } = useSession();
+  const { session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     console.log("session", session);
-    console.log("sessionUpdate", sessionUpdate);
 
-    if (session == null && sessionUpdate != null) {
+    if (session == null) {
       console.log("asasdasdadadasdad");
       router.push("/login");
     }
-  }, [session, sessionUpdate]);
+  }, [session]);
 
   return (session == null && <>Ta indo</>) || <>{children}</>;
 }
@@ -174,5 +156,5 @@ export const useSession = () => {
     throw new Error("useSession must be used inside SupabaseProvider");
   }
 
-  return { session: context.session, sessionUpdate: context.sessionUpdate };
+  return { session: context.session };
 };
