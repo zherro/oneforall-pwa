@@ -10,6 +10,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "./utils/client";
 import APP_ROUTES from "@routes/app.routes";
 import { UserData } from "./model/user/UserData";
+import SessionUtils from "./session";
+import ObjectUtils from "@utils/helpers/Object.utils";
 
 type MaybeSession = Session | UserData | null;
 
@@ -34,9 +36,10 @@ export default function SupabaseProvider({
   const [changeView, setView] = useState("");
   const path: any = usePathname();
 
-  supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
-    await setSession(sessionNew);
-  });
+  // POR AlGUM MOTIVO FICA SETANDO A O SESSION PRA null - nunca mecha
+  // supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
+  //   await setSession(sessionNew);
+  // });
 
   useEffect(() => {
     const run = async () => {
@@ -50,6 +53,12 @@ export default function SupabaseProvider({
   if (path != changeView) {
     setView(path);
   }
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+      setSession(null);
+    }
+  });
 
   useEffect(() => {
     const {
@@ -152,9 +161,23 @@ export const useSupabase = <
 export const useSession = () => {
   let context = useContext(SupabaseContext);
 
+  const [session, setSession] = useState<SessionUtils>();
+
+  useEffect(() => {
+    if (context != undefined && ObjectUtils.nonNull(context?.session)) {
+      setSession(new SessionUtils(context.session));
+    } else {
+      setSession(undefined);
+    }
+  }, [context, context?.session]);
+
   if (context === undefined) {
     throw new Error("useSession must be used inside SupabaseProvider");
   }
 
-  return { session: context.session };
+  return {
+    session: session?.getUser(),
+    tenant: session?.getTenant(),
+    isAuthenticated: session?.isAuthenticated(),
+  };
 };

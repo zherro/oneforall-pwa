@@ -15,15 +15,16 @@ import { useRouter } from "next/navigation";
 import APP_ROUTES from "@routes/app.routes";
 import { H1 } from "../Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
-import { isAuthenticated } from "@utils/session";
+import { logout } from "app/(auth)/actions";
 
 // ====================================================================
 type HeaderProps = { isFixed?: boolean; className?: string };
 // =====================================================================
 
 export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
+  const signout: any = logout;
   const { state } = useAppContext();
-  const { session } = useSession();
+  const { isAuthenticated } = useSession();
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const router = useRouter();
@@ -55,7 +56,10 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
   );
 
   return (
-    <StyledHeader className={className}>
+    <StyledHeader
+      className={className}
+      // style={{ boxShadow: "rgb(51, 51, 51) 0px -20px 11px 15px" }}
+    >
       <Container
         display="flex"
         alignItems="center"
@@ -77,7 +81,7 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
         </FlexBox>
 
         <FlexBox className="header-right" alignItems="center">
-          {(!isAuthenticated(session) || false) && (
+          {(!isAuthenticated || false) && (
             <>
               <Link
                 href="/login"
@@ -97,15 +101,25 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
               </Link>
             </>
           )}
-          {isAuthenticated(session) && (
-            <IconButton
-              onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}
-              ml="1rem"
-              bg="gray.200"
-              p="8px"
-            >
-              <Icon size="28px">user</Icon>
-            </IconButton>
+          {isAuthenticated && (
+            <>
+              <IconButton
+                onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}
+                ml="1rem"
+                bg="gray.200"
+                p="8px"
+              >
+                <Icon size="28px">user</Icon>
+              </IconButton>
+              <form>
+                <Button color="error" formAction={signout}>
+                  Sair{" "}
+                  <Icon size="1rem" ml="0.75rem">
+                    fa/solid/arrow-right-from-bracket
+                  </Icon>
+                </Button>
+              </form>
+            </>
           )}
           {/* <Sidenav
             open={open}
@@ -115,7 +129,6 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
             toggleSidenav={toggleSidenav}>
             <MiniCart toggleSidenav={toggleSidenav} />
           </Sidenav> */}
-          { JSON.stringify(session)}
         </FlexBox>
       </Container>
     </StyledHeader>

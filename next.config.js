@@ -29,19 +29,19 @@ const nextConfig = {
     theme: "DEFAULT",
   },
   env: {
+    // APP CONFIG
     SITE_URI: 'http://localhost:3000',
     APP_META_TITLE: 'Bimo App',
-    APP_NAME: "bony-clyde",
+    APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
 
-    // log mode
-    TRACE_MODE: "on",
+    // trace log mode
+    TRACE_MODE: "on", // on, off
 
     // SUPABASE
     NEXT_PUBLIC_SUPABASE_URL: "http://localhost:8000",
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
-
 
     // EMAIL SENDER
     EMAIL_USER: 'one.4.all.bmo@gmail.com',

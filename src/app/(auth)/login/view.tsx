@@ -1,10 +1,6 @@
 "use client";
 import type { Metadata } from "next";
 import { login } from "../actions";
-import { useEffect } from "react";
-import { useSession } from "@supabaseutils/supabase.provider";
-import { redirect } from "next/navigation";
-import APP_ROUTES from "@routes/app.routes";
 import Login from "@sections/auth/Login";
 
 const metadata: Metadata = {
@@ -15,11 +11,11 @@ const metadata: Metadata = {
 };
 
 export default function LoginView() {
-  const { session } = useSession();
+  // const { isAuthenticated } = useSession();
 
-  useEffect(() => {
-    if (session != null) redirect(APP_ROUTES.DASHBOARD.HOME);
-  }, [session]);
+  // useEffect(() => {
+  //   if (isAuthenticated) redirect(APP_ROUTES.DASHBOARD.HOME);
+  // }, [isAuthenticated]);
 
   return <Login formAction={login} />;
 }
