@@ -31,10 +31,8 @@ export default function SupabaseProvider({
   const supabaseClient = createClient();
   const supabase = createClientComponentClient<any>();
   const router = useRouter();
-  const [session, setSession] = useState<any>(null);
-
-  const [changeView, setView] = useState("");
   const path: any = usePathname();
+  const [session, setSession] = useState<any>(null);
 
   // POR AlGUM MOTIVO FICA SETANDO A O SESSION PRA null - nunca mecha
   // supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
@@ -42,17 +40,15 @@ export default function SupabaseProvider({
   // });
 
   useEffect(() => {
-    const run = async () => {
-      const sessionNew: any = await supabaseClient.auth.getUser();
-      await setSession(sessionNew);
+    const fetchSession = async () => {
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+      setSession(user);
     };
 
-    run();
-  }, [changeView]);
-
-  if (path != changeView) {
-    setView(path);
-  }
+    fetchSession();
+  }, []);
 
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_OUT") {
@@ -65,18 +61,33 @@ export default function SupabaseProvider({
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_, _session) => {
       if (_session?.access_token !== session?.access_token) {
-        try {
-          router.refresh();
-        } catch (ex: any) {}
+        // CUIDADO - refresh infinito
+        router.refresh();
       }
     });
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
-  }, [router, supabase, session]);
+  }, [path, createClient]);
 
-  console.log(path);
+  useEffect(() => {
+    const paths = (
+      process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
+    ).split(",");
+    const sessionUtils = new SessionUtils(session);
+
+    if (paths.includes(path) && sessionUtils.isAuthenticated()) {
+      if (sessionUtils.isConfirmed()) {
+        router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
+      } else {
+        router.push("profile");
+      }
+    }
+  }, [path, session]);
+
   return (
     <SupabaseContext.Provider value={{ supabase, session }}>
       <>{children}</>
