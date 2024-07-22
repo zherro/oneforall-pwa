@@ -16,6 +16,9 @@ import APP_ROUTES from "@routes/app.routes";
 import { H1 } from "../Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
 import { logout } from "app/(auth)/actions";
+import Sidenav from "@component/sidenav/Sidenav";
+import useWindowSize from "@hook/useWindowSize";
+import { DashboardNavigationMenu } from "@component/layout/DashboardNavigation";
 
 // ====================================================================
 type HeaderProps = { isFixed?: boolean; className?: string };
@@ -28,6 +31,9 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const router = useRouter();
+
+  const width: any = useWindowSize();
+  const isTablet = width < 1025;
 
   const CART_HANDLE = (
     <Box ml="20px" position="relative">
@@ -70,7 +76,7 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
           <Link href="/">
             <Image
               style={{ maxWidth: "120px", marginLeft: "15px" }}
-              src="/assets/images/logo-bora-cuiaba.png"
+              src="/assets/images/logo.png"
               alt="logo"
             />
           </Link>
@@ -111,14 +117,30 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
               >
                 <Icon size="28px">user</Icon>
               </IconButton>
-              <form>
-                <Button color="error" formAction={signout}>
-                  Sair{" "}
-                  <Icon size="1rem" ml="0.75rem">
-                    fa/solid/arrow-right-from-bracket
-                  </Icon>
-                </Button>
-              </form>
+              {!isTablet && (
+                <form>
+                  <Button color="error" formAction={signout}>
+                    Sair{" "}
+                    <Icon size="1rem" ml="0.75rem">
+                      fa/solid/arrow-right-from-bracket
+                    </Icon>
+                  </Button>
+                </form>
+              )}
+              {isTablet && (
+                <Sidenav
+                  open={open}
+                  position="left"
+                  toggleSidenav={toggleSidenav}
+                  handle={
+                    <IconButton onClick={() => toggleSidenav()} mx="1rem">
+                      <Icon>menu</Icon>
+                    </IconButton>
+                  }
+                >
+                  <DashboardNavigationMenu />
+                </Sidenav>
+              )}
             </>
           )}
           {/* <Sidenav

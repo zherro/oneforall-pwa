@@ -81,6 +81,7 @@ export default function ProfileEditForm({
       await supabase.auth.updateUser({
         data: {
           completed: true,
+          first_name: values.full_name.split(" ")[0],
         },
       });
 

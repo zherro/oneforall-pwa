@@ -3,7 +3,7 @@ import Box from "@component/Box";
 import { Button } from "@component/buttons";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
-import { H2, H3, H4, SemiSpan } from "@component/Typography";
+import { H2, H3, SemiSpan } from "@component/Typography";
 import { useLaraTheme } from "@context/app-context/AppContext";
 import styled from "styled-components";
 
