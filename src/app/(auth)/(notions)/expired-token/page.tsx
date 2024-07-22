@@ -1,12 +1,17 @@
 "use server";
 import Box from "@component/Box";
+import FlexBox from "@component/FlexBox";
 import Typography, { H2 } from "@component/Typography";
+import Icon from "@component/icon/Icon";
 import Link from "next/link";
 
 const WelcomeSended = async () => {
   return (
     <>
       <Box textAlign="center">
+        <FlexBox justifyContent="center">
+          <Icon size="260px">story-set/Search-amico</Icon>
+        </FlexBox>
         <H2 fontWeight="600">
           Oops! O código de validação é inválido ou expirou.
         </H2>

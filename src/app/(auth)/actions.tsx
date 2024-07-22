@@ -10,7 +10,7 @@ import { sendEmailUseCase } from "@supabaseutils/use-cases/sendEmail.usecase";
 import { IngestionDataBuilder } from "@supabaseutils/use-cases/processor/ingestion-data";
 import { addCharacterAfterEach } from "@utils/helpers/String.utils";
 import ProfileRecoveryRepository from "@supabaseutils/repositories/profileRecovery.repository";
-import { generateCharacterCode, getUuid } from "@utils/code/codeUtils";
+import { encrypt, generateCharacterCode, getUuid } from "@utils/code/codeUtils";
 
 export async function login(formData: any) {
   const supabase = createClient();
@@ -29,7 +29,6 @@ export async function login(formData: any) {
     if (isAuthError(error)) {
       redirect("/login?retry=true");
     } else {
-      console.log('aaaaaaaaaaaa')
       redirect("/error");
     }
   }
@@ -90,6 +89,11 @@ export async function signup(formData: any) {
   }
 
   try {
+    const token = encrypt(
+      `${data2?.recovery_code + data1.email}`,
+      data2?.recovery_hash
+    );
+
     await sendEmailUseCase(
       IngestionDataBuilder.of()
         .addInput({
@@ -97,7 +101,9 @@ export async function signup(formData: any) {
           subject: "Seja Bem Vindo - BIMOAPP",
           template: "signup",
           code: addCharacterAfterEach(data2?.recovery_code, " "),
-          recoveryLink: `${process.env.SITE_URI}/reset-password?code=${
+          recoveryLink: `${
+            process.env.SITE_URI
+          }/confirm-email?token=${token}&code=${
             data2?.recovery_code
           }&email=${formData.get("email")}`,
         })
@@ -144,6 +150,8 @@ export async function signup(formData: any) {
   //   redirect("/error");
   // }
 
+  await supabase.auth.signOut();
+
   revalidatePath("/", "layout");
   redirect(`/welcome?email=${data1.email}`);
 }
@@ -163,4 +171,3 @@ export async function logout() {
   revalidatePath("/", "layout");
   redirect("/login");
 }
-

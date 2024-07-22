@@ -40,14 +40,14 @@ export default function SupabaseProvider({
   //   await setSession(sessionNew);
   // });
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-      setSession(user);
-    };
+  const fetchSession = async () => {
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    setSession(user);
+  };
 
+  useEffect(() => {
     fetchSession();
   }, []);
 
@@ -59,6 +59,7 @@ export default function SupabaseProvider({
 
   useEffect(() => {
     if (path != lastPath) {
+      fetchSession();
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((_, _session) => {
@@ -99,7 +100,7 @@ export default function SupabaseProvider({
 export const AuthGuard = ({ skelecton, children }) => {
   const router = useRouter();
   const supabase = useSupabase();
-  const { signature, isAuthenticated, isCompleted } = useSession();
+  const { isAuthenticated } = useSession();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [auth, setAuth] = useState<boolean>(false);
@@ -124,18 +125,25 @@ export const AuthGuard = ({ skelecton, children }) => {
   };
 
   useEffect(() => {
-    validateAutorizedsPaths(
-      signature || "none",
-      isAuthenticated || false,
-      isCompleted || false,
-      path,
-      router
-    );
-    if (isAuthenticated == true) {
-      setLoading(false);
-      setAuth(true);
-    }
-  }, [isAuthenticated]);
+    const supabaseClient = createClient();
+
+    const validate = async () => {
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+
+      const sUser = new SessionUtils(user);
+
+      if (sUser.isAuthenticated() == true) {
+        setLoading(false);
+        setAuth(true);
+      } else {
+        router.push("/login");
+      }
+    };
+
+    validate();
+  }, []);
 
   return loading ? skelecton : children;
 };

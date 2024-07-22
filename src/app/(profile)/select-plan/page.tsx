@@ -30,7 +30,7 @@ const ChoseYourPlan = () => {
             flexDirection="column"
             mx="0.75rem"
           >
-            <H2>Escolha um PLANO para começar agora mesmo!</H2>
+            <H2 mt="2rem" mb="1rem">Escolha um PLANO para começar agora mesmo!</H2>
             <ChoseBox>
               <H3>Gratuito</H3>
               <SemiSpan>

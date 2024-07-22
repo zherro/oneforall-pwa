@@ -21,7 +21,7 @@ export default function ShopLayout({ navbar, fluidHeader, children }: Props) {
         <HeaderCustomer fluid={fluidHeader} />
       </Sticky>
 
-      <div style={{ width: "100%", minHeight: "85vh" }}>{children}</div>
+      <div style={{ width: "100%", minHeight: "80vh" }}>{children}</div>
 
       <Footer3 />
     </StyledAppLayout>

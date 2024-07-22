@@ -46,7 +46,7 @@ export default function Login({ formAction }: { formAction: any }) {
     });
 
   return (
-    <StyledRoot mx="auto" my="2rem" boxShadow="large" borderRadius={8}>
+    <StyledRoot mx="auto" my="4rem" boxShadow="large" borderRadius={8}>
       <form className="content">
         <H3 textAlign="center" mb="2.5rem">
           Seja bem vindo 🥳

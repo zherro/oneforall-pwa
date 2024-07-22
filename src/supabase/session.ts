@@ -13,7 +13,7 @@ export default class SessionUtils {
     return (
       ObjectUtils.nonNull(this.session) &&
       this.session?.aud == "authenticated" &&
-      ObjectUtils.nonNull(this.session?.email_confirmed_at) &&
+      // ObjectUtils.nonNull(this.session?.email_confirmed_at) &&
       this.session?.is_anonymous == false
     );
   }
