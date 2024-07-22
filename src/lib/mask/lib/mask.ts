@@ -1,5 +1,5 @@
 /* eslint-disable no-confusing-arrow */
-import Objects from "@utils/objects";
+import ObjectUtils from "@utils/helpers/Object.utils";
 import toPattern from "./toPattern";
 
 /**
@@ -102,9 +102,9 @@ function maskMoney(value: string | number, pattern: string, options?: any): stri
   for (let i = 0; i < revv.length; i++) {
     if(revp[auxIndx] == '9') {
       formattedValue += revv[i];
-    } else if(Objects.isNull(revp[auxIndx]) && unlimitedPattern) {
+    } else if(ObjectUtils.isNull(revp[auxIndx]) && unlimitedPattern) {
       formattedValue += revv[i];
-    } else if(Objects.nonNull(revp[auxIndx])) {
+    } else if(ObjectUtils.nonNull(revp[auxIndx])) {
       formattedValue += revp[auxIndx] + revv[i];
       auxIndx++;
     }

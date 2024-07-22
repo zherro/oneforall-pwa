@@ -1,6 +1,8 @@
+import { CompanyTenantyDTO } from "../dto/CompanyTenanty.dto";
 import { StatusEntity } from "../types/Status.type";
 
 export interface UserData {
+  id?: string;
   sub: string;
   email: string;
   tenant: {
@@ -14,4 +16,13 @@ export interface UserData {
   completed: boolean;
   email_verified: boolean;
   phone_verified: boolean;
+}
+
+export interface UserMetaData {
+      completed: boolean;
+      email: string;
+      email_verified:boolean;
+      phone_verified:boolean;
+      sub: string;
+      tenant: CompanyTenantyDTO
 }

@@ -30,14 +30,16 @@ const nextConfig = {
   },
   env: {
     // APP CONFIG
-    SITE_URI: 'http://localhost:3000',
-    APP_META_TITLE: 'Bimo App',
+    SITE_URI: "http://localhost:3000",
+    APP_META_TITLE: "Bimo App",
     APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
 
     // AUTH
     APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO: "/minhaconta",
     APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES: "/login,/signup",
+
+    APP_REDIRECT_AFTERPROFILE_COMPLETED: "/select-plan",
 
     // trace log mode
     TRACE_MODE: "on", // on, off
@@ -48,8 +50,8 @@ const nextConfig = {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
 
     // EMAIL SENDER
-    EMAIL_USER: 'one.4.all.bmo@gmail.com',
-    EMAIL_PASS: 'hobhmejwmfditwme',
+    EMAIL_USER: "one.4.all.bmo@gmail.com",
+    EMAIL_PASS: "hobhmejwmfditwme",
 
     // S3 BUCKET
     S3_BUKET_NAME: "gathu-cuiaba",

@@ -1,5 +1,6 @@
 import { CompanyTenantyDTO } from "@supabaseutils/model/dto/CompanyTenanty.dto";
 import ObjectUtils from "../utils/helpers/Object.utils";
+import { UserMetaData } from "./model/user/UserData";
 
 export default class SessionUtils {
   private session: any;
@@ -21,7 +22,7 @@ export default class SessionUtils {
   }
 
   getTenant(): CompanyTenantyDTO {
-    return this.session?.user_metadata?.tenant || {};
+    return this.userMetaData()?.tenant || {};
   }
 
   isConfirmed(): boolean {
@@ -29,6 +30,10 @@ export default class SessionUtils {
   }
 
   isCompleted(): boolean {
-    return ObjectUtils.nonNull(this.session?.email_confirmed_at);
+    return this.userMetaData()?.completed || false;
+  }
+
+  userMetaData(): UserMetaData {
+    return this.session?.user_metadata;
   }
 }

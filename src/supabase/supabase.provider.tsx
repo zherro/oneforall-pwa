@@ -33,6 +33,7 @@ export default function SupabaseProvider({
   const router = useRouter();
   const path: any = usePathname();
   const [session, setSession] = useState<any>(null);
+  const [lastPath, setLastPath] = useState<any>(null);
 
   // POR AlGUM MOTIVO FICA SETANDO A O SESSION PRA null - nunca mecha
   // supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
@@ -57,20 +58,23 @@ export default function SupabaseProvider({
   });
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, _session) => {
-      if (_session?.access_token !== session?.access_token) {
-        // CUIDADO - refresh infinito
-        router.refresh();
-      }
-    });
+    if (path != lastPath) {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_, _session) => {
+        if (_session?.access_token !== session?.access_token) {
+          // CUIDADO - refresh infinito
+          router.refresh();
+        }
+      });
 
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    };
+      setLastPath(path);
+      return () => {
+        if (subscription) {
+          subscription.unsubscribe();
+        }
+      };
+    }
   }, [path, createClient]);
 
   useEffect(() => {
@@ -79,11 +83,13 @@ export default function SupabaseProvider({
     ).split(",");
     const sessionUtils = new SessionUtils(session);
 
-    if (paths.includes(path) && sessionUtils.isAuthenticated()) {
-      if (sessionUtils.isConfirmed()) {
+    if (sessionUtils.isAuthenticated()) {
+      if (path == "/complete-your-profile" && sessionUtils.isCompleted()) {
+        router.push("/profile-completed");
+      } else if (!sessionUtils.isCompleted()) {
+        router.push("/complete-your-profile");
+      } else if (paths.includes(path)) {
         router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
-      } else {
-        router.push("profile");
       }
     }
   }, [path, session]);
@@ -191,5 +197,7 @@ export const useSession = () => {
     session: session?.getUser(),
     tenant: session?.getTenant(),
     isAuthenticated: session?.isAuthenticated(),
+    isConfirmed: session?.isConfirmed(),
+    isCompleted: session?.isCompleted(),
   };
 };
