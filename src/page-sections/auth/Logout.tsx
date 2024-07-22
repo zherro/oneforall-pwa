@@ -1,9 +1,12 @@
 import Box from "@component/Box";
 import { Button } from "@component/buttons";
+import Icon from "@component/icon/Icon";
+import { logout } from "app/(auth)/actions";
 import { useRouter } from "next/navigation";
 
 const LogoutButton = () => {
   const router = useRouter();
+  const signout: any = logout;
 
   const handleLogout = async () => {
     const res = await fetch("/api/logout", {
@@ -16,19 +19,24 @@ const LogoutButton = () => {
       console.error("Failed to logout");
     }
   };
-
   return (
     <Box minWidth="150px">
-      <Button
-        mr="auto"
-        ml="auto"
-        py="16px"
-        color="white"
-        backgroundColor="error.main"
-        onClick={() => handleLogout()}
-      >
-        Sair
-      </Button>
+      <form>
+        <Button
+          mr="auto"
+          ml="auto"
+          py="16px"
+          color="white"
+          backgroundColor="error.main"
+          formAction={signout}
+        >
+          Sair{" "}
+          <Icon size="1rem" ml="0.75rem">
+            fa/solid/arrow-right-from-bracket
+          </Icon>
+        </Button>
+      </form>
+      ;
     </Box>
   );
 };

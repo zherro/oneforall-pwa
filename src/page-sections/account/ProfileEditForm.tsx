@@ -92,6 +92,8 @@ export default function ProfileEditForm({
           description: "Perfil atualizado",
         },
       });
+      router.refresh();
+      router.push("/profile-completed")
     } catch (error) {
       dispatch({
         type: "NOTIFY",

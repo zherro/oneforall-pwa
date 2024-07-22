@@ -78,20 +78,14 @@ export default function SupabaseProvider({
   }, [path, createClient]);
 
   useEffect(() => {
-    const paths = (
-      process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
-    ).split(",");
     const sessionUtils = new SessionUtils(session);
-
-    if (sessionUtils.isAuthenticated()) {
-      if (path == "/complete-your-profile" && sessionUtils.isCompleted()) {
-        router.push("/profile-completed");
-      } else if (!sessionUtils.isCompleted()) {
-        router.push("/complete-your-profile");
-      } else if (paths.includes(path)) {
-        router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
-      }
-    }
+    validateAutorizedsPaths(
+      sessionUtils.signature(),
+      sessionUtils.isAuthenticated(),
+      sessionUtils.isCompleted(),
+      path,
+      router
+    );
   }, [path, session]);
 
   return (
@@ -102,11 +96,13 @@ export default function SupabaseProvider({
 }
 
 // authGuard.js
-export const AuthGuard = ({ children }) => {
+export const AuthGuard = ({ skelecton, children }) => {
   const router = useRouter();
   const supabase = useSupabase();
-  const session = supabase?.auth.getSession();
+  const { signature, isAuthenticated, isCompleted } = useSession();
+
   const [loading, setLoading] = useState<boolean>(true);
+  const [auth, setAuth] = useState<boolean>(false);
 
   const path: any = usePathname();
 
@@ -127,23 +123,44 @@ export const AuthGuard = ({ children }) => {
     setLoading(false);
   };
 
-  const validateSession = async () => {
-    const sessionValue = (await session)?.data?.session;
-    // console.log("session", sessionValue);
-    // Se não houver uma sessão de usuário, redirecione para a página de login
-    if (!sessionValue) {
-      router.replace("/login");
-    } else {
-      validateProfile();
-    }
-  };
-
   useEffect(() => {
-    validateSession();
-  }, []);
+    validateAutorizedsPaths(
+      signature || "none",
+      isAuthenticated || false,
+      isCompleted || false,
+      path,
+      router
+    );
+    if (isAuthenticated == true) {
+      setLoading(false);
+      setAuth(true);
+    }
+  }, [isAuthenticated]);
 
-  return children;
+  return loading ? skelecton : children;
 };
+
+function validateAutorizedsPaths(
+  signature: string,
+  isAuthenticated: boolean,
+  isCompleted: boolean,
+  path: any,
+  router
+) {
+  const paths = (
+    process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
+  ).split(",");
+
+  if (isAuthenticated) {
+    if (path == "/complete-your-profile" && isCompleted) {
+      router.push("/profile-completed");
+    } else if (!isCompleted) {
+      router.push("/complete-your-profile");
+    } else if (paths.includes(path)) {
+      router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
+    }
+  }
+}
 
 export function SupabaseAuthGuard({ children }: { children: React.ReactNode }) {
   const { session } = useSession();
@@ -177,6 +194,7 @@ export const useSupabase = <
 };
 
 export const useSession = () => {
+  const path = usePathname();
   let context = useContext(SupabaseContext);
 
   const [session, setSession] = useState<SessionUtils>();
@@ -187,16 +205,17 @@ export const useSession = () => {
     } else {
       setSession(undefined);
     }
-  }, [context, context?.session]);
+  }, [context?.session]);
 
   if (context === undefined) {
     throw new Error("useSession must be used inside SupabaseProvider");
   }
 
   return {
+    signature: session?.signature(),
     session: session?.getUser(),
     tenant: session?.getTenant(),
-    isAuthenticated: session?.isAuthenticated(),
+    isAuthenticated: session == undefined ? false : session?.isAuthenticated(),
     isConfirmed: session?.isConfirmed(),
     isCompleted: session?.isCompleted(),
   };

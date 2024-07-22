@@ -21,10 +21,14 @@ import useWindowSize from "@hook/useWindowSize";
 import { DashboardNavigationMenu } from "@component/layout/DashboardNavigation";
 
 // ====================================================================
-type HeaderProps = { isFixed?: boolean; className?: string };
+type HeaderProps = { isFixed?: boolean; fluid?: boolean; className?: string };
 // =====================================================================
 
-export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
+export default function HeaderCustomer({
+  isFixed,
+  fluid,
+  className,
+}: HeaderProps) {
   const signout: any = logout;
   const { state } = useAppContext();
   const { isAuthenticated } = useSession();
@@ -33,7 +37,7 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
   const router = useRouter();
 
   const width: any = useWindowSize();
-  const isTablet = width < 1025;
+  const isTablet = width < 1125;
 
   const CART_HANDLE = (
     <Box ml="20px" position="relative">
@@ -64,13 +68,14 @@ export default function HeaderCustomer({ isFixed, className }: HeaderProps) {
   return (
     <StyledHeader
       className={className}
-      // style={{ boxShadow: "rgb(51, 51, 51) 0px -20px 11px 15px" }}
+      style={{ boxShadow: "rgb(51, 51, 51) 0px -20px 11px 15px" }}
     >
       <Container
         display="flex"
         alignItems="center"
         justifyContent="space-between"
         height="100%"
+        fluid={fluid || false}
       >
         <FlexBox className="logo" alignItems="center" mr="1rem">
           <Link href="/">

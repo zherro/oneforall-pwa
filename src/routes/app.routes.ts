@@ -1,3 +1,5 @@
+const dashboard = "/minhaconta";
+
 const APP_ROUTES = {
   CONTACT_US: "/contato",
   CONTACT_RECEIVED: "/contato/recebido",
@@ -14,12 +16,8 @@ const APP_ROUTES = {
   },
 
   DASHBOARD: {
-    HOME: "/minhaconta",
-    CATEGORY_NEW: "/minhaconta/categories/form",
-    CATEGORY_LIST: "/minhaconta/categories",
-    POST_LIST: "/minhaconta/articles",
-    POST_NEW: "/minhaconta/articles/form",
-    POST_SELECT_TYPE: "/minhaconta/articles/select-type",
+    HOME: dashboard,
+    PROFILE: `${dashboard}/profile`
   },
 };
 

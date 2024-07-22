@@ -19,10 +19,11 @@ export interface UserData {
 }
 
 export interface UserMetaData {
-      completed: boolean;
-      email: string;
-      email_verified:boolean;
-      phone_verified:boolean;
-      sub: string;
-      tenant: CompanyTenantyDTO
+  signature: string;
+  completed: boolean;
+  email: string;
+  email_verified: boolean;
+  phone_verified: boolean;
+  sub: string;
+  tenant: CompanyTenantyDTO;
 }

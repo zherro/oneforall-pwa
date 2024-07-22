@@ -17,12 +17,16 @@ import styled from "styled-components";
 import { isValidProp } from "@utils/utils";
 import { layoutConstant } from "@utils/constants";
 
+interface ContainerProps {
+  fluid: boolean;
+}
+
 const Container = styled.div.withConfig({
   shouldForwardProp: (prop: string) => isValidProp(prop)
-})<LayoutProps & ColorProps & PositionProps & SpaceProps & FlexboxProps>`
+})<LayoutProps & ColorProps & PositionProps & SpaceProps & FlexboxProps & ContainerProps>`
   margin-left: auto;
   margin-right: auto;
-  max-width: ${layoutConstant.containerWidth};
+  max-width: ${(props) => props.fluid ? "1800px" : layoutConstant.containerWidth};
 
   @media only screen and (max-width: 1199px) {
     margin-left: 1rem;

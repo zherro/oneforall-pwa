@@ -1,5 +1,5 @@
-"use client"
-import { H1 } from "@component/Typography";
+"use client";
+import { H2 } from "@component/Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
 
 const MyAccountHomePage = () => {
@@ -7,9 +7,9 @@ const MyAccountHomePage = () => {
 
   return (
     <>
-      <H1>Olá, </H1>
+      <H2>Olá, {session?.user_metadata.first_name}</H2>
       {JSON.stringify(session)}
-      {''+isCompleted}
+      {"" + isCompleted}
     </>
   );
 };

@@ -8,21 +8,20 @@ import HeaderCustomer from "@component/header/HeaderCustomer";
 // ===============================================================================
 type Props = {
   title?: string;
+  fluidHeader?: boolean;
   navbar?: ReactElement;
   children: ReactNode;
 };
 // ===============================================================================
 
-export default function ShopLayout({ navbar, children }: Props) {
+export default function ShopLayout({ navbar, fluidHeader, children }: Props) {
   return (
     <StyledAppLayout>
       <Sticky fixedOn={0} scrollDistance={50}>
-        <HeaderCustomer />
+        <HeaderCustomer fluid={fluidHeader} />
       </Sticky>
 
-      <div style={{ width: "100%", minHeight: "85vh", paddingTop: "5rem" }}>
-        {children}
-      </div>
+      <div style={{ width: "100%", minHeight: "85vh" }}>{children}</div>
 
       <Footer3 />
     </StyledAppLayout>

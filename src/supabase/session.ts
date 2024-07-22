@@ -11,6 +11,7 @@ export default class SessionUtils {
 
   isAuthenticated() {
     return (
+      ObjectUtils.nonNull(this.session) &&
       this.session?.aud == "authenticated" &&
       ObjectUtils.nonNull(this.session?.email_confirmed_at) &&
       this.session?.is_anonymous == false
@@ -31,6 +32,10 @@ export default class SessionUtils {
 
   isCompleted(): boolean {
     return this.userMetaData()?.completed || false;
+  }
+
+  signature(): string {
+    return this.userMetaData()?.signature || "none";
   }
 
   userMetaData(): UserMetaData {

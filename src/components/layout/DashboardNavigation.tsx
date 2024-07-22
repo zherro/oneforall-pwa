@@ -57,7 +57,7 @@ export function DashboardNavigationMenu() {
                 <span>{item.title}</span>
               </FlexBox>
 
-              <span>{item.count}</span>
+              <span>{item?.count}</span>
             </StyledDashboardNav>
           ))}
         </Fragment>
@@ -77,38 +77,24 @@ const linkList = [
     title: "Links Rapidos",
     list: [
       {
-        href: "/",
-        title: "Ir para o site",
+        href: APP_ROUTES.DASHBOARD.HOME,
+        title: "Ir para a Home",
         iconName: "home",
       },
     ],
   },
   {
-    title: "DASHBOARD",
+    title: "CONFIGURAÇÃO DA CONTA",
     list: [
       {
-        href: APP_ROUTES.DASHBOARD.CATEGORY_LIST,
-        title: "Categorias",
-        iconName: "box",
-        count: 0,
+        href: APP_ROUTES.DASHBOARD.PROFILE,
+        title: "Minha Conta",
+        iconName: "user",
       },
       {
-        href: APP_ROUTES.DASHBOARD.CATEGORY_NEW,
-        title: "Nova Categoria",
-        iconName: "plus",
-        count: 0,
-      },
-      {
-        href: APP_ROUTES.DASHBOARD.POST_LIST,
-        title: "Publicações",
-        iconName: "box",
-        count: 0,
-      },
-      {
-        href: APP_ROUTES.DASHBOARD.POST_SELECT_TYPE,
-        title: "Nova Publicação",
-        iconName: "fa/regular/newspaper",
-        count: 0,
+        href: "#",
+        title: "Meu Endereço",
+        iconName: "map-pin-2",
       },
       // { href: "/orders", title: "Orders", iconName: "bag", count: 5 },
       // { href: "/wish-list", title: "Wishlist", iconName: "heart", count: 19 },
@@ -120,17 +106,4 @@ const linkList = [
       // },
     ],
   },
-  // {
-  //   title: "ACCOUNT SETTINGS",
-  //   list: [
-  //     { href: "/profile", title: "Profile Info", iconName: "user", count: 3 },
-  //     { href: "/address", title: "Addresses", iconName: "pin", count: 16 },
-  //     {
-  //       href: "/payment-methods",
-  //       title: "Payment Methods",
-  //       iconName: "credit-card",
-  //       count: 4,
-  //     },
-  //   ],
-  // },
 ];
