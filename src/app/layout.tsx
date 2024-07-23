@@ -8,7 +8,7 @@ import StyledContext from "@context/StyledContext";
 import SupabaseProvider from "@supabaseutils/supabase.provider";
 import { Open_Sans } from "next/font/google";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -16,13 +16,23 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+export const viewport: Viewport = {
+  themeColor: "#317EFB",
+  width: "device-width",
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // interactiveWidget: 'resizes-visual', // Se necessário, pode ser adicionado.
+};
+
 export const metadata: Metadata = {
   title: "Next.js PWA Example",
   description: "An example of a PWA with Next.js",
   keywords: "PWA, Next.js, Example",
-  viewport:
-    "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no",
-  themeColor: "#317EFB",
+  // viewport:
+  //   "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no",
+  // themeColor: "#317EFB",
   manifest: "/manifest.json",
 
   icons: [

@@ -3,8 +3,6 @@ import HeaderPageDashBoard from "@component/header/HeaderPageDashBoard";
 import ProfileEditForm from "@sections/account/ProfileEditForm";
 import { createClient } from "@supabaseutils/utils/server";
 
-
-
 export default async function EditYourProfilePage() {
   const supabase = createClient();
 
@@ -20,7 +18,7 @@ export default async function EditYourProfilePage() {
   return (
     <>
       <Grid container splited spacing={6}>
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <HeaderPageDashBoard icon="user" title="Meu Perfil" />
         </Grid>
         <Grid item xs={12}>

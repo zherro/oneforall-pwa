@@ -47,7 +47,8 @@ export default class StringUtils {
 }
 
 const isEmpty = (str: any): boolean => StringUtils.isEmpty(str);
+const notBlank = (str: any): boolean => !StringUtils.isEmpty(str);
 const addCharacterAfterEach = (inputString: string, charToAdd: string) =>
   StringUtils.addCharacterAfterEach(inputString, charToAdd);
 
-export { isEmpty, addCharacterAfterEach };
+export { isEmpty, notBlank, addCharacterAfterEach };

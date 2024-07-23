@@ -1,11 +1,12 @@
-"use client";;
+"use client";
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import Typography, { H2, SemiSpan } from "@component/Typography";
 import Icon from "@component/icon/Icon";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-const RecoverySend = () => {
+const RecoverySendContent = () => {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -31,4 +32,11 @@ const RecoverySend = () => {
   );
 };
 
+const RecoverySend = () => {
+  return (
+    <Suspense fallback={<></>}>
+      <RecoverySendContent />
+    </Suspense>
+  );
+};
 export default RecoverySend;

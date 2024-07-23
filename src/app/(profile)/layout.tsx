@@ -1,5 +1,4 @@
-"use client";
-import { Skeleton, SkeletonCircle } from "@chakra-ui/react";
+"use client";;
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import { H2 } from "@component/Typography";
@@ -17,46 +16,6 @@ export const StyledGrid = styled(Grid)`
     display: none;
   }
 `;
-
-const SkelectonBoard = () => {
-  return (
-    <>
-      <Box width="100%" height="70px" style={{ float: "left" }}>
-        <Skeleton width="100%" height="70px" />
-      </Box>
-      <Box
-        mt="0.5rem"
-        mx="0.5rem"
-        width="20%"
-        maxWidth="250px"
-        height="80vh"
-        style={{ float: "left" }}
-      >
-        <Skeleton width="100%" maxWidth="250px" height="80vh" />
-      </Box>
-      <Box
-        mt="1rem"
-        mx="1rem"
-        style={{ float: "left" }}
-        width="63%"
-        maxWidth="70%"
-      >
-        <Skeleton width="100%" height="80px" mb="1rem" />
-        <SkeletonCircle size="90px" style={{ float: "left" }} />
-        <Skeleton
-          mt="0.5rem"
-          width="70%"
-          height="80px"
-          ml="1rem"
-          style={{ float: "left" }}
-        />
-      </Box>
-      <Box mt="1rem" mx="1rem" style={{ float: "left" }} width="63%">
-        <Skeleton width="100%" height="180px" mt="0.75rem" />
-      </Box>
-    </>
-  );
-};
 
 const StoryLoadBoard = () => {
   return (
