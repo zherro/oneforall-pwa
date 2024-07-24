@@ -72,6 +72,7 @@ export async function signup(formData: any) {
     LOG.debug("Signup error", error);
     redirect("/user-exists");
   } else if (error) {
+    LOG.error("Signup error", error);
     redirect("/error");
   }
 
@@ -150,7 +151,7 @@ export async function signup(formData: any) {
   //   redirect("/error");
   // }
 
-  await supabase.auth.signOut();
+  // await supabase.auth.signOut();
 
   revalidatePath("/", "layout");
   redirect(`/welcome?email=${data1.email}`);
