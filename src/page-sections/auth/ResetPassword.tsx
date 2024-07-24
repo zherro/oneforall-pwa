@@ -13,6 +13,7 @@ import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import { isEmpty } from "@utils/helpers/String.utils";
 import useVisibility from "./useVisibility";
 import Icon from "@component/icon/Icon";
+import MESSAGES from "@data/messages";
 
 export default function ResetPassword({ formAction }: { formAction: any }) {
   const query = useSearchParams();
@@ -31,11 +32,18 @@ export default function ResetPassword({ formAction }: { formAction: any }) {
 
   const validatePass: any = hasToken
     ? {
-        password: yup.string().required("Campo obrigatório"),
+        password: yup
+          .string()
+          .min(6, MESSAGES.FORM.VALIDADION.PASSWORD_MIN_LENGHT)
+          .max(16, MESSAGES.FORM.VALIDADION.PASSWORD_MAX_LENGHT)
+          .required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
         re_password: yup
           .string()
-          .oneOf([yup.ref("password"), undefined], "A senhas devem ser iguais")
-          .required("Para continuar, digite a senha novamente"),
+          .oneOf(
+            [yup.ref("password"), undefined],
+            MESSAGES.FORM.VALIDADION.PASSWORD_SHOULD_EQUALS
+          )
+          .required(MESSAGES.FORM.VALIDADION.PASSWORD_CONFIRM_IS_REQUIRED),
       }
     : {};
 
@@ -43,9 +51,9 @@ export default function ResetPassword({ formAction }: { formAction: any }) {
     ...validatePass,
     email: yup
       .string()
-      .email("Informe um email válido")
-      .required("Informe seu login"),
-    code: yup.string().required("Informe o código de verificação"),
+      .email(MESSAGES.FORM.VALIDADION.INVALID_EMAIL)
+      .required(MESSAGES.FORM.VALIDADION.PUT_LOGIN),
+    code: yup.string().required(MESSAGES.FORM.VALIDADION.PUT_VERIFICARION_CODE),
   });
 
   const handleFormSubmit = async (values: any) => {

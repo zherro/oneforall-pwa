@@ -14,6 +14,7 @@ import { Button, IconButton } from "@component/buttons";
 import { H3, H5, H6, SemiSpan } from "@component/Typography";
 // STYLED COMPONENT
 import { StyledRoot } from "./styles";
+import MESSAGES from "@data/messages";
 
 export default function Signup({ formAction }: { formAction: any }) {
   const { passwordVisibility, togglePasswordVisibility } = useVisibility();
@@ -27,12 +28,22 @@ export default function Signup({ formAction }: { formAction: any }) {
   };
 
   const formSchema = yup.object().shape({
-    email: yup.string().email("Email inválido").required("Campo obrigatório"),
-    password: yup.string().required("Campo obrigatório"),
+    email: yup
+      .string()
+      .email(MESSAGES.FORM.VALIDADION.INVALID_EMAIL)
+      .required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
+    password: yup
+      .string()
+      .min(6, MESSAGES.FORM.VALIDADION.PASSWORD_MIN_LENGHT)
+      .max(16, MESSAGES.FORM.VALIDADION.PASSWORD_MAX_LENGHT)
+      .required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
     re_password: yup
       .string()
-      .oneOf([yup.ref("password"), undefined], "A senhas devem ser iguais")
-      .required("Para continuar, digite a senha novamente"),
+      .oneOf(
+        [yup.ref("password"), undefined],
+        MESSAGES.FORM.VALIDADION.PASSWORD_SHOULD_EQUALS
+      )
+      .required(MESSAGES.FORM.VALIDADION.PASSWORD_CONFIRM_IS_REQUIRED),
   });
 
   const handleFormSubmit = async (values: any) => {
@@ -86,6 +97,7 @@ export default function Signup({ formAction }: { formAction: any }) {
         <TextField
           fullwidth
           mb="0.75rem"
+          id="password"
           name="password"
           label="Senha"
           placeholder="*********"
