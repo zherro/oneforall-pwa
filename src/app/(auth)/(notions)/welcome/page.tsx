@@ -13,7 +13,9 @@ const WelcomeSendedContent = () => {
   return (
     <Box textAlign="center">
       <FlexBox justifyContent="center">
-        <Icon mt="2rem" size="250px">story-set/Ok-pana</Icon>
+        <Icon mt="2rem" size="250px">
+          story-set/Ok-pana
+        </Icon>
       </FlexBox>
       <H2 fontWeight="600">Verifique seu email!</H2>
       <SemiSpan my="1rem" fontSize="1.75rem">
@@ -31,7 +33,7 @@ const WelcomeSendedContent = () => {
 
 const WelcomeSended = () => {
   return (
-    <Suspense fallback={<div>Carregando...</div>}>
+    <Suspense fallback={<></>}>
       <WelcomeSendedContent />
     </Suspense>
   );

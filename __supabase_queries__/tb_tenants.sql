@@ -53,7 +53,7 @@ $function$
 ;
 
 
-select  use_has_tenant(gen_random_uuid(), gen_random_uuid())
+select  use_has_tenant(gen_random_uuid(), gen_random_uuid());
 
 
 -- DROP FUNCTION public.auto_create_user_tenant();
