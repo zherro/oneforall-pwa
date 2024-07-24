@@ -30,6 +30,26 @@ class HttpResponse {
       }
     );
   }
+
+  accepted() {
+    return new Response("{}", {
+      status: HttpStatusCode.ACCEPTED,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  error(status?: HttpStatusCode, msg?: string) {
+    return new Response(
+      JSON.stringify({
+        statusCode: status || 500,
+        message: msg || "Não conseguimos completar as solicitação!",
+      }),
+      {
+        status: status || 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }
 
 const httpResponse = new HttpResponse();

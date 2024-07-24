@@ -14,6 +14,9 @@ const APP_ROUTES = {
     PROFILE_CONFIGURE: "/profile-configure",
     PROFILE_SELECT_COMPANY: "/profile/select-store",
   },
+  SUPORT: {
+    FORM: "/suporte"
+  },
 
   DASHBOARD: {
     HOME: dashboard,
@@ -27,6 +30,7 @@ export const API_ROUTES = {
     GET: "/api/bucket",
   },
   USER: {
+    CONFIRM_EMAIL: "/api/confirm-email",
     PROFILE_CONFIGURE: "/api/profile-configure",
   },
   CUSTOMER: {

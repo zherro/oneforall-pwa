@@ -25,9 +25,10 @@ alter table "profile_recovery" enable row level security;
 
 create policy "Anyone can get recovery by email." on "public"."profile_recovery" as permissive for insert to public with check (true);
 create policy "Anyone can request recovery by email." on "public"."profile_recovery" as permissive for select to public using (true);
-
+create policy "Anyone can get token verification" on "public"."profile_recovery" as permissive for select to public using (true);
 create policy "Allow valid token access" on public.profile_recovery using (  status = 'A');
 
+create policy "Anon user can update token" on "public"."profile_recovery" as permissive for update to anon using (true);
 
 create policy "Allow password update with valid token"
 on auth.users
@@ -51,8 +52,8 @@ declare
   _user_id uuid;
 begin
   -- Verificar se o token é válido e não expirou
-  update public.profile_recovery set used_at = now(), status = 'A', pass = _new_password
-  where recovery_hash = _secret_token  and recovery_code = _code;
+  update public.profile_recovery set used_at = now(), pass = _new_password
+  where recovery_hash = _secret_token  and recovery_code = _code and status = 'A';
 end;
 $$ language plpgsql;
 
@@ -76,3 +77,24 @@ FOR EACH ROW
     EXECUTE PROCEDURE updatePassword();
 
     
+
+
+-- confirm email by token
+create or replace function public.email_verification(
+  _secret_token text,
+  _code text,
+  _email text
+)
+returns void as $$
+declare
+  _user_id uuid;
+begin
+  -- Verificar se o token é válido e não expirou
+  update public.profile_recovery set used_at = now(), status = 'S'
+  where recovery_hash = _secret_token  and recovery_code = _code;
+
+  INSERT INTO public.profiles_email_confirmation
+  (update_at, email, code)
+  VALUES(now(), _email, _code);
+end;
+$$ language plpgsql;

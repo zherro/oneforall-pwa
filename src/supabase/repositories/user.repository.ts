@@ -1,5 +1,5 @@
 import SupabaseRepository from "@supabaseutils/types/repository";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 export default class UserRepository extends SupabaseRepository<any> {
   constructor() {
@@ -12,11 +12,11 @@ export default class UserRepository extends SupabaseRepository<any> {
     password: string,
     id_recovery: string
   ) {
-    console.log( {
+    console.log({
       _secret_token: _secret_token,
       _code: _code,
       _new_password: password,
-    })
+    });
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
@@ -27,6 +27,23 @@ export default class UserRepository extends SupabaseRepository<any> {
         _secret_token: _secret_token,
         _code: _code,
         _new_password: hash,
+      }
+    );
+
+    return upddateError;
+  }
+
+  public async confirmEmail(
+    _secret_token: string,
+    _code: string,
+    _email: string
+  ) {
+    const { data, error: upddateError } = await this.supabase.rpc(
+      "email_verification",
+      {
+        _secret_token: _secret_token,
+        _code: _code,
+        _email: _email,
       }
     );
 

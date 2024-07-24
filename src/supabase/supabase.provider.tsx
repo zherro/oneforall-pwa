@@ -145,7 +145,7 @@ export const AuthGuard = ({ skelecton, children }) => {
     validate();
   }, []);
 
-  return loading ? skelecton : children;
+  return loading && !auth ? skelecton : children;
 };
 
 function validateAutorizedsPaths(
