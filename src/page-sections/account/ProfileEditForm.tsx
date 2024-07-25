@@ -93,7 +93,7 @@ export default function ProfileEditForm({
         },
       });
       router.refresh();
-      router.push("/profile-completed")
+      router.push("/profile-completed");
     } catch (error) {
       dispatch({
         type: "NOTIFY",
@@ -130,24 +130,26 @@ export default function ProfileEditForm({
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
-            <FlexBox alignItems="flex-end" mb="22px" justifyContent="center">
-              <AvatarLoad
-                size={64}
-                uid={user?.id ?? null}
-                url={avatarUrl || values?.avatar_url}
-                onUpload={(url) => {
-                  setAvatarUrl(url);
-                  updateProfile({
-                    full_name: values.full_name,
-                    username: values.username,
-                    avatar_url: url,
-                  });
-                }}
-              />
-            </FlexBox>
-
             <Box mb="30px">
-              <Grid container horizontal_spacing={6} vertical_spacing={4}>
+              <Grid container horizontal_spacing={6} vertical_spacing={6}>
+                <Grid item xs={12}>
+                  <Box my="auto" mb="22px" maxWidth="135px">
+                    <AvatarLoad
+                      size={64}
+                      uid={user?.id ?? null}
+                      url={avatarUrl || values?.avatar_url}
+                      onUpload={(url) => {
+                        setAvatarUrl(url);
+                        updateProfile({
+                          full_name: values.full_name,
+                          username: values.username,
+                          avatar_url: url,
+                        });
+                      }}
+                    />
+                  </Box>
+                </Grid>
+
                 <Grid item md={6} xs={12}>
                   <TextField
                     fullwidth

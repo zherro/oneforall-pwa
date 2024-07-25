@@ -23,11 +23,11 @@ const LogoutButton = () => {
     <Box minWidth="150px">
       <form>
         <Button
+          variant="outlined"
           mr="auto"
           ml="auto"
           py="16px"
-          color="white"
-          backgroundColor="error.main"
+          color="error.main"
           formAction={signout}
         >
           Sair{" "}

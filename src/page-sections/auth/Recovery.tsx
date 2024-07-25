@@ -57,7 +57,7 @@ export default function Recovery({ formAction }: { formAction: any }) {
           onBlur={handleBlur}
           value={values.email}
           onChange={handleChange}
-          placeholder="meuemail@...com"
+          placeholder="meu_email@exemplo.com"
           label="Informe seu email"
           errorText={touched.email && errors.email}
         />
@@ -77,7 +77,12 @@ export default function Recovery({ formAction }: { formAction: any }) {
         <FlexBox justifyContent="center" mb="1.25rem">
           <SemiSpan>Ainda não tem uma conta?</SemiSpan>
           <Link href="/signup">
-            <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+            <H6
+              ml="0.5rem"
+              borderBottom="1px solid"
+              borderColor="primary.main"
+              color="primary.main"
+            >
               Criar Conta
             </H6>
           </Link>

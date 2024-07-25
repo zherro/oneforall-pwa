@@ -62,12 +62,14 @@ export function DashboardNavigationMenu() {
           ))}
         </Fragment>
       ))}
-      <StyledDashboardNav px="1.5rem" mb="1.25rem" href="#">
-        <Box alignItems="center">
-          <Divider width="175px" my="1rem" bg="primary.main" height="2px" />
-          <LogoutButton />
-        </Box>
-      </StyledDashboardNav>
+      <FlexBox
+        alignItems="center"
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        <Divider width="225px" my="1rem" bg="primary.main" height="2px" />
+        <LogoutButton />
+      </FlexBox>
     </>
   );
 }

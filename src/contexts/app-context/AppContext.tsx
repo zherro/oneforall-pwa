@@ -20,7 +20,7 @@ import { getTheme } from "@utils/utils";
 // import { initGA, logPageView } from "@lib/gtag";
 import { useRouter } from "next/navigation";
 
-const INITIAL_STATE = { theme: 'BORA_CUIABA', cart: INITIAL_CART, isHeaderFixed: false, notify: {}};
+const INITIAL_STATE = { theme: 'GREEN', cart: INITIAL_CART, isHeaderFixed: false, notify: {}};
 
 export const AppContext = createContext<ContextProps>({
   state: INITIAL_STATE,

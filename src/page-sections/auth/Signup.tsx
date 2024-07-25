@@ -89,7 +89,7 @@ export default function Signup({ formAction }: { formAction: any }) {
           onBlur={handleBlur}
           value={values.email}
           onChange={handleChange}
-          placeholder="meuemail@...com"
+          placeholder="meu_email@exemplo.com"
           label="Email"
           errorText={touched.email && errors.email}
         />
@@ -162,7 +162,12 @@ export default function Signup({ formAction }: { formAction: any }) {
       <FlexBox justifyContent="center" bg="gray.200" py="19px">
         <SemiSpan>Ja tem uma conta?</SemiSpan>
         <Link href="/login">
-          <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+          <H6
+            ml="0.5rem"
+            borderBottom="1px solid"
+            borderColor="primary.main"
+            color="primary.main"
+          >
             Login
           </H6>
         </Link>

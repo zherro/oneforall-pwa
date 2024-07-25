@@ -20,6 +20,7 @@ const THEMES = {
   GROCERY: "GROCERY",
   FURNITURE: "FURNITURE",
   BORA_CUIABA: "BORA_CUIABA",
+  GREEN: "GREEN",
 };
 
 const themesOptions = {
@@ -55,11 +56,47 @@ const themesOptions = {
     colors: {
       ...colors,
       primary: { ...colors.primary, main: colors.fire.main },
-      secondary: { ...colors.secondary, main: "#d85136", 900: "#EF4333", dark: "#EF4333" },
+      secondary: {
+        ...colors.secondary,
+        main: "#d85136",
+        900: "#EF4333",
+        dark: "#EF4333",
+      },
+    },
+  },
+  [THEMES.GREEN]: {
+    shadows,
+    breakpoints,
+    colors: {
+      ...colors,
+      secondary: {
+        light: "#B2EBF2",
+        main: "#0097A7",
+        dark: "#006064",
+        text: "#ffffff",
+        900: "#00838F",
+        100: "#26C6DA"
+      },
+      primary: {
+        light: "#E0F2F1",
+        main: "#00BFA5",
+        dark: "#004D40",
+        text: "#ffffff",
+        100: "#B2DFDB",
+        200: "#80CBC4",
+        300: "#4DB6AC",
+        400: "#26A69A",
+        500: "#009688",
+        600: "#00897B",
+        700: "#00796B",
+        800: "#006064",
+        900: "#004D40",
+      },
     },
   },
 };
-
+// 26A69A
+// 00C853
 export default function getThemeOptions(themes: any, pathname: string) {
   let themeOption: ThemeOption = themesOptions[THEMES.DEFAULT];
 

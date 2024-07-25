@@ -23,9 +23,9 @@ export default async function CompleteYourProfilePage() {
 
   return (
     <>
-      <Grid container splited spacing={12}>
+      <Grid container splited spacing={6}>
         <Grid item xs={12}>
-          <H2 mt="2rem" textAlign="center">
+          <H2 mt="0.75rem" textAlign="center">
             Complete o seu cadastro!
           </H2>
         </Grid>
