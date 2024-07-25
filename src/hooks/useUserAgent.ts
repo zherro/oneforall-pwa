@@ -50,6 +50,11 @@ export default function useUserAgent() {
       if (window.matchMedia("(display-mode: standalone)").matches) {
         setIsStandalone(true);
       }
+      try {
+        if (window.navigator.standalone) {
+          setIsStandalone(true);
+        }
+      } catch (ignore: any) {}
     }
   }, []);
 

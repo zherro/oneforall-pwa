@@ -45,6 +45,7 @@ export default function AddToHomeScreen() {
   const { userAgent, isMobile, isStandalone, isIOS } = useUserAgent();
 
   const closePrompt = () => {
+    doNotShowAgainToday();
     setDisplayPrompt("");
   };
 
@@ -57,10 +58,23 @@ export default function AddToHomeScreen() {
     setDisplayPrompt("");
   };
 
+  const doNotShowAgainToday = () => {
+    // Create date 1 year from now
+    const date = new Date();
+    // date.setFullYear(date.getFullYear() + 1);
+    date.setDate(date.getDate() + 1);
+    setCookie(COOKIE_NAME, "dontShow", { expires: date }); // Set cookie for a month
+    setDisplayPrompt("");
+  };
+
   useEffect(() => {
     const addToHomeScreenPromptCookie = getCookie(COOKIE_NAME);
 
-    if (addToHomeScreenPromptCookie !== "dontShow") {
+    if (
+      isMobile &&
+      !isStandalone &&
+      addToHomeScreenPromptCookie !== "dontShow"
+    ) {
       // Only show prompt if user is on mobile and app is not installed
       //   if (isMobile && !isStandalone) {
       //     if (userAgent === "Safari") {
@@ -82,6 +96,7 @@ export default function AddToHomeScreen() {
       setDisplayPrompt("other");
       //   }
     } else {
+      setDisplayPrompt("");
     }
   }, [userAgent, isMobile, isStandalone, isIOS]);
 
@@ -112,6 +127,7 @@ export default function AddToHomeScreen() {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === "accepted") {
+          doNotShowAgainToday();
           console.log("User accepted the install prompt");
         } else {
           console.log("User dismissed the install prompt");
