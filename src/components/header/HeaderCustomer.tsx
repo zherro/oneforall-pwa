@@ -17,7 +17,7 @@ import { H1 } from "../Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
 import { logout } from "app/(auth)/actions";
 import Sidenav from "@component/sidenav/Sidenav";
-import useWindowSize from "@hook/useWindowSize";
+import useWindowSize, { useWindowIsTablet } from "@hook/useWindowSize";
 import { DashboardNavigationMenu } from "@component/layout/DashboardNavigation";
 
 // ====================================================================
@@ -36,8 +36,7 @@ export default function HeaderCustomer({
   const toggleSidenav = () => setOpen(!open);
   const router = useRouter();
 
-  const width: any = useWindowSize();
-  const isTablet = width < 1125;
+  const isTablet: any = useWindowIsTablet();
 
   const CART_HANDLE = (
     <Box ml="20px" position="relative">

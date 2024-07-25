@@ -21,3 +21,23 @@ pnpm create next-app --example progressive-web-app progressive-web-app
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+
+## Media Queries
+
+```css
+// Dispositivos extra small (telefones em modo retrato, com menos de 576px)
+// Sem media query para `xs`, já que este é o padrão, no Bootstrap.
+
+// Dispositivos small (telefones em modo paisagem, com 576px ou mais)
+@media (min-width: 576px) { ... }
+
+// Dispositivos médios (tablets com 768px ou mais)
+@media (min-width: 768px) { ... }
+
+// Dispositivos large (desktops com 992px ou mais)
+@media (min-width: 992px) { ... }
+
+// Dispositivos extra large (desktops grandes com 1200px ou mais)
+@media (min-width: 1200px) { ... }
+```

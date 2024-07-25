@@ -1,24 +1,33 @@
-import Box from "@component/Box";
-import Grid from "@component/grid/Grid";
-import Container from "@component/Container";
 import Typography from "@component/Typography";
 import styled from "styled-components";
 import { isValidProp } from "@utils/utils";
 import FlexBox from "@component/FlexBox";
 
-export default function Footer3() {
-  const BoxFooter = styled.div.withConfig({
-    shouldForwardProp: (prop) => isValidProp(prop),
-  })`
-    width: 100%;
-    height: 75px;
-    background-color: #093d65;
-    @media only screen and (max-width: 550px) {
-      position: fixed;
-      bottom: 0;
-      height: 45px;
-    }
-  `;
+export default function Footer3({
+  fixedFooterOnMobile,
+}: {
+  fixedFooterOnMobile: boolean;
+}) {
+  const BoxFooter = fixedFooterOnMobile
+    ? styled.div.withConfig({
+        shouldForwardProp: (prop) => isValidProp(prop),
+      })`
+        width: 100%;
+        height: 75px;
+        background-color: #093d65;
+        @media only screen and (max-width: 550px) {
+          position: fixed;
+          bottom: 0;
+          height: 45px;
+        }
+      `
+    : styled.div.withConfig({
+        shouldForwardProp: (prop) => isValidProp(prop),
+      })`
+        width: 100%;
+        height: 75px;
+        background-color: #093d65;
+      `;
 
   return (
     <>

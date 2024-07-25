@@ -22,15 +22,16 @@ const ChoseYourPlan = () => {
 
   return (
     <>
-      <Grid container spacing={12}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <FlexBox
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
             mx="0.75rem"
+            mb="2rem"
           >
-            <H2 mt="2rem" mb="1rem">
+            <H2 mt="1.25rem" mb="1rem">
               Escolha um PLANO para começar agora mesmo!
             </H2>
 

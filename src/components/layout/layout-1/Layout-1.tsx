@@ -10,11 +10,17 @@ type Props = {
   title?: string;
   fluidHeader?: boolean;
   navbar?: ReactElement;
+  fixedFooterOnMobile?: boolean;
   children: ReactNode;
 };
 // ===============================================================================
 
-export default function ShopLayout({ navbar, fluidHeader, children }: Props) {
+export default function ShopLayout({
+  navbar,
+  fluidHeader,
+  children,
+  fixedFooterOnMobile = false,
+}: Props) {
   return (
     <StyledAppLayout>
       <Sticky fixedOn={0} scrollDistance={50}>
@@ -23,7 +29,7 @@ export default function ShopLayout({ navbar, fluidHeader, children }: Props) {
 
       <div style={{ width: "100%", minHeight: "80vh" }}>{children}</div>
 
-      <Footer3 />
+      <Footer3 fixedFooterOnMobile={fixedFooterOnMobile} />
     </StyledAppLayout>
   );
 }

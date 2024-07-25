@@ -18,6 +18,13 @@ export const StyledGrid = styled(Grid)`
   }
 `;
 
+export const StyledGridContainer = styled(Grid)`
+  padding: 0px 1rem;
+  @media only screen and (max-width: 1124px) {
+    min-width: 100% !important;
+  }
+`;
+
 const SkelectonBoard = () => {
   return (
     <>
@@ -79,9 +86,9 @@ export default function Layout({ children }) {
           <StyledGrid lg={3}>
             <DashboardNavigation></DashboardNavigation>
           </StyledGrid>
-          <Grid item lg={9} xs={12}>
+          <StyledGridContainer item lg={9} xs={12}>
             <Box maxWidth={"100%"}>{children}</Box>
-          </Grid>
+          </StyledGridContainer>
         </Grid>
       </AppLayout>
     </AuthGuard>
