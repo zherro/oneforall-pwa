@@ -1,4 +1,4 @@
-"use server";;
+"use server";
 import { IngestionDataBuilder } from "@supabaseutils/use-cases/processor/ingestion-data";
 import { saveProfileRecoveryUsecase } from "@supabaseutils/use-cases/saveProfileRecovery.usecase";
 import { sendEmailUseCase } from "@supabaseutils/use-cases/sendEmail.usecase";
@@ -10,25 +10,24 @@ import { redirect } from "next/navigation";
 
 export async function recovery(formData: any) {
   const email = formData.get("email");
-
-  const result = await saveProfileRecoveryUsecase(
-    new IngestionDataBuilder()
-      .addInput({
-        email,
-        recovery_code: generateCharacterCode(6),
-        recovery_hash: getUuid(),
-      })
-      .build()
-  );
-
-  const output = result.output;
-
-  if (output?.error) {
-    LOG.debug("error", output.error);
-    redirect(`/error`);
-  }
-
   try {
+    const result = await saveProfileRecoveryUsecase(
+      new IngestionDataBuilder()
+        .addInput({
+          email,
+          recovery_code: generateCharacterCode(6),
+          recovery_hash: getUuid(),
+        })
+        .build()
+    );
+
+    const output = result.output;
+
+    if (output?.error) {
+      LOG.debug("error", output.error);
+      redirect(`/error`);
+    }
+
     await sendEmailUseCase(
       IngestionDataBuilder.of()
         .addInput({
@@ -42,7 +41,7 @@ export async function recovery(formData: any) {
     );
   } catch (error) {
     LOG.debug("error", error);
-    redirect(`/error`);
+    redirect(`/user-not-exists`);
   }
 
   revalidatePath("/", "layout");

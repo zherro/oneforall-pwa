@@ -25,7 +25,7 @@ const APP_ROUTES = {
 };
 
 export const API_ROUTES = {
-  TICKETS: "/api/ticket",
+  TICKETS: "/api/tickets",
   BUKET: {
     GET: "/api/bucket",
   },

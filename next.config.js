@@ -35,6 +35,10 @@ const nextConfig = {
     APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
 
+    APP_EMAIL_SUPORT: "contato@boracuiaba.com",
+    APP_INSTAGRAN_NAME: "@boracuiaba.ofc",
+    APP_INSTAGRAN_LINK: "https://www.instagram.com/boracuiaba.ofc",
+
     // AUTH
     APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO: "/minhaconta",
     APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES: "/login,/signup",
@@ -57,6 +61,9 @@ const nextConfig = {
     S3_BUKET_NAME: "gathu-cuiaba",
     S3_BUKET_URI:
       "https://boracuiaba.nyc3.cdn.digitaloceanspaces.com/gathu-cuiaba/",
+
+    // GOOGLE
+    G_CAPTCHA_SITE_KEY: "6LfUSAIqAAAAAN8fUYn8TRvHS2d6vCdKAOyacvKF",
   },
   // !! WARN !!
   // Dangerously allow production builds to successfully complete even if

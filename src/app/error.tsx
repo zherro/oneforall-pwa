@@ -39,7 +39,7 @@ export default function NotFound() {
 
           <Link href="/">
             <Button variant="contained" color="primary" m="0.5rem">
-              Ir para a Home
+              Ir para o Inicio
             </Button>
           </Link>
         </FlexBox>

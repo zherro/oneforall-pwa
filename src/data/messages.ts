@@ -12,6 +12,9 @@ const MESSAGES = {
     },
   },
 
+  // ERRORS
+  ERROR_NOT_COMPLETE_REQUEST: "Algo deu errado! Não conseguimos completar a solicitação.",
+
   // USER MESSAGES
   INVALID_CREDENTIALS_TOKE:
     "A verificação expirou ou é invalida! Solicite uma nova recuperação de senha, para receber um novo token.",

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import MESSAGES from "@data/messages";
 
 const content = {
   "Content-Type": "application/json",
@@ -22,8 +22,11 @@ export default function useFetch(uri: string, options, config: FetchOptions) {
         else config.handleData(data);
       })
       .catch((error) => {
-        config.onLoading(true);
-        config.handleError(error);
+        config.onLoading(false);
+        config.handleError({
+          status: "error",
+          message: MESSAGES.ERROR_NOT_COMPLETE_REQUEST,
+        });
       });
   };
 

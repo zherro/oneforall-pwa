@@ -9,12 +9,15 @@ import { colors } from "@utils/themeColors";
 type SelectOption = { label: any; value: any };
 
 interface SelectProps extends Props, SpaceProps {
+  id?: any;
+  name?: any;
   value?: any;
   label?: string;
   errorText?: any;
   isMulti?: boolean;
   defaultValue?: any;
   options: SelectOption[];
+  onChange?: any;
 }
 // ==============================================================
 
