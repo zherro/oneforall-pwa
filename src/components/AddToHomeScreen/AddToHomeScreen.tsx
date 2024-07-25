@@ -6,24 +6,6 @@ import useUserAgent from "@hook/useUserAgent";
 const ModuleLoading = () => (
   <p className="animate-bounce text-white font-bold">Loading...</p>
 );
-const AddToIosSafari = dynamic(() => import("./AddToIosSafari"), {
-  loading: () => <ModuleLoading />,
-});
-const AddToMobileChrome = dynamic(() => import("./AddToMobileChrome"), {
-  loading: () => <ModuleLoading />,
-});
-const AddToMobileFirefox = dynamic(() => import("./AddToMobileFirefox"), {
-  loading: () => <ModuleLoading />,
-});
-const AddToMobileFirefoxIos = dynamic(() => import("./AddToMobileFirefoxIos"), {
-  loading: () => <ModuleLoading />,
-});
-const AddToMobileChromeIos = dynamic(() => import("./AddToMobileChromeIos"), {
-  loading: () => <ModuleLoading />,
-});
-const AddToSamsung = dynamic(() => import("./AddToSamsung"), {
-  loading: () => <ModuleLoading />,
-});
 const AddToOtherBrowser = dynamic(() => import("./AddToOtherBrowser"), {
   loading: () => <ModuleLoading />,
 });
@@ -142,42 +124,6 @@ export default function AddToHomeScreen() {
     <>
       {
         {
-          safari: (
-            <AddToIosSafari
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
-          chrome: (
-            <AddToMobileChrome
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
-          firefox: (
-            <AddToMobileFirefox
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
-          firefoxIos: (
-            <AddToMobileFirefoxIos
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
-          chromeIos: (
-            <AddToMobileChromeIos
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
-          samsung: (
-            <AddToSamsung
-              closePrompt={closePrompt}
-              doNotShowAgain={doNotShowAgain}
-            />
-          ),
           other: (
             <AddToOtherBrowser
               closePrompt={closePrompt}

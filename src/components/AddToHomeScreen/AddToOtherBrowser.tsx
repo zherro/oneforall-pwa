@@ -1,7 +1,3 @@
-import React from "react";
-import Link from "next/link";
-
-import { FaTimes } from "react-icons/fa";
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import { Button } from "@component/buttons";
@@ -41,7 +37,7 @@ export default function AddToOtherBrowser(props: Props) {
             style={{ float: "right", padding: "0.25rem", color: "white" }}
             onClick={closePrompt}
           >
-            <FaTimes className="text-2xl" />
+            X
           </button>
         </FlexBox>
         <Typography color="white" fontSize="1.15rem" textAlign="center">
