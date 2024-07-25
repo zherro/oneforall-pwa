@@ -1,9 +1,10 @@
-"use client";
+"use client";;
 import { ReactElement, ReactNode } from "react";
 import StyledAppLayout from "./styles";
 import { Footer3 } from "@component/footer";
 import Sticky from "@component/sticky";
 import HeaderCustomer from "@component/header/HeaderCustomer";
+import AddToHomeScreen from "@component/AddToHomeScreen/AddToHomeScreen";
 
 // ===============================================================================
 type Props = {
@@ -24,7 +25,10 @@ export default function ShopLayout({
   return (
     <StyledAppLayout>
       <Sticky fixedOn={0} scrollDistance={50}>
-        <HeaderCustomer fluid={fluidHeader} />
+        <>
+          <AddToHomeScreen />
+          <HeaderCustomer fluid={fluidHeader} />
+        </>
       </Sticky>
 
       <div style={{ width: "100%", minHeight: "80vh" }}>{children}</div>
