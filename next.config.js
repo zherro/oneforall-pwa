@@ -8,6 +8,19 @@ const withPWA = require("next-pwa")({
 const removeImports = require("next-remove-imports")();
 // module.exports = removeImports({});
 
+const dev = {
+  app_url: "http://localhost:3000",
+  api_url: "http://localhost:8000",
+};
+
+const prod = {
+  app_url: "https://bimoapp.boracuiaba.com",
+  api_url: "https://bimoapp.boracuiaba.com:8881",
+};
+
+const envDefault = dev;
+// const envDefault = prod;
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -30,7 +43,7 @@ const nextConfig = {
   },
   env: {
     // APP CONFIG
-    SITE_URI: "https://bimoapp.boracuiaba.com",
+    SITE_URI: envDefault.app_url,
     APP_META_TITLE: "Bimo App",
     APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
@@ -49,7 +62,7 @@ const nextConfig = {
     TRACE_MODE: "on", // on, off
 
     // SUPABASE
-    NEXT_PUBLIC_SUPABASE_URL: "https://bimoapp.boracuiaba.com:8881",
+    NEXT_PUBLIC_SUPABASE_URL: `http://localhost:8000`,
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
 

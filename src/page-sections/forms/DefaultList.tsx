@@ -17,28 +17,26 @@ import StatusLabel from "@component/StatusLabel";
 import ComfirmationModal from "@component/modal/Comfirmation";
 import ImageUtils from "@utils/image";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
+import { Field } from "formik";
 
 // ==============================================================
 interface Props {
   meta?: MetaPagination;
-  data: {
-    id: string | any;
-    title: string | any;
-    status: StatusEntity | any;
-    img: string | any;
-  }[] | any;
+  data: any[];
+  dataMap: { field: any; type: "key" | "text" | "status" | "img" }[];
   deletePost?: any;
   setPage?: any;
-  editLink?: string;
+  api_uri: string;
 }
 // ==============================================================
 
 export default function DefaultList({
   meta,
   data,
+  dataMap,
   deletePost,
   setPage,
-  editLink,
+  api_uri,
 }: Props) {
   const { push } = useRouter();
   const [openDialog, setOpenDialog] = useState({
@@ -57,6 +55,62 @@ export default function DefaultList({
 
   const [confimDeletePost, setDeletePost] = useState<string>();
 
+  const FormField = ({ field, value }) => {
+    switch (field.type) {
+      case "text":
+        return (
+          <FlexBox alignItems="center" m="6px" flex="2 2 220px !important">
+            {/* <Avatar src={ImageUtils.getMini(value.img)} size={40} /> */}
+            <Typography textAlign="left" ml="20px">
+              {value[field.field]}
+            </Typography>
+          </FlexBox>
+        );
+      case "status":
+        return (
+          <H5 m="6px" textAlign="left" fontWeight="400">
+            <StatusLabel status={value[field.field]} />
+          </H5>
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  const Actions = ({ id }: { id: string }) => {
+    return (
+      <>
+        <H5 m="6px" textAlign="left" fontWeight="400">
+          <Button
+            onClick={() => {
+              setDeletePost(id);
+              toggleDialog();
+            }}
+          >
+            Excluir
+          </Button>
+        </H5>
+        <Link href={`${api_uri}/${id}`} passHref>
+          <FlexBox>
+            <H5 m="6px" textAlign="left" fontWeight="400">
+              Editar
+            </H5>
+
+            <Hidden flex="0 0 0 !important" down={769}>
+              <Typography textAlign="center" color="text.muted">
+                <IconButton>
+                  <Icon variant="small" defaultcolor="currentColor">
+                    arrow-right
+                  </Icon>
+                </IconButton>
+              </Typography>
+            </Hidden>
+          </FlexBox>
+        </Link>
+      </>
+    );
+  };
+
   return (
     <>
       <ComfirmationModal
@@ -69,51 +123,23 @@ export default function DefaultList({
           toggleDialog();
         }}
       />
+
       {data?.map((item) => (
         <TableRow key={item.id} my="1rem" padding="6px 18px">
-          <FlexBox alignItems="center" m="6px" flex="2 2 220px !important">
-            <Avatar src={ImageUtils.getMini(item.img)} size={40} />
-            <Typography textAlign="left" ml="20px">
-              {item.title}
-            </Typography>
-          </FlexBox>
-
-          <H5 m="6px" textAlign="left" fontWeight="400">
-            <StatusLabel status={item.status} />
-          </H5>
-          <H5 m="6px" textAlign="left" fontWeight="400">
-            <Button
-              onClick={() => {
-                setDeletePost(item.id);
-                toggleDialog();
-              }}
-            >
-              Excluir
-            </Button>
-          </H5>
-          <Link href={`${editLink}/${item.id}`} passHref>
-            <FlexBox>
-              <H5 m="6px" textAlign="left" fontWeight="400">
-                Editar
-              </H5>
-
-              <Hidden flex="0 0 0 !important" down={769}>
-                <Typography textAlign="center" color="text.muted">
-                  <IconButton>
-                    <Icon variant="small" defaultcolor="currentColor">
-                      arrow-right
-                    </Icon>
-                  </IconButton>
-                </Typography>
-              </Hidden>
-            </FlexBox>
-          </Link>
+          <>
+            {dataMap?.map((field, idx) => (
+              <>
+                <FormField key={idx} field={field} value={item} />
+              </>
+            ))}
+            <Actions id={item.id} />
+          </>
         </TableRow>
       ))}
 
       <FlexBox justifyContent="center" mt="2.5rem">
         <Pagination
-          page={meta.page}
+          page={meta?.page || 0}
           pageCount={Math.ceil((meta?.total || 0) / (meta?.size || 1)) || 1}
           onChange={(data) => setPage(data + 1)}
         />

@@ -1,5 +1,6 @@
 import SupabaseRepository from "@supabaseutils/types/repository";
 import StringUtils from "@utils/helpers/String.utils";
+import { LOG } from "@utils/log";
 
 export default class ProfileRepository extends SupabaseRepository<any> {
   constructor() {
@@ -15,14 +16,12 @@ export default class ProfileRepository extends SupabaseRepository<any> {
     size: number,
     query: {
       tsv_search?: string;
-      order?: string[][]
+      order?: string[][];
     }
   ) {
     const start = page <= 1 ? 0 : (page - 1) * size;
 
-    const queryRunner = this.from
-      .select("*", { count: "exact" })
-      .eq("deleted", false);
+    const queryRunner = this.from.select("*", { count: "exact" });
 
     const textSearch = this.fulltextSearchQuery(query.tsv_search);
     if (!StringUtils.isEmpty(textSearch)) {
@@ -37,9 +36,12 @@ export default class ProfileRepository extends SupabaseRepository<any> {
       queryRunner.range(start, start + size);
     }
 
-    if(query.order != undefined && query.order.length > 0) {
-
+    if (query.order != undefined && query.order.length > 0) {
     }
+
+    LOG.debug(
+      `Search paginated on '${this.TABLE}' with: start={${start}}, size={${size}} `
+    );
 
     return queryRunner.order("created_at", { ascending: false });
   }

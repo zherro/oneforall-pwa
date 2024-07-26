@@ -8,7 +8,8 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page: number = +(searchParams.get("page") || 1);
-    const size: number = +(searchParams.get("size") || 0);
+    let size: number = +(searchParams.get("size") || 20);
+    size = size > 30 ? 30 : size;
     const tsv_search: string = searchParams.get("search") || "";
 
     const respository = new ProfileRepository();

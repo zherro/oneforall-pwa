@@ -19,13 +19,6 @@ import { ProfileModel } from "@supabaseutils/model/Profile.model";
 import HeaderPageDashBoard from "@component/header/HeaderPageDashBoard";
 import { usePagination } from "@hook/usePagination";
 
-interface DataProps {
-  data?: ProfileModel[];
-  page?: number;
-  size?: number;
-  total?: number;
-}
-
 export default function ListUsers() {
   const {
     data,
@@ -116,14 +109,20 @@ export default function ListUsers() {
               Nenhum resultado encontrado
             </Typography>
           )} */}
-          {!loading && (data?.meta.totalItems || 0) > 0 && (
+          {!loading && (data?.total || 0) > 0 && (
             <DefaultList
+              api_uri={API_ROUTES.ADMIN.USERS}
               deletePost={deletePost}
-              data={data?.items }
+              data={data?.data || []}
+              dataMap={[
+                { field: "id", type: "key" },
+                { field: "email", type: "text" },
+                { field: "status", type: "status" },
+              ]}
               meta={{
                 page: page,
-                size: data?.meta.itemsPerPage,
-                total: data?.meta.totalItems,
+                size: data?.size,
+                total: data?.total,
               }}
             />
           )}

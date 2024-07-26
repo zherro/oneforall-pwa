@@ -8,6 +8,13 @@ interface PaginationOptions {
   limit: number;
 }
 
+interface DataProps<T> {
+  data?: any[] | T[];
+  page?: number;
+  size?: number;
+  total?: number;
+}
+
 interface PaginationResult<T> {
   items: T[];
   meta: {
@@ -26,7 +33,7 @@ export const usePagination = <T>(
   const notify = useNotify();
 
   const [page, setPage] = useState<number>();
-  const [data, setData] = useState<PaginationResult<T> | null>(null);
+  const [data, setData] = useState<DataProps<T> | null>(null);
   const [options, setOptions] = useState<PaginationOptions>(initialOptions);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
