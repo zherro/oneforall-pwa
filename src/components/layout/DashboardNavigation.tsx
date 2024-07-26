@@ -108,4 +108,22 @@ const linkList = [
       // },
     ],
   },
+  {
+    title: "ADMINISTRADOR",
+    list: [
+      {
+        href: APP_ROUTES.ADMIN.USERS,
+        title: "Usuários",
+        iconName: "children",
+      },
+      // { href: "/orders", title: "Orders", iconName: "bag", count: 5 },
+      // { href: "/wish-list", title: "Wishlist", iconName: "heart", count: 19 },
+      // {
+      //   href: "/support-tickets",
+      //   title: "Support Tickets",
+      //   iconName: "customer-service",
+      //   count: 1,
+      // },
+    ],
+  },
 ];

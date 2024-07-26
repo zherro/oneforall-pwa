@@ -31,8 +31,16 @@ class HttpResponse {
     );
   }
 
-  accepted() {
-    return new Response("{}", {
+  ok(body?: any) {
+    return this.responsePayload(HttpStatusCode.OK, body);
+  }
+
+  accepted(body?: any) {
+    return this.responsePayload(HttpStatusCode.ACCEPTED, body);
+  }
+
+  private responsePayload(status: HttpStatusCode, body?: any) {
+    return new Response(body ? JSON.stringify(body) : "{}", {
       status: HttpStatusCode.ACCEPTED,
       headers: { "Content-Type": "application/json" },
     });

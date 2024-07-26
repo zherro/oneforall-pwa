@@ -12,6 +12,7 @@ import APP_ROUTES from "@routes/app.routes";
 import { UserData } from "./model/user/UserData";
 import SessionUtils from "./session";
 import ObjectUtils from "@utils/helpers/Object.utils";
+import { LOG } from "@utils/log";
 
 type MaybeSession = Session | UserData | null;
 
@@ -48,6 +49,7 @@ export default function SupabaseProvider({
   };
 
   useEffect(() => {
+    LOG.debug("Provider->fetchSession");
     fetchSession();
   }, []);
 
@@ -128,6 +130,7 @@ export const AuthGuard = ({ skelecton, children }) => {
     const supabaseClient = createClient();
 
     const validate = async () => {
+      LOG.debug("Validate session");
       const {
         data: { user },
       } = await supabaseClient.auth.getUser();
@@ -155,6 +158,7 @@ function validateAutorizedsPaths(
   path: any,
   router
 ) {
+  LOG.debug("Provider::validateAutorizedsPaths for path: " + path);
   const paths = (
     process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
   ).split(",");

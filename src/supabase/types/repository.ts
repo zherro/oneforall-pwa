@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@supabaseutils/utils/server";
+import StringUtils from "@utils/helpers/String.utils";
 
 export default abstract class SupabaseRepository<T> {
   protected supabase: SupabaseClient;
@@ -30,5 +31,25 @@ export default abstract class SupabaseRepository<T> {
     Object.keys(query).forEach((key) => {
       builder.eq(key, query[key]);
     });
+  }
+
+  public fulltextSearchQuery(value?: string): string {
+    if (StringUtils.isEmpty(value)) {
+      return "";
+    }
+    // Divide a string em palavras usando espaços como delimitadores
+    const words = (value || "").split(" ");
+
+    let query = "";
+
+    // Ajusta cada palavra conforme necessário
+    words
+      .filter((w) => w.length > 2)
+      .forEach(
+        (word) =>
+          (query = query.length <= 0 ? `${word}:*` : `${query} | ${word}:*`)
+      );
+
+    return query;
   }
 }

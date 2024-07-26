@@ -15,12 +15,17 @@ const APP_ROUTES = {
     PROFILE_SELECT_COMPANY: "/profile/select-store",
   },
   SUPORT: {
-    FORM: "/suporte"
+    FORM: "/suporte",
   },
 
   DASHBOARD: {
     HOME: dashboard,
-    PROFILE: `${dashboard}/profile`
+    PROFILE: `${dashboard}/profile`,
+  },
+
+  ADMIN: {
+    USERS: `${dashboard}/admin/users`,
+    USERS_PERMISSION: `${dashboard}/admin/users-permissions`,
   },
 };
 
@@ -44,6 +49,10 @@ export const API_ROUTES = {
     ARTICLES: "/api/articles",
     PAGES: "/api/pages/",
     PLACES: "/api/places",
+  },
+
+  ADMIN: {
+    USERS: "/api/admin/profiles",
   },
 };
 
