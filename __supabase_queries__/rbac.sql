@@ -1,6 +1,7 @@
 --create schema
 create schema if not exists rbac;
-
+grant usage on schema "rbac" to anon;
+grant usage on schema "rbac" to authenticated;
 
 --create tables
 create table if not exists rbac.role(

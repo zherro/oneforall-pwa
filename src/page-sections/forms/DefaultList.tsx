@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import Avatar from "@component/avatar";
@@ -38,6 +38,7 @@ export default function DefaultList({
   setPage,
   api_uri,
 }: Props) {
+  const path = usePathname();
   const { push } = useRouter();
   const [openDialog, setOpenDialog] = useState({
     open: false,
@@ -90,7 +91,7 @@ export default function DefaultList({
             Excluir
           </Button>
         </H5>
-        <Link href={`${api_uri}/${id}`} passHref>
+        <Link href={`${path}/${id}`} passHref>
           <FlexBox>
             <H5 m="6px" textAlign="left" fontWeight="400">
               Editar

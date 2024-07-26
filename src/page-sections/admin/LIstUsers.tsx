@@ -1,21 +1,14 @@
-"use client";
-import { useCallback, useEffect, useState } from "react";
+"use client";;
+import { useState } from "react";
 // GLOBAL CUSTOM COMPONENTS
 import Hidden from "@component/hidden";
 import FlexBox from "@component/FlexBox";
 import TableRow from "@component/TableRow";
-import Typography, { H5 } from "@component/Typography";
-import useFetch from "@hook/useFetch";
+import { H5 } from "@component/Typography";
 import { API_ROUTES } from "@routes/app.routes";
-import useNotify from "@hook/useNotify";
-import { SearchInput } from "@component/search-box";
 import Grid from "@component/grid/Grid";
-import Queryfy from "@utils/QueryFy";
-import Select from "@component/Select";
-import Box from "@component/Box";
 import { Skeleton, Stack } from "@chakra-ui/react";
 import DefaultList from "@sections/forms/DefaultList";
-import { ProfileModel } from "@supabaseutils/model/Profile.model";
 import HeaderPageDashBoard from "@component/header/HeaderPageDashBoard";
 import { usePagination } from "@hook/usePagination";
 
