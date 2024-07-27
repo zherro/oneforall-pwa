@@ -86,6 +86,21 @@ const linkList = [
     ],
   },
   {
+    title: "MEU NEGÒCIO",
+    list: [
+      {
+        href: APP_ROUTES.DASHBOARD.PROFILE,
+        title: "Minha Conta",
+        iconName: "user",
+      },
+      {
+        href: "#",
+        title: "Meu Endereço",
+        iconName: "map-pin-2",
+      },
+    ],
+  },
+  {
     title: "CONFIGURAÇÃO DA CONTA",
     list: [
       {
