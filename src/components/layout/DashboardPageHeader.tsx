@@ -9,12 +9,14 @@ import Sidenav from "@component/sidenav/Sidenav";
 import { DashboardNavigationMenu } from "./DashboardNavigation";
 import { IconButton } from "../buttons";
 import Grid from "@component/grid/Grid";
+import Divider from "@component/Divider";
 
 // ==============================================================
 export interface DashboardPageHeaderProps {
   title?: string;
   iconName?: string;
   button?: ReactNode;
+  divider?: boolean;
 }
 // ==============================================================
 
@@ -22,6 +24,7 @@ export default function DashboardPageHeader({
   iconName,
   title,
   button,
+  divider
 }: DashboardPageHeaderProps) {
   const [open, setOpen] = useState(false);
 
@@ -47,6 +50,7 @@ export default function DashboardPageHeader({
             {button}
           </Grid>
         </Grid>
+        {divider && <Divider height="1px" width="100%" bg="gray.400" mt="0.5rem" />}
 
         {/* {isTablet && !!button && <Box mt="1rem">{button}</Box>} */}
       </Box>

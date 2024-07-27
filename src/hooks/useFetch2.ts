@@ -1,4 +1,6 @@
+"use client"
 import MESSAGES from "@data/messages";
+import useNotify from "./useNotify";
 
 const content = {
   "Content-Type": "application/json",
@@ -10,20 +12,21 @@ interface RequestProps {
   body?: any;
 }
 export default function useFetch(uri: string, options, config: FetchOptions) {
+
   const useFetchClbk = async () => {
-    config.onLoading(true);
+    config.onLoading && config.onLoading(true);
 
     fetch(uri, options)
       .then((response) => response.json())
       .then((data) => {
-        config.onLoading(false);
+        config.onLoading && config.onLoading(false);
         // IF response is error
-        if (data?.statusCode > 299) config.handleError(data);
-        else config.handleData(data);
+        if (data?.statusCode > 299 && config.handleError) config.handleError(data);
+        else config.handleData && config.handleData(data);
       })
       .catch((error) => {
-        config.onLoading(false);
-        config.handleError({
+        config.onLoading && config.onLoading(false);
+        config.handleError && config.handleError({
           status: "error",
           message: MESSAGES.ERROR_NOT_COMPLETE_REQUEST,
         });

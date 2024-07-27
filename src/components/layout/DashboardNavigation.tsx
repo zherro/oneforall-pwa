@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 
 import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
-import Typography from "@component/Typography";
-import APP_ROUTES from "@routes/app.routes";
+import Typography, { SemiSpan } from "@component/Typography";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import LogoutButton from "@sections/auth/Logout";
 // STYLED COMPONENTS
 import { DashboardNavigationWrapper, StyledDashboardNav } from "./styles";
 import Divider from "../Divider";
 import Box from "../Box";
+import { useSession } from "@supabaseutils/supabase.provider";
 
 export default function DashboardNavigation() {
   const pathname = usePathname();
@@ -30,38 +31,74 @@ export default function DashboardNavigation() {
 
 export function DashboardNavigationMenu() {
   const pathname = usePathname();
+  const { tenant } = useSession();
 
   return (
     <>
-      {linkList.map((item) => (
-        <Fragment key={item.title}>
-          <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
-            {item.title}
-          </Typography>
+      <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
+        {}
+      </Typography>
 
-          {item.list.map((item) => (
-            <StyledDashboardNav
-              px="1.5rem"
-              mb="1.25rem"
-              href={item.href}
-              key={item.title}
-              isCurrentPath={pathname?.includes(item.href)}
-            >
-              <FlexBox alignItems="center">
-                <div className="dashboard-nav-icon-holder">
-                  <Icon variant="small" defaultcolor="currentColor" mr="10px">
-                    {item.iconName}
-                  </Icon>
-                </div>
+      <StyledDashboardNav
+        px="1.5rem"
+        mb="1.25rem"
+        href={APP_ROUTES.DASHBOARD.STORE.MY_STORE}
+      >
+        <FlexBox alignItems="center" color="primary.main">
+          <div className="dashboard-nav-icon-holder">
+            <Icon variant="small" defaultcolor="primary.main" mr="10px">
+              store-solid
+            </Icon>
+          </div>
 
-                <span>{item.title}</span>
-              </FlexBox>
+          <SemiSpan
+            borderColor="gray.200"
+            style={{
+              borderBottom: "1px solid",
+            }}
+          >
+            {tenant?.name}
+          </SemiSpan>
+        </FlexBox>
 
-              <span>{item?.count}</span>
-            </StyledDashboardNav>
-          ))}
-        </Fragment>
-      ))}
+        {/* <span>{item?.count}</span> */}
+      </StyledDashboardNav>
+      {linkList?.map(
+        (item) =>
+          item?.title && (
+            <Fragment key={item.title}>
+              <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
+                {item.title}
+              </Typography>
+
+              {item?.list?.map((item) => (
+                <StyledDashboardNav
+                  px="1.5rem"
+                  mb="1.25rem"
+                  href={item.href}
+                  key={item.title}
+                  isCurrentPath={pathname?.includes(item.href)}
+                >
+                  <FlexBox alignItems="center">
+                    <div className="dashboard-nav-icon-holder">
+                      <Icon
+                        variant="small"
+                        defaultcolor="currentColor"
+                        mr="10px"
+                      >
+                        {item.iconName}
+                      </Icon>
+                    </div>
+
+                    <span>{item.title}</span>
+                  </FlexBox>
+
+                  <span>{item?.count}</span>
+                </StyledDashboardNav>
+              ))}
+            </Fragment>
+          )
+      )}
       <FlexBox
         alignItems="center"
         flexDirection="column"
@@ -85,18 +122,23 @@ const linkList = [
       },
     ],
   },
-  {
+  process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
     title: "MEU NEGÒCIO",
     list: [
       {
-        href: APP_ROUTES.DASHBOARD.PROFILE,
-        title: "Minha Conta",
-        iconName: "user",
+        href: APP_ROUTES.DASHBOARD.STORE.MY_STORE,
+        title: "Minha Loja",
+        iconName: "store-solid",
       },
       {
-        href: "#",
-        title: "Meu Endereço",
-        iconName: "map-pin-2",
+        href: APP_ROUTES.DASHBOARD.STORE.MY_STORE + "?change=true",
+        title: "Gerenciar Outra Loja",
+        iconName: "fa/solid/arrows-rotate",
+      },
+      {
+        href: APP_ROUTES.DASHBOARD.STORE.NEW_STORE,
+        title: "Nova Loja",
+        iconName: "plus",
       },
     ],
   },

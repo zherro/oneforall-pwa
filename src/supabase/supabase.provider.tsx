@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Session,
   SupabaseClient,
@@ -19,6 +25,7 @@ type MaybeSession = Session | UserData | null;
 type Context = {
   supabase: SupabaseClient<any, string>;
   session: MaybeSession;
+  revalidate: any;
 };
 
 export const SupabaseContext = createContext<Context | undefined>(undefined);
@@ -59,26 +66,26 @@ export default function SupabaseProvider({
     }
   });
 
-  useEffect(() => {
-    if (path != lastPath) {
-      fetchSession();
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_, _session) => {
-        if (_session?.access_token !== session?.access_token) {
-          // CUIDADO - refresh infinito
-          router.refresh();
-        }
-      });
+  // useEffect(() => {
+  //   if (path != lastPath) {
+  //     fetchSession();
+  //     const {
+  //       data: { subscription },
+  //     } = supabase.auth.onAuthStateChange((_, _session) => {
+  //       if (_session?.access_token !== session?.access_token) {
+  //         // CUIDADO - refresh infinito
+  //         router.refresh();
+  //       }
+  //     });
 
-      setLastPath(path);
-      return () => {
-        if (subscription) {
-          subscription.unsubscribe();
-        }
-      };
-    }
-  }, [path, createClient]);
+  //     setLastPath(path);
+  //     return () => {
+  //       if (subscription) {
+  //         subscription.unsubscribe();
+  //       }
+  //     };
+  //   }
+  // }, [path, createClient]);
 
   useEffect(() => {
     const sessionUtils = new SessionUtils(session);
@@ -87,12 +94,18 @@ export default function SupabaseProvider({
       sessionUtils.isAuthenticated(),
       sessionUtils.isCompleted(),
       path,
-      router
+      router,
+      sessionUtils.getTenant(),
+      sessionUtils.getUser()
     );
   }, [path, session]);
 
+  const revalidate = useCallback(() => {
+    fetchSession();
+  }, []);
+
   return (
-    <SupabaseContext.Provider value={{ supabase, session }}>
+    <SupabaseContext.Provider value={{ supabase, session, revalidate }}>
       <>{children}</>
     </SupabaseContext.Provider>
   );
@@ -156,7 +169,9 @@ function validateAutorizedsPaths(
   isAuthenticated: boolean,
   isCompleted: boolean,
   path: any,
-  router
+  router,
+  tenant,
+  user
 ) {
   LOG.debug("Provider::validateAutorizedsPaths for path: " + path);
   const paths = (
@@ -170,6 +185,12 @@ function validateAutorizedsPaths(
       router.push("/complete-your-profile");
     } else if (paths.includes(path)) {
       router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
+    }
+
+    if (
+      process.env.APP_STORE_CONTEXT_REQUIRED == "true" &&
+      tenant.id == user.id
+    ) {
     }
   }
 }
@@ -224,6 +245,7 @@ export const useSession = () => {
   }
 
   return {
+    revalidate: context.revalidate,
     signature: session?.signature(),
     session: session?.getUser(),
     tenant: session?.getTenant(),

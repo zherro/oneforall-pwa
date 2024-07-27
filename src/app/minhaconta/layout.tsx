@@ -9,6 +9,7 @@ import DashboardNavigation from "@component/layout/DashboardNavigation";
 import AppLayout from "@component/layout/layout-1";
 import { AuthGuard } from "@supabaseutils/supabase.provider";
 import styled from "styled-components";
+import StoryLoadBoard from "./StoryLoadBoard";
 // import SubFooter from "@component/footer/SubFooter";
 
 export const StyledGrid = styled(Grid)`
@@ -65,18 +66,6 @@ const SkelectonBoard = () => {
   );
 };
 
-const StoryLoadBoard = () => {
-  return (
-    <>
-      <H2 textAlign="center" mt="2rem" mb="3rem">
-        Estamos preparando tudo pra você! Só um instante.
-      </H2>
-      <FlexBox justifyContent="center">
-        <Icon size="320px">story-set/Design-stats-amico</Icon>
-      </FlexBox>
-    </>
-  );
-};
 
 export default function Layout({ children }) {
   return (

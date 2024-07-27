@@ -48,6 +48,9 @@ const nextConfig = {
     APP_NAME: "Bimo App",
     APP_LANGUAGE: "portuguese", // portuguese, english
 
+    // STORE
+    APP_STORE_CONTEXT_REQUIRED: "true",
+
     APP_EMAIL_SUPORT: "contato@boracuiaba.com",
     APP_INSTAGRAN_NAME: "@boracuiaba.ofc",
     APP_INSTAGRAN_LINK: "https://www.instagram.com/boracuiaba.ofc",

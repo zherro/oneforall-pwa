@@ -75,24 +75,26 @@ const H2_responsive = styled(Typography)`
   // Dispositivos extra small (telefones em modo retrato, com menos de 576px)
   // Sem media query para xs, já que este é o padrão, no Bootstrap.
 
+  font-size: 1.25rem;
+
   // Dispositivos small (telefones em modo paisagem, com 576px ou mais)
   @media (min-width: 576px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 
   // Dispositivos médios (tablets com 768px ou mais)
   @media (min-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 
   // Dispositivos large (desktops com 992px ou mais)
   @media (min-width: 992px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 
   // Dispositivos extra large (desktops grandes com 1200px ou mais)
   @media (min-width: 1200px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 `;
 export const H1 = (props: CustomProps) => {

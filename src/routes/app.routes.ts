@@ -21,6 +21,10 @@ const APP_ROUTES = {
   DASHBOARD: {
     HOME: dashboard,
     PROFILE: `${dashboard}/profile`,
+    STORE: {
+      MY_STORE: `${dashboard}/stores/minha-loja`,
+      NEW_STORE: `${dashboard}/stores/nova-loja`,
+    },
   },
 
   ADMIN: {
@@ -49,6 +53,15 @@ export const API_ROUTES = {
     ARTICLES: "/api/articles",
     PAGES: "/api/pages/",
     PLACES: "/api/places",
+  },
+
+  STORE: {
+    LIST: "/api/stores",
+    NEW: "/api/stores",
+  },
+
+  TENANT: {
+    CHANGE: "/api/tenant/change"
   },
 
   ADMIN: {
