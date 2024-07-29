@@ -141,6 +141,17 @@ const linkList = [
     ],
   },
 
+  process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
+    title: "MEUS PRODUTOS",
+    list: [
+      {
+        href: APP_ROUTES.DASHBOARD.MY_CATALOG,
+        title: "Gerenciar Produtos",
+        iconName: "fa/solid/boxes-stacked",
+      },
+    ],
+  },
+
   {
     title: "CONFIGURAÇÃO DA CONTA",
     list: [

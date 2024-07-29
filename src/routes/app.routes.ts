@@ -25,6 +25,8 @@ const APP_ROUTES = {
       MY_STORE: `${dashboard}/stores/minha-loja`,
       NEW_STORE: `${dashboard}/stores/nova-loja`,
     },
+    MY_CATALOG: `${dashboard}/cardapio`,
+    MY_CATALOG_SEND_FILE_CARDAPIO: `${dashboard}/cardapio/cardapio-enviar`,
   },
 
   ADMIN: {
