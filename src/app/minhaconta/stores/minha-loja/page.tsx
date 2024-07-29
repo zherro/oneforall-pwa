@@ -75,6 +75,11 @@ const MYStorePage = () => {
       {tenant?.tenant_id && (
         <Grid container>
           <Grid item xs={12}>
+            <FlexBox justifyContent="end" mt="0.5rem">
+              <Button color="blue" variant="outlined" >
+                Editar <Icon>edit</Icon>
+              </Button>
+            </FlexBox>
             <Box mt="1rem">
               <Typography fontSize="1.15rem">Nome:</Typography>
               <SemiSpan fontSize="1.15rem">{tenant.name}</SemiSpan>
@@ -110,7 +115,11 @@ const MYStorePage = () => {
           </Grid>
         )}
         <Grid item xs={12}>
-          <DashboardPageHeader divider title="Minhas Lojas" iconName="fa/regular/rectangle-list" />
+          <DashboardPageHeader
+            divider
+            title="Minhas Lojas"
+            iconName="fa/regular/rectangle-list"
+          />
           <Divider
             width="100%"
             bg="gray.300"

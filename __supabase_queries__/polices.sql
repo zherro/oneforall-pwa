@@ -1,1 +1,0 @@
-create policy "root_blogs" on "public"."blog_posts" as permissive for all to authenticated using ((get_my_claim('feature_blog'::text) = '"true"'::jsonb))with check ((get_my_claim('feature_blog'::text) = '"true"'::jsonb));

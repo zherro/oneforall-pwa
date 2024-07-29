@@ -3,6 +3,7 @@ create table profiles (
   id uuid references auth.users not null primary key,
   email varchar,
   updated_at timestamp with time zone,
+  created_at timestamp with time zone default CURRENT,
   username text unique,
   full_name text,
   avatar_url text,

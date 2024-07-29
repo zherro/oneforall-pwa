@@ -30,6 +30,8 @@ const APP_ROUTES = {
   ADMIN: {
     USERS: `${dashboard}/admin/users`,
     USERS_PERMISSION: `${dashboard}/admin/users-permissions`,
+    CONFIG_PRODUCTS_TABLE: `${dashboard}/admin/config-products`,
+    CONFIG_PRODUCTS_TABLE_FORM: `${dashboard}/admin/config-products/form`,
   },
 };
 
@@ -61,11 +63,12 @@ export const API_ROUTES = {
   },
 
   TENANT: {
-    CHANGE: "/api/tenant/change"
+    CHANGE: "/api/tenant/change",
   },
 
   ADMIN: {
     USERS: "/api/admin/profiles",
+    CONFIG_PRODUCT_TABLE: "/api/admin/config-products-table",
   },
 };
 

@@ -1,17 +1,15 @@
 "use client";
-
 import { Fragment } from "react";
 import { usePathname } from "next/navigation";
 
 import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
 import Typography, { SemiSpan } from "@component/Typography";
-import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
+import APP_ROUTES from "@routes/app.routes";
 import LogoutButton from "@sections/auth/Logout";
 // STYLED COMPONENTS
 import { DashboardNavigationWrapper, StyledDashboardNav } from "./styles";
 import Divider from "../Divider";
-import Box from "../Box";
 import { useSession } from "@supabaseutils/supabase.provider";
 
 export default function DashboardNavigation() {
@@ -142,6 +140,7 @@ const linkList = [
       },
     ],
   },
+
   {
     title: "CONFIGURAÇÃO DA CONTA",
     list: [
@@ -155,14 +154,6 @@ const linkList = [
         title: "Meu Endereço",
         iconName: "map-pin-2",
       },
-      // { href: "/orders", title: "Orders", iconName: "bag", count: 5 },
-      // { href: "/wish-list", title: "Wishlist", iconName: "heart", count: 19 },
-      // {
-      //   href: "/support-tickets",
-      //   title: "Support Tickets",
-      //   iconName: "customer-service",
-      //   count: 1,
-      // },
     ],
   },
   {
@@ -172,6 +163,11 @@ const linkList = [
         href: APP_ROUTES.ADMIN.USERS,
         title: "Usuários",
         iconName: "children",
+      },
+      {
+        href: APP_ROUTES.ADMIN.CONFIG_PRODUCTS_TABLE,
+        title: "Tabela de Produtos",
+        iconName: "fa/regular/rectangle-list",
       },
       // { href: "/orders", title: "Orders", iconName: "bag", count: 5 },
       // { href: "/wish-list", title: "Wishlist", iconName: "heart", count: 19 },

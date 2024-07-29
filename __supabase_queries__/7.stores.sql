@@ -15,7 +15,5 @@ $function$
 ;
 
 
-CREATE TRIGGER auto_insert_tenant_store_owner
- AFTER INSERT ON public.stores
- FOR EACH ROW
- EXECUTE PROCEDURE auto_insert_tenant();
+CREATE TRIGGER auto_insert_tenant_store_owner AFTER INSERT ON public.stores  
+FOR EACH ROW  EXECUTE PROCEDURE auto_insert_tenant();
