@@ -9,7 +9,7 @@ import Image from "./Image";
 import FlexBox from "./FlexBox";
 import ViewImage from "./modal/ViewImage";
 import { useCallback, useState } from "react";
-import { IconButton } from "./buttons";
+import { Button, IconButton } from "./buttons";
 import styled from "styled-components";
 
 interface FileInputProps {
@@ -181,25 +181,31 @@ export const ImageViewList = ({
           }}
         >
           <Stack direction={["row"]} spacing={4} mt="0.75rem" mb="0.75rem">
-            <IconButton
+            <Button
               padding="0.5rem"
               borderRadius="8px"
               border="1px solid"
               borderColor="error"
-              onClick={() => removeFile(file.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                removeFile(file.id);
+              }}
               type="button"
               color="error.main"
               style={{ float: "left", height: "38px" }}
               m="0"
             >
               <Icon size="1.25rem">fa/solid/trash-can</Icon>
-            </IconButton>
+            </Button>
             <IconButton
               padding="0.5rem"
               borderRadius="8px"
               border="1px solid"
               borderColor="error"
-              onClick={() => setCapFile(file.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                setCapFile(file.id);
+              }}
               color={mainFile ? "success.main" : ""}
               type="button"
               style={{ float: "left", height: "38px" }}
