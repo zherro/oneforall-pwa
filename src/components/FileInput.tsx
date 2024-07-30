@@ -1,12 +1,10 @@
 import Link from "next/link";
-import Grid from "./grid/Grid";
 import { Stack } from "@chakra-ui/react";
 import Icon from "./icon/Icon";
 import Typography, { H3, SemiSpan } from "./Typography";
 import DropZone from "./DropZone";
 import Box from "./Box";
 import Image from "./Image";
-import FlexBox from "./FlexBox";
 import ViewImage from "./modal/ViewImage";
 import { useCallback, useState } from "react";
 import { Button, IconButton } from "./buttons";
@@ -161,6 +159,7 @@ export const ImageViewList = ({
       />
       <FileWrapper>
         <Box
+          height="120px"
           className="eye-box img"
           pb="10px"
           onClick={() => view(file?.base64)}

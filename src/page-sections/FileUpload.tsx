@@ -1,27 +1,24 @@
 "use client";
 import { Stack } from "@chakra-ui/react";
+import Box from "@component/Box";
 import FileInput, { ImageViewList } from "@component/FileInput";
 import { FileData } from "@supabaseutils/model/FileData";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
 import { getUuid } from "@utils/code/codeUtils";
 import { DataManager } from "@utils/memoryDataManager";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const FileUpload = ({
   savedFiles,
-  onChange,
+  onSelect,
 }: {
   savedFiles: FileData[] | any[];
-  onChange: any;
+  onSelect: Function;
 }) => {
   const [mainImg, setMainImg] = useState("");
-  const [files, setManager] = useState<DataManager<FileData | any>>(
+  const [manager, setManager] = useState<DataManager<FileData | any>>(
     new DataManager(savedFiles || [])
   );
-
-  useEffect(() => {
-    onChange(files.data);
-  }, [files, files.data]);
 
   const handleImageUpload = (fls) => {
     for (let i = 0; i < fls.length; i++) {
@@ -38,24 +35,28 @@ const FileUpload = ({
           size: fls[i]?.size,
           base64: reader.result,
         };
-        files.add(newFile);
-        setManager(new DataManager(files.data));
+        manager.add(newFile);
+        onSelect(manager.getAll());
+        setManager(new DataManager(manager.data));
       };
       reader.readAsDataURL(fls[i]);
     }
   };
 
   const removeFile = (id: string) => {
-    files.remove(id);
-    setManager(new DataManager(files.getAll()));
+    manager.remove(id);
+    onSelect(manager.getAll());
+    setManager(new DataManager(manager.getAll()));
   };
   return (
     <>
-      <FileInput onChange={(f) => handleImageUpload(f)} />
+      <Box shadow={4}>
+        <FileInput onChange={(f) => handleImageUpload(f)} />
+      </Box>
 
-      <Stack direction={["row"]} spacing={6} flexWrap={"wrap"}>
-        {files.data &&
-          files.data?.map((file, idx) => (
+      <Stack mt="2rem" direction={["row"]} spacing={6} flexWrap={"wrap"}>
+        {manager.data &&
+          manager.data?.map((file, idx) => (
             <ImageViewList
               mainFile={mainImg == file.id}
               removeFile={(id) => removeFile(id)}
