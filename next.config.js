@@ -74,9 +74,9 @@ const nextConfig = {
     EMAIL_PASS: "hobhmejwmfditwme",
 
     // S3 BUCKET
-    S3_BUKET_NAME: "gathu-cuiaba",
+    S3_BUKET_NAME: "bimo-buket",
     S3_BUKET_URI:
-      "https://boracuiaba.nyc3.cdn.digitaloceanspaces.com/gathu-cuiaba/",
+      "https://boracuiaba.nyc3.cdn.digitaloceanspaces.com/bimo-buket/",
 
     // GOOGLE
     G_CAPTCHA_SITE_KEY: "6LfUSAIqAAAAAN8fUYn8TRvHS2d6vCdKAOyacvKF",

@@ -5,4 +5,5 @@ export enum StatusEntity {
   DELETED = "D",
   PUBLISHED = "P",
   RACUNHO = "R",
+  NEW_REGISTRY = "N",
 }

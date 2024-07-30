@@ -55,7 +55,7 @@ const CardapioWelcome = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <LinkCard
-            link={APP_ROUTES.DASHBOARD.MY_CATALOG + "?start=true"}
+            link={APP_ROUTES.DASHBOARD.MY_CATALOG}
             titleIcon="edit"
             titleIconProps={{
               color: "primary",

@@ -35,14 +35,23 @@ export default function ViewImage({ open, onClose, image }: Props) {
           src={image}
         />
         <div style={{ clear: "both" }}></div>
-        <Box position="absolute" top="0.75rem" right="0.75rem" cursor="pointer">
+        <Box
+          position="absolute"
+          width="40px"
+          top="0.25rem"
+          right="0.25rem"
+          cursor="pointer"
+        >
           <IconButton
+            height="40px"
             className="close"
-            color="primary"
+            color="gray.main"
             size="small"
             onClick={onClose}
           >
-            <SemiSpan color="primary.main">FECHAR</SemiSpan>
+            <SemiSpan fontSize="1.25rem" color="primary.main">
+              X
+            </SemiSpan>
           </IconButton>
         </Box>
       </Card>

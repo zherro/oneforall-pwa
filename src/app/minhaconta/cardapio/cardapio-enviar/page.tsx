@@ -18,6 +18,7 @@ import useNotify from "@hook/useNotify";
 import { Extensions } from "@supabaseutils/types/Extensions";
 import { StoreMenuFile } from "@supabaseutils/model/file/StoreMenuFile.model";
 import DropZone from "@component/DropZone";
+import FileUpload from "@sections/FileUpload";
 
 interface CreateBucketOptions {
   types: string[];
@@ -156,7 +157,7 @@ const AddCategory = () => {
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            paddingTop="1rem"
+            paddingTop="2.5rem"
             marginBottom="1rem"
           >
             <Link
@@ -180,7 +181,8 @@ const AddCategory = () => {
               </Icon>
               <H3 marginBottom="0.5rem">Envie o cardapio por aqui</H3>
             </Stack>
-            <DropZone onChange={(inputs) => selectFiles(inputs)} />
+            {/* <DropZone onChange={(inputs) => selectFiles(inputs)} /> */}
+            <FileUpload />
           </Link>
         </Grid>
         <Grid item xs={12}>

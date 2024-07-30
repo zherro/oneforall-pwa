@@ -27,6 +27,8 @@ const APP_ROUTES = {
     },
     MY_CATALOG: `${dashboard}/cardapio`,
     MY_CATALOG_SEND_FILE_CARDAPIO: `${dashboard}/cardapio/cardapio-enviar`,
+
+    CATEGORY_NEW: `${dashboard}/new-category`,
   },
 
   ADMIN: {

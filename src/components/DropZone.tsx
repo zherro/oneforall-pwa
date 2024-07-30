@@ -1,27 +1,39 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Box from "./Box";
 import Divider from "./Divider";
 import { Button } from "./buttons";
 import Typography, { H5, Small } from "./Typography";
+import { getUuid } from "@utils/code/codeUtils";
+import { StatusEntity } from "@supabaseutils/model/types/Status.type";
+import ObjectUtils from "@utils/helpers/Object.utils";
+import { FileData } from "@supabaseutils/model/FileData";
 
 export interface DropZoneProps {
-  onChange?: (files: []) => void;
+  onlyImage?: boolean;
+  multiple?: boolean;
+  maxFiles?: number;
+  onChange?: (files: any) => void;
 }
 
-const DropZone: React.FC<DropZoneProps> = ({ onChange }) => {
+const extImg = { "image/*": [".png", ".jpeg", ".jpg", ".gif"] };
+const extPdf = { "application/pdf": [".pdf"] };
+
+const DropZone: React.FC<DropZoneProps> = ({
+  onChange,
+  maxFiles = 10,
+  multiple = true,
+  onlyImage = false,
+}: DropZoneProps) => {
   const onDrop = useCallback((acceptedFiles: any) => {
     if (onChange) onChange(acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxFiles: 10,
-    multiple: true,
-    accept: {
-      "image/*": [".png", ".jpeg", ".jpg", ".gif"],
-      "application/pdf": [".pdf"]
-    },
+    maxFiles,
+    multiple,
+    accept: { ...extImg, ...(onlyImage ? {} : extPdf) },
   });
 
   return (
@@ -41,7 +53,7 @@ const DropZone: React.FC<DropZoneProps> = ({ onChange }) => {
     >
       <input {...getInputProps()} />
       <H5 mb="18px" color="text.muted">
-       Arraste uma imagem
+        Arraste uma imagem
       </H5>
 
       <Divider width="200px" mx="auto" />
@@ -66,7 +78,7 @@ const DropZone: React.FC<DropZoneProps> = ({ onChange }) => {
         Selecionar arquivos
       </Button>
 
-      {/* <Small color="text.muted">Upload 280*280 image</Small> */ }
+      {/* <Small color="text.muted">Upload 280*280 image</Small> */}
     </Box>
   );
 };
