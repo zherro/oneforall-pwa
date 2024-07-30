@@ -7,15 +7,21 @@ import { getUuid } from "@utils/code/codeUtils";
 import { DataManager } from "@utils/memoryDataManager";
 import { useEffect, useState } from "react";
 
-const FileUpload = ({ savedFiles = [] }: { savedFiles?: FileData[] }) => {
-  const [mainImg, setMainImg] = useState('');
+const FileUpload = ({
+  savedFiles,
+  onChange,
+}: {
+  savedFiles: FileData[] | any[];
+  onChange: any;
+}) => {
+  const [mainImg, setMainImg] = useState("");
   const [files, setManager] = useState<DataManager<FileData | any>>(
-    new DataManager([])
+    new DataManager(savedFiles || [])
   );
 
   useEffect(() => {
-    console.log(files.data);
-  }, [files.data]);
+    onChange(files.data);
+  }, [files, files.data]);
 
   const handleImageUpload = (fls) => {
     for (let i = 0; i < fls.length; i++) {
@@ -32,7 +38,6 @@ const FileUpload = ({ savedFiles = [] }: { savedFiles?: FileData[] }) => {
           size: fls[i]?.size,
           base64: reader.result,
         };
-        console.log("newFile", newFile);
         files.add(newFile);
         setManager(new DataManager(files.data));
       };
