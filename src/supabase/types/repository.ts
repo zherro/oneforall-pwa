@@ -1,4 +1,5 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient, User } from "@supabase/supabase-js";
+import { UserData } from "@supabaseutils/model/user/UserData";
 import { createClient } from "@supabaseutils/utils/server";
 import StringUtils from "@utils/helpers/String.utils";
 import { LOG } from "@utils/log";
@@ -69,7 +70,7 @@ export default abstract class SupabaseRepository<T> {
   }
 
   async getUser(): Promise<any> {
-    const data: any = await this.supabase.auth.getUser();
+    const data: UserData | any = await this.supabase.auth.getUser();
     return data?.data?.user;
   }
 

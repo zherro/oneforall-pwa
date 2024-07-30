@@ -20,7 +20,7 @@ export default function DashboardNavigation() {
       px="0px"
       pb="1.5rem"
       color="gray.900"
-      borderRadius={8}
+      borderRight="1px solid #cdcdcd"
     >
       <DashboardNavigationMenu />
     </DashboardNavigationWrapper>

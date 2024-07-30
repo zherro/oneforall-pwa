@@ -51,6 +51,10 @@ export const API_ROUTES = {
   CUSTOMER: {
     CATEGORY: "/api/customer/category",
     POST: "/api/customer/article",
+
+    CATALOG: {
+      SEND_CATALOG_FILE: "/api/catalog/upload-menu"
+    }
   },
   EVENTOS: {
     NEXT: "/api/events/next",

@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { ReactElement, ReactNode } from "react";
 import StyledAppLayout from "./styles";
 import { Footer3 } from "@component/footer";

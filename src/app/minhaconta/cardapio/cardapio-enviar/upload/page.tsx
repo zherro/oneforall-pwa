@@ -5,13 +5,15 @@ import Typography, { SemiSpan } from "@component/Typography";
 import { Button } from "@component/buttons";
 import Grid from "@component/grid/Grid";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
-import APP_ROUTES from "@routes/app.routes";
+import { fetchPost } from "@hook/useFetch2";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import FileUpload from "@sections/FileUpload";
 import { FileData } from "@supabaseutils/model/FileData";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
 const CardapioUploadPage = () => {
+  const API_URI = API_ROUTES.CUSTOMER.CATALOG.SEND_CATALOG_FILE;
   const [files, setFileList] = useState<FileData[]>([]);
 
   const loadedFiles = useCallback(
@@ -20,6 +22,13 @@ const CardapioUploadPage = () => {
     },
     [setFileList]
   );
+
+  const upload = (body: any[]) => {
+    fetchPost(API_URI, body, {
+      notify: true,
+      handleData: () => {},
+    });
+  };
 
   return (
     <>
@@ -71,7 +80,7 @@ const CardapioUploadPage = () => {
             paddingY="0.35rem"
             color="white"
             backgroundColor="primary.main"
-            // onClick={() => upload(files)}
+            onClick={() => upload(files)}
           >
             Enviar cardapio
           </Button>
