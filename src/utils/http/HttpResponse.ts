@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import HttpStatusCode from "./HttpStatusCode";
 
 class HttpResponse {
@@ -19,7 +20,7 @@ class HttpResponse {
   }
 
   send() {
-    return new Response(
+    return new NextResponse(
       JSON.stringify({
         statusCode: this.statusCode,
         message: this.msg,
@@ -35,19 +36,16 @@ class HttpResponse {
     return this.responsePayload(HttpStatusCode.OK, body);
   }
 
-  accepted(body?: any) {
+  accepted(body?: any): NextResponse {
     return this.responsePayload(HttpStatusCode.ACCEPTED, body);
   }
 
   private responsePayload(status: HttpStatusCode, body?: any) {
-    return new Response(body ? JSON.stringify(body) : "{}", {
-      status: HttpStatusCode.ACCEPTED,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(body ? JSON.stringify(body) : "{}", { status });
   }
 
   error(status?: HttpStatusCode, msg?: string) {
-    return new Response(
+    return new NextResponse(
       JSON.stringify({
         statusCode: status || 500,
         message: msg || "Não conseguimos completar as solicitação!",

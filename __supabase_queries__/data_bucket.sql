@@ -25,7 +25,7 @@ CREATE TABLE public.data_bucket (
 
 alter table "data_bucket" enable row level security;
 
-create policy "Users can send own data files" on "public"."data_bucket" as permissive for insert to authenticated with check (true);
+create policy "Users can send own data files" on "public"."data_bucket" as permissive for insert to public with check ((( SELECT uid() AS uid) = user_id));
 
 create policy "Can get tenants data files" on "public"."data_bucket" as permissive for select to authenticated using (public.use_has_tenant(auth.uid(), tenant_id));
 

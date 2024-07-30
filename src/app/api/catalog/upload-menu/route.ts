@@ -1,6 +1,6 @@
 import { createClient } from "@supabaseutils/utils/server";
 import { LOG } from "@utils/log";
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import sharp from "sharp";
 import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { FileData } from "@supabaseutils/model/FileData";
@@ -10,6 +10,8 @@ import httpResponse from "@utils/http/HttpResponse";
 import FileDataRepository from "@supabaseutils/repositories/FileData.repository";
 import { UserData } from "@supabaseutils/model/user/UserData";
 import SessionUtils from "@supabaseutils/session";
+import { BusinessException } from "@supabaseutils/bussines.exception";
+import HttpStatusCode from "@utils/http/HttpStatusCode";
 
 // Configurar o cliente S3 da DigitalOcean
 const s3Client = new S3({
@@ -77,43 +79,64 @@ async function upload({ path, base64Image, width, name }, optimize = false) {
   const data = await s3Client.send(command);
 }
 
-const useUserVerify = (
-  user: UserData | any,
- matchs: { type: ""; value: any }[] = []
-) => {
-    let result = true;
-    for (let i = 0; i < matchs.length; i++) {
-        switch (matchs[i].type) {
-            case '':
-                
-                break;
-        
-            default:
-                break;
-        }
-    }
-    return result;
-};
+class ValidateUserAuth {
+  private session;
+  constructor(userData: UserData) {
+    this.session = new SessionUtils(userData);
+  }
+
+  public isAuthenticated() {
+    if (this.session.isAuthenticated()) return this;
+
+    throw new BusinessException(
+      "Faça login para continuar!",
+      HttpStatusCode.UNPROCESSABLE_ENTITY
+    );
+  }
+
+  public get() {
+    return {
+      tenant: this.session.getTenant(),
+      userId: this.session.getUser()?.id,
+    };
+  }
+}
+
+const validateUserAuth = (userData) => new ValidateUserAuth(userData);
+export default validateUserAuth;
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
-
-    const repository = new FileDataRepository();
-
     // Parse the JSON body
     const files: FileData[] = await request.json();
-    const user = new SessionUtils(await repository.getUser());
-    (user.isAuthenticated());
 
+    const repository = new FileDataRepository();
+    const { tenant, userId } = validateUserAuth(await repository.getUser())
+      .isAuthenticated()
+      .get();
+
+    for (let i = 0; i < files.length; i++) {
+      uploadFiles(files[i]);
+      files[i].status = StatusEntity.ACTIVE;
+      files[i].tenant_id = tenant.id;
+      files[i].user_id = userId;
+      const { data, error } = await repository
+        .save(files[i])
+        .select("id")
+        .single();
+
+      console.log(files[i]);
+
+      if (error) throw error;
+    }
     // const filesIds = await uploadFiles(files, supabase);
 
-    return httpResponse.accepted();
+    return NextResponse.json({}, { status: HttpStatusCode.CREATED });
   } catch (error) {
     LOG.error("Error processing request:", error);
 
     // Return an error response
-    return httpResponse.error;
+    return NextResponse.json({}, { status: HttpStatusCode.CREATED });
   }
 }
 
@@ -123,48 +146,25 @@ const imageSizes = [
   { size: 750, name: "medium" },
 ];
 
-async function uploadFiles(files: FileData[], supabase) {
-  const images: any[] = [];
+async function uploadFiles(file: FileData) {
+  if (ObjectUtils.nonNull(file)) {
+    await upload({
+      path: file.id,
+      base64Image: file.base64,
+      width: 100,
+      name: "original",
+    });
 
-  if (ObjectUtils.nonNull(files) && files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      const updateOnly = ObjectUtils.nonNull(files[i].id);
-      if (updateOnly && StatusEntity.NEW_REGISTRY != files[i].status) {
-        images.push({ isMain: false, path: files[i].id });
-        continue;
-      } else if (StatusEntity.NEW_REGISTRY == files[i].status) {
-        files[i].status = StatusEntity.ACTIVE;
-        files[i].id = undefined;
-      }
-
-      const { data, error } = await supabase
-        .from("data_bucket")
-        .upsert(files[i])
-        .select("id");
-
-      if (error) throw error;
-
-      await upload({
-        path: data[0].id,
-        base64Image: files[i].base64,
-        width: 100,
-        name: "original",
-      });
-
-      for (let j = 0; j < imageSizes.length; j++) {
-        await upload(
-          {
-            path: data[0].id,
-            base64Image: files[i].base64,
-            width: imageSizes[j].size,
-            name: imageSizes[j].name,
-          },
-          true
-        );
-      }
-
-      images.push({ isMain: false, path: data[0].id });
+    for (let j = 0; j < imageSizes.length; j++) {
+      await upload(
+        {
+          path: file.id,
+          base64Image: file.base64,
+          width: imageSizes[j].size,
+          name: imageSizes[j].name,
+        },
+        true
+      );
     }
   }
-  return images;
 }
