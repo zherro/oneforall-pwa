@@ -6,7 +6,7 @@ import useWindowSize from "@hook/useWindowSize";
 import TitleCard from "@component/cards/TitleCard";
 import TipCard from "@component/cards/TipCard";
 import Stepper from "@component/Stepper";
-import { Flex, Spacer, Stack, Switch } from "@chakra-ui/react";
+import { Flex, Spacer, Stack, Switch, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { Button } from "@component/buttons";
 import Icon from "@component/icon/Icon";
@@ -14,12 +14,14 @@ import { Accordion, AccordionHeader } from "@component/accordion";
 import { SemiSpan } from "@component/Typography";
 import Divider from "@component/Divider";
 import { useRouter } from "next/navigation";
-import APP_ROUTES from "@routes/app.routes";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import Box from "@component/Box";
 import DeliveryCatalog from "./DeliveryCatalog";
 import useFetch from "@hook/useFetch";
 import useNotify from "@hook/useNotify";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
+import { fetchGet } from "@hook/useFetch2";
+import TipBox from "@component/tips/TipBox";
 
 // ======================================================
 type Props = { children: ReactNode };
@@ -35,10 +37,15 @@ const initialValues = {
 };
 
 const PageCatalogFood = () => {
+  const API_URI_CATEGORIES = API_ROUTES.CUSTOMER.CATALOG.CATEGORY;
+
+  const [category, handleDataCategory] = useState<any>();
+  const [errorCategory, handleErrorCategory] = useState<any>();
+  const [loadingCategory, onLoadingCategory] = useState<boolean>(false);
+
   // const PageCatalog: FC<Props> = ({ children }) => {
   const [selectedStep, setSelectedStep] = useState(0);
   const [refresh, prefetchData] = useState<any>();
-  const [category, setCategories] = useState<any[]>();
 
   const router = useRouter();
   const notify = useNotify();
@@ -46,17 +53,6 @@ const PageCatalogFood = () => {
 
   const width: any = useWindowSize();
   const isTablet = (width || 0) < 745;
-
-  const successCallback = useCallback((data) => {
-    setCategories(data);
-  }, []);
-
-  const errorCallback = useCallback((error) => {
-    notify({
-      status: "error",
-      description: error.message,
-    });
-  }, []);
 
   const retrieveCatalog = useCallback(() => {
     // fetchData(
@@ -68,7 +64,13 @@ const PageCatalogFood = () => {
   }, []);
 
   useEffect(() => {
-    retrieveCatalog();
+    fetchGet(API_URI_CATEGORIES, {
+      notify: true,
+      headers: {},
+      handleData: handleDataCategory,
+      handleError: handleErrorCategory,
+      onLoading: onLoadingCategory,
+    });
   }, [refresh]);
 
   const checkoutSchema = yup.object().shape({
@@ -138,8 +140,8 @@ const PageCatalogFood = () => {
         <Link href={APP_ROUTES.DASHBOARD.CATEGORY_NEW}>
           <Button
             mt="1.5rem"
-            bg="primary.main"
-            color="white"
+            variant="outlined"
+            color="primary"
             style={{ fontWeight: "400" }}
           >
             <Icon size="1.25rem" pr=".35rem">
@@ -160,62 +162,83 @@ const PageCatalogFood = () => {
             onChange={handleStepChange}
           />
         </Grid>
+        {(errorCategory && (
+          <Grid item xs={12}>
+            <TipBox
+              type="error"
+              text="Oh não! Ocorreu um erro inesperado ao tentar encontrar as categorias."
+            />
+          </Grid>
+        )) || <></>}
       </Grid>
       {/* <DeliveryCatalog /> */}
       <Grid container spacing={0}>
-        {category?.map((cat: any) => (
-          <Grid item xs={12} key={cat.id}>
-            <Accordion expanded>
-              <AccordionHeader px="0px" py="6px" color="text.muted">
-                <Box width="100%">
-                  <Flex width="100%">
-                    <SemiSpan className="cursor-pointer" mr="9px">
-                      {cat.name}
-                    </SemiSpan>
-                    <Spacer />
-                    <Switch
-                      name="status"
-                      size="md"
-                      style={{ margin: "0 1rem" }}
-                      isChecked={cat.status == StatusEntity.ACTIVE}
-                      onChange={(event) => {}}
-                    />
-                  </Flex>
-                  <Divider width="100%" mt="1.5rem" bg="gray.400" />
-                </Box>
-              </AccordionHeader>
+        {(JSON.parse(category || "{}")?.data?.length > 0 &&
+          JSON.parse(category || "{}")?.data?.map((cat: any) => (
+            <Grid item xs={12} key={cat.id}>
+              <Accordion expanded>
+                <AccordionHeader px="0px" py="6px" color="text.muted">
+                  <Box width="100%">
+                    <Flex width="100%">
+                      <SemiSpan className="cursor-pointer" mr="9px" mt="1rem">
+                        {cat.name}
+                      </SemiSpan>
+                      <Spacer />
+                      <Box mt="1rem" pr="1.5rem">
+                        <Stack direction="row">
+                          <Switch
+                            name="status"
+                            size="md"
+                            isChecked={cat.status == StatusEntity.ACTIVE}
+                            onChange={(event) => {}}
+                          />
+                          {cat.status && (
+                            <Text color="teal" fontWeight="bold">
+                              ATIVO
+                            </Text>
+                          )}
+                          {!cat.status && (
+                            <Text color="tomato" fontWeight="bold">
+                              PAUSADO
+                            </Text>
+                          )}
+                        </Stack>
+                      </Box>
+                    </Flex>
+                    <Divider width="100%" mt="1.5rem" bg="gray.400" />
+                  </Box>
+                </AccordionHeader>
 
-              <Grid item xs={12}>
                 <Grid item xs={12}>
-                  <Divider mb="1rem" />
-                  <Stack direction={"row-reverse"}>
-                    <Button
-                      mt=""
-                      bg="primary.main"
-                      color="white"
-                      padding="0.25rem"
-                      height="1.35rem"
-                      style={{
-                        fontWeight: "400",
-                        fontSize: "0.85rem",
-                        lineHeight: "1rem",
-                      }}
-                      onClick={
-                        () =>
-                          "" /*router.push(APP_ROUTES.CUSTOMER.CARDAPIO.FOOD_ITEM + '/' + cat.id)*/
-                      }
-                    >
-                      <Icon size="1rem" pr=".35rem">
-                        plus
-                      </Icon>
-                      Novo produto
-                    </Button>
-                  </Stack>
+                  <Box backgroundColor="gray.300" pb="1rem" px="1rem">
+                    <Divider mb="1rem" />
+                    <Stack direction={"row-reverse"}>
+                      <Link href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`} >
+                        <Button
+                          mt=""
+                          bg="primary.main"
+                          color="white"
+                          padding="0.25rem"
+                          height="1.35rem"
+                          style={{
+                            fontWeight: "400",
+                            fontSize: "0.85rem",
+                            lineHeight: "1rem",
+                          }}
+                        >
+                          <Icon size="1rem" pr=".35rem">
+                            plus
+                          </Icon>
+                          Novo produto
+                        </Button>
+                      </Link>
+                    </Stack>
+                    <Box></Box>
+                  </Box>
                 </Grid>
-              </Grid>
-            </Accordion>
-          </Grid>
-        ))}
+              </Accordion>
+            </Grid>
+          ))) || <></>}
       </Grid>
 
       {(category || [])?.length <= 0 && <DeliveryCatalog />}
@@ -247,6 +270,8 @@ const PageCatalogFood = () => {
           </Grid>
         </Grid>
       )*/}
+
+      <Divider width="100%" mt="5rem" />
     </>
   );
 };

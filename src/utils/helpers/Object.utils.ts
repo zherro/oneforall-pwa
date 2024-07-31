@@ -1,3 +1,5 @@
+import { LOG } from "@utils/log";
+
 export default class ObjectUtils {
   /**
    * Verifica se um valor é nulo ou indefinido.
@@ -68,6 +70,26 @@ export default class ObjectUtils {
     });
 
     return target;
+  }
+
+  static compare(o1: any, o2: any) {
+    if (this.isNull(o1) && this.isNull(o2)) {
+      return true;
+    }
+
+    if (this.isNull(o1) && this.nonNull(o2)) {
+      return false;
+    }
+
+    for (var p in o1) {
+      LOG.debug(`COMPARING=[${o1[p] === o2[p]}][ ${p}, ${o1[p]} === ${o2[p]}`);
+
+      if (o1[p] !== o2[p]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 

@@ -21,34 +21,6 @@ interface FormProps {
   name: string;
 }
 
-const BoxInfo = ({ type, text }: { type: "info"; text: string }) => {
-  return (
-    <Box>
-      <Box
-        my="1rem"
-        p="0.75rem"
-        shadow={6}
-        border="solid 1px"
-        borderColor="primary.100"
-        borderRadius="8px"
-        backgroundColor="gray.200"
-      >
-        <Typography fontWeight="400" fontSize="1rem">
-          Informação:
-        </Typography>
-        <FlexBox>
-          <Icon mt="0.5rem" mr="1rem" color="secondary">
-            fa/solid/circle-info
-          </Icon>{" "}
-          <SemiSpan mt="0.5rem" mb="0.5rem" fontSize="0.95rem" color="gray.700">
-            {text}
-          </SemiSpan>
-        </FlexBox>
-      </Box>
-    </Box>
-  );
-};
-
 interface Props {
   initialValues: FormProps;
   setLoading: Function;
