@@ -10,11 +10,14 @@ import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import FileUpload from "@sections/FileUpload";
 import { FileData } from "@supabaseutils/model/FileData";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 const CardapioUploadPage = () => {
   const API_URI = API_ROUTES.CUSTOMER.CATALOG.SEND_CATALOG_FILE;
   const [files, setFileList] = useState<FileData[]>([]);
+
+  const router = useRouter();
 
   const loadedFiles = useCallback(
     (f) => {
@@ -26,7 +29,10 @@ const CardapioUploadPage = () => {
   const upload = (body: any[]) => {
     fetchPost(API_URI, body, {
       notify: true,
-      handleData: () => {},
+      handleData: () =>
+        router.push(
+          APP_ROUTES.DASHBOARD.MY_CATALOG_SEND_FILE_CARDAPIO + "/completed"
+        ),
     });
   };
 

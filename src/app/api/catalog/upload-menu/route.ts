@@ -12,6 +12,7 @@ import { UserData } from "@supabaseutils/model/user/UserData";
 import SessionUtils from "@supabaseutils/session";
 import { BusinessException } from "@supabaseutils/bussines.exception";
 import HttpStatusCode from "@utils/http/HttpStatusCode";
+import validateUserAuth from "@supabaseutils/service/validateUserAuth.service";
 
 // Configurar o cliente S3 da DigitalOcean
 const s3Client = new S3({
@@ -38,7 +39,7 @@ async function resizeAndOptimizeImage(buffer, width) {
     const optimizedBuffer = await image
       .resize(width, height) // Redimensiona proporcionalmente
       .toFormat("webp", {
-        quality: 80, // Ajusta a qualidade para um equilíbrio entre tamanho do arquivo e qualidade da imagem
+        quality: 85, // Ajusta a qualidade para um equilíbrio entre tamanho do arquivo e qualidade da imagem
       })
       .toBuffer();
 
@@ -79,32 +80,6 @@ async function upload({ path, base64Image, width, name }, optimize = false) {
   const data = await s3Client.send(command);
 }
 
-class ValidateUserAuth {
-  private session;
-  constructor(userData: UserData) {
-    this.session = new SessionUtils(userData);
-  }
-
-  public isAuthenticated() {
-    if (this.session.isAuthenticated()) return this;
-
-    throw new BusinessException(
-      "Faça login para continuar!",
-      HttpStatusCode.UNPROCESSABLE_ENTITY
-    );
-  }
-
-  public get() {
-    return {
-      tenant: this.session.getTenant(),
-      userId: this.session.getUser()?.id,
-    };
-  }
-}
-
-const validateUserAuth = (userData) => new ValidateUserAuth(userData);
-export default validateUserAuth;
-
 export async function POST(request: NextRequest) {
   try {
     // Parse the JSON body
@@ -125,8 +100,6 @@ export async function POST(request: NextRequest) {
         .select("id")
         .single();
 
-      console.log(files[i]);
-
       if (error) throw error;
     }
     // const filesIds = await uploadFiles(files, supabase);
@@ -136,7 +109,9 @@ export async function POST(request: NextRequest) {
     LOG.error("Error processing request:", error);
 
     // Return an error response
-    return NextResponse.json({}, { status: HttpStatusCode.CREATED });
+    return NextResponse.json(httpResponse.errorMsg(), {
+      status: HttpStatusCode.BAD_REQUEST,
+    });
   }
 }
 

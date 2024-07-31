@@ -56,6 +56,13 @@ class HttpResponse {
       }
     );
   }
+
+  errorMsg(msg?: string, status?: HttpStatusCode): any {
+    return {
+      statusCode: status || 500,
+      message: msg || "Não conseguimos completar as solicitação!",
+    };
+  }
 }
 
 const httpResponse = new HttpResponse();

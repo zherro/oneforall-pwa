@@ -28,7 +28,7 @@ const APP_ROUTES = {
     MY_CATALOG: `${dashboard}/cardapio`,
     MY_CATALOG_SEND_FILE_CARDAPIO: `${dashboard}/cardapio/cardapio-enviar`,
 
-    CATEGORY_NEW: `${dashboard}/new-category`,
+    CATEGORY_NEW: `${dashboard}/cardapio/new-category`,
   },
 
   ADMIN: {
@@ -49,12 +49,10 @@ export const API_ROUTES = {
     PROFILE_CONFIGURE: "/api/profile-configure",
   },
   CUSTOMER: {
-    CATEGORY: "/api/customer/category",
-    POST: "/api/customer/article",
-
     CATALOG: {
-      SEND_CATALOG_FILE: "/api/catalog/upload-menu"
-    }
+      CATEGORY: "/api/catalog/category",
+      SEND_CATALOG_FILE: "/api/catalog/upload-menu",
+    },
   },
   EVENTOS: {
     NEXT: "/api/events/next",
