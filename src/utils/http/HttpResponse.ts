@@ -41,7 +41,7 @@ class HttpResponse {
   }
 
   private responsePayload(status: HttpStatusCode, body?: any) {
-    return NextResponse.json(body ? JSON.stringify(body) : "{}", { status });
+    return NextResponse.json(body || {}, { status });
   }
 
   error(status?: HttpStatusCode, msg?: string) {

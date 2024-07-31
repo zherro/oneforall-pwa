@@ -3,8 +3,11 @@ import CatalogSelectorBox from "@component/catalog/CatalogSelectorBox";
 import Grid from "@component/grid/Grid";
 import productTypes from "@data/productTypes";
 import APP_ROUTES from "@routes/app.routes";
+import { usePathname, useRouter } from "next/navigation";
 
 const ChoseProductTypePage = () => {
+  const path = usePathname();
+  const router = useRouter();
   return (
     <>
       <Grid container splited spacing={8}>
@@ -16,7 +19,12 @@ const ChoseProductTypePage = () => {
           />
         </Grid>
       </Grid>
-      <CatalogSelectorBox options={productTypes((a) => {})} />
+      <CatalogSelectorBox
+        options={productTypes((a) => {}).map((pt) => ({
+          ...pt,
+          onClick: (type) => router.push(path + "?type=" + type),
+        }))}
+      />
     </>
   );
 };

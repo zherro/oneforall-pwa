@@ -51,14 +51,35 @@ export class CrudService {
       formData.tenant_id = user?.user_metadata?.tenant?.id;
 
       LOG.debug("formData", formData);
-      const { error } = await this.repository.save(formData);
+      const { error, data } = await this.repository
+        .save(formData)
+        .select()
+        .single();
 
       if (error) {
         LOG.error("Error on when save stores", error);
         return httpResponse.error();
       }
 
-      return httpResponse.accepted();
+      return httpResponse.accepted(data);
+    } catch (error) {
+      LOG.error("Error processing request:", error);
+
+      // Return an error response
+      return httpResponse.error();
+    }
+  }
+
+  async getById(uuid: string) {
+    try {
+      const { data, error } = await this.repository.findById(uuid).single();
+
+      if (error) {
+        LOG.error("Error on when save stores", error);
+        return httpResponse.error();
+      }
+
+      return httpResponse.ok(data);
     } catch (error) {
       LOG.error("Error processing request:", error);
 

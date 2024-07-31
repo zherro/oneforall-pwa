@@ -12,7 +12,7 @@ const mainCategories = [
     description: "Supermercado e verduras.",
   },
   {
-    id: "water",
+    id: "water-gas",
     name: "Água e Gás",
     slug: "water",
     description: "Agua e Gás.",

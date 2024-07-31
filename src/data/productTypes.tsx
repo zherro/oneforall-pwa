@@ -36,4 +36,11 @@ const productTypes = (setType: Function) => {
   ];
 };
 
+export const productType = {
+  "pizza": productTypes(() => [])[0],
+  "drink": productTypes(() => [])[1],
+  "water-gas": productTypes(() => [])[2],
+  "all": productTypes(() => [])[3],
+}
+
 export default productTypes;
