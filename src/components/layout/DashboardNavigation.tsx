@@ -120,8 +120,25 @@ const linkList = [
       },
     ],
   },
+
+  {
+    title: "VENDAS",
+    list: [
+      {
+        href: APP_ROUTES.DASHBOARD.DELIVERY_DASHBOARD,
+        title: "Painel de Pedidos",
+        iconName: "robot",
+      },
+      {
+        href: APP_ROUTES.DASHBOARD.SALES.NEW,
+        title: "Novo Pedido/Venda",
+        iconName: "plus",
+      },
+    ],
+  },
+
   process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
-    title: "MEU NEGÒCIO",
+    title: "MEU NEGÓCIO",
     list: [
       {
         href: APP_ROUTES.DASHBOARD.STORE.MY_STORE,

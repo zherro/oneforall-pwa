@@ -173,8 +173,8 @@ const PageCatalogFood = () => {
       </Grid>
       {/* <DeliveryCatalog /> */}
       <Grid container spacing={0}>
-        {(JSON.parse(category || "{}")?.data?.length > 0 &&
-          JSON.parse(category || "{}")?.data?.map((cat: any) => (
+        {(category?.data?.length > 0 &&
+          category?.data?.map((cat: any) => (
             <Grid item xs={12} key={cat.id}>
               <Accordion expanded>
                 <AccordionHeader px="0px" py="6px" color="text.muted">
@@ -213,7 +213,9 @@ const PageCatalogFood = () => {
                   <Box backgroundColor="gray.300" pb="1rem" px="1rem">
                     <Divider mb="1rem" />
                     <Stack direction={"row-reverse"}>
-                      <Link href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`} >
+                      <Link
+                        href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`}
+                      >
                         <Button
                           mt=""
                           bg="primary.main"

@@ -15,9 +15,10 @@ interface FileInputProps {
   title?: string;
   setFiles?: any;
   onChange?: any;
+  multiple?: boolean;
 }
 
-const FileInput = ({ icon, title, onChange }: FileInputProps) => {
+const FileInput = ({ icon, title, onChange, multiple }: FileInputProps) => {
   return (
     <>
       <Link href="#">
@@ -29,7 +30,7 @@ const FileInput = ({ icon, title, onChange }: FileInputProps) => {
           )}
           {title && <H3 marginBottom="0.5rem">{title}</H3>}
         </Stack>
-        <DropZone onChange={(f) => onChange(f)} />
+        <DropZone onChange={(f) => onChange(f)} multiple={multiple} />
       </Link>
     </>
   );

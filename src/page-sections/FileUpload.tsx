@@ -11,9 +11,11 @@ import { useState } from "react";
 const FileUpload = ({
   savedFiles,
   onSelect,
+  multiple,
 }: {
   savedFiles: FileData[] | any[];
   onSelect: Function;
+  multiple: boolean
 }) => {
   const [mainImg, setMainImg] = useState("");
   const [manager, setManager] = useState<DataManager<FileData | any>>(
@@ -51,7 +53,7 @@ const FileUpload = ({
   return (
     <>
       <Box shadow={4}>
-        <FileInput onChange={(f) => handleImageUpload(f)} />
+        <FileInput onChange={(f) => handleImageUpload(f)} multiple={multiple} />
       </Box>
 
       <Stack mt="2rem" direction={["row"]} spacing={6} flexWrap={"wrap"}>

@@ -1,16 +1,18 @@
 "use client";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import Grid from "@component/grid/Grid";
-import useWindowSize from "@hook/useWindowSize";
 import TitleCard from "@component/cards/TitleCard";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import Stepper from "@component/Stepper";
 import NewProductItem from "@sections/cardapio/NewItem";
 import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
-import useFetch from "@hook/useFetch";
 import useNotify from "@hook/useNotify";
 import { useSession } from "@supabaseutils/supabase.provider";
-import { Skeleton } from "@chakra-ui/react";
 import Divider from "@component/Divider";
 import ProductModel from "@supabaseutils/model/catalog/Product.model";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
@@ -86,6 +88,7 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   const notify = useNotify();
   const params: any = useParams();
   const query: any = useSearchParams();
+  const path: any = usePathname();
 
   // routes
   const CATEGORY_ID = params["category_uuid"];
@@ -111,7 +114,7 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   const [type, setType] = useState(TYPE ? productType[TYPE] : {});
 
   const [category, setCategory] = useState<CategoryModel | null>(null);
-  const [productData, setProductData] = useState<ProductModel | null>({
+  const [productData, setProductData] = useState<ProductModel | any>({
     ...initialState,
     category_id: CATEGORY_ID,
     product_type: TYPE,
@@ -125,14 +128,24 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   // EFFECTS
 
   useEffect(() => {
-    fetchGet(API_URI_CATEGORIES, {
-      handleData: (data) => setCategory(data),
-    });
-  }, [CATEGORY_ID]);
+    if (ObjectUtils.nonNull(CATEGORY_ID)) {
+      fetchGet(API_URI_CATEGORIES, {
+        handleData: (data) => setCategory(data),
+      });
+    }
+
+    if (ObjectUtils.nonNull(productId)) {
+      fetchGet(API_URI_PRODUCTS + `/${productId}`, {
+        handleData: (data) => setProductData(data),
+        handleError,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (nextStep == "2") {
       actionStep(2);
+      router.replace(path);
     }
   }, [nextStep]);
 
@@ -251,7 +264,7 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
         </Grid>
       )}
 
-      {showForm && productData != null && (
+      {showForm && productData != null && productData?.uid > 0 && (
         <NewProductItem
           category={category}
           productType={type}

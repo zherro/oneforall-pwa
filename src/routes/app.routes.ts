@@ -30,6 +30,11 @@ const APP_ROUTES = {
 
     CATEGORY_NEW: `${dashboard}/cardapio/new-category`,
     PRODUCT_NEW: `${dashboard}/cardapio/new-product`,
+
+    DELIVERY_DASHBOARD: `${dashboard}/pedidos`,
+    SALES: {
+      NEW: `${dashboard}/sales/new`
+    },
   },
 
   ADMIN: {

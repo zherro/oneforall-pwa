@@ -1,13 +1,12 @@
 "use client";
-import { ChangeEvent, Fragment, useState } from "react";
-import { Formik, useFormik } from "formik";
+import { Fragment, useCallback, useState } from "react";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import Card from "@component/Card";
 import Grid from "@component/grid/Grid";
 import { Button } from "@component/buttons";
 import { H3, SemiSpan } from "@component/Typography";
 import { Stack } from "@chakra-ui/react";
-import useWindowSize from "@hook/useWindowSize";
 import Box from "@component/Box";
 import { useSearchParams } from "next/navigation";
 import ComplementsInput from "./ComplementsInput";
@@ -18,6 +17,8 @@ import FormProductDisponibility from "./form/FormProductDisponibility";
 import CategoryModel from "@supabaseutils/model/catalog/Category.model";
 import Link from "next/link";
 import APP_ROUTES from "@routes/app.routes";
+import FileUpload from "@sections/FileUpload";
+import ObjectUtils from "@utils/helpers/Object.utils";
 
 interface Props {
   page: string;
@@ -33,11 +34,10 @@ interface Props {
   productType: any;
 }
 
-const CAT: any = {
-  drink: { icon: "milk", name: "Bebidas", type: "drink" },
-  all: { icon: "food", name: "Itens gerais", type: "all" },
-  pizza: { icon: "extra/pizza", name: "Pizza's", type: "pizza" },
-};
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Informe o nome da produto"),
+  session: yup.string().required("Selecione a sessão da categoria"),
+});
 
 const NewProductItem = ({
   page,
@@ -55,14 +55,12 @@ const NewProductItem = ({
   const params = useSearchParams();
 
   const [complements, setComplements] = useState<any[]>([]);
-
-  const width: any = useWindowSize();
-  const isTablet = width < 745;
-
-  const validationSchema = yup.object().shape({
-    name: yup.string().required("Informe o nome da produto"),
-    session: yup.string().required("Selecione a sessão da categoria"),
-  });
+  const loadedFiles = useCallback(
+    (f) => {
+      setFiles([...f]);
+    },
+    [setFiles]
+  );
 
   const handleFormSubmit = async (values: any) => {
     console.log(values);
@@ -136,12 +134,11 @@ const NewProductItem = ({
                 <br />
                 <SemiSpan>- Imagens: PNG, JPG, JPEG.</SemiSpan>
                 <Box width="100%" marginTop="2rem" />
-                {/* <DropZone
-                      onChange={(files) => {
-                        console.log(files);
-                      }}
-                    /> */}
-                {/* <ImageUpload files={files} setFiles={setFiles} /> */}
+                <FileUpload
+                  multiple={false}
+                  savedFiles={files}
+                  onSelect={loadedFiles}
+                />
               </Grid>
             </Grid>
           )}
@@ -216,7 +213,7 @@ const NewProductItem = ({
                     variant="outlined"
                     color="primary"
                   >
-                    Voltar
+                    Anterior
                   </Button>
                 )}
                 {page == "home" && selectedStep == 1 && (
@@ -226,7 +223,7 @@ const NewProductItem = ({
                     </Button>
                   </Link>
                 )}
-                {page == "home" && selectedStep == 1 && (
+                {ObjectUtils.nonNull(values.id) && (
                   <Button
                     onClick={(e) => nextStep(e)}
                     variant="outlined"
