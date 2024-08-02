@@ -1,17 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
-  Button,
   FormControl,
   FormLabel,
   Input,
   VStack,
   HStack,
-  Heading,
 } from "@chakra-ui/react";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Divider from "@component/Divider";
+import { H3 } from "@component/Typography";
+import { Button } from "@component/buttons";
+import Icon from "@component/icon/Icon";
+import FlexBox from "@component/FlexBox";
 
 interface TimeSlot {
   open: string;
@@ -43,6 +45,14 @@ const BusinessHoursPage = () => {
     });
   };
 
+  const removeTimeSlot = (day: string, index: number) => {
+    const newTimeSlots = businessHours[day].filter((_, i) => i !== index);
+    setBusinessHours({
+      ...businessHours,
+      [day]: newTimeSlots,
+    });
+  };
+
   const handleTimeSlotChange = (
     day: string,
     index: number,
@@ -63,6 +73,25 @@ const BusinessHoursPage = () => {
     // Aqui você pode enviar o payload para o servidor
   };
 
+  const getWeekeDay = (day: string) => {
+    switch (day.toUpperCase()) {
+      case "MONDAY":
+        return "Segunda-feira";
+      case "TUESDAY":
+        return "Terça-feira";
+      case "WEDNESDAY":
+        return "Quarta-feira";
+      case "THURSDAY":
+        return "Quinta-feira";
+      case "FRIDAY":
+        return "Sexta-feira";
+      case "SATURDAY":
+        return "Sábado";
+      case "SUNDAY":
+        return "Domingo";
+    }
+  };
+
   return (
     <>
       <DashboardPageHeader
@@ -73,14 +102,13 @@ const BusinessHoursPage = () => {
       <Box p={5}>
         {Object.keys(businessHours).map((day) => (
           <Box key={day} mb={5}>
-            <Heading size="md" mb={3}>
-              {day.charAt(0).toUpperCase() + day.slice(1)}
-            </Heading>
+            <H3 size="md">{getWeekeDay(day)}</H3>
+            <Divider width="100%" bg="gray.400" mb="2rem" />
             <VStack spacing={3} align="start">
               {businessHours[day].map((slot, index) => (
                 <HStack key={index} spacing={3}>
                   <FormControl id={`${day}-open-${index}`}>
-                    <FormLabel>Open</FormLabel>
+                    <FormLabel>Abre às</FormLabel>
                     <Input
                       type="time"
                       value={slot.open}
@@ -90,7 +118,7 @@ const BusinessHoursPage = () => {
                     />
                   </FormControl>
                   <FormControl id={`${day}-close-${index}`}>
-                    <FormLabel>Close</FormLabel>
+                    <FormLabel>Flecha às</FormLabel>
                     <Input
                       type="time"
                       value={slot.close}
@@ -104,15 +132,34 @@ const BusinessHoursPage = () => {
                       }
                     />
                   </FormControl>
+                  <Button
+                    mt="2rem"
+                    ml="1rem"
+                    onClick={() => removeTimeSlot(day, index)}
+                    color="error"
+                    variant="outlined"
+                    width="38px"
+                    height="38px"
+                  >
+                    <Icon>minus</Icon>
+                  </Button>
                 </HStack>
               ))}
-              <Button onClick={() => addTimeSlot(day)}>Add Time Slot</Button>
+              <Button
+                onClick={() => addTimeSlot(day)}
+                variant="outlined"
+                color="primary"
+              >
+                <Icon>plus</Icon>
+              </Button>
             </VStack>
           </Box>
         ))}
-        <Button colorScheme="teal" onClick={handleSubmit}>
-          Submit
-        </Button>
+        <FlexBox justifyContent="center" pb="4rem" pt="2.5rem">
+          <Button color="primary" variant="contained" onClick={handleSubmit}>
+            <Icon mr="1rem">fa/solid/floppy-disk</Icon> Salvar Alterações
+          </Button>
+        </FlexBox>
       </Box>
     </>
   );
