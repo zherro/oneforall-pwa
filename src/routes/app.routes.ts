@@ -24,6 +24,7 @@ const APP_ROUTES = {
     STORE: {
       MY_STORE: `${dashboard}/stores/minha-loja`,
       NEW_STORE: `${dashboard}/stores/nova-loja`,
+      BUSINESS_HOURS: `${dashboard}/stores/business-hour`,
     },
     MY_CATALOG: `${dashboard}/cardapio`,
     MY_CATALOG_SEND_FILE_CARDAPIO: `${dashboard}/cardapio/cardapio-enviar`,

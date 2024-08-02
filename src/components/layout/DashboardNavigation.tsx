@@ -155,6 +155,11 @@ const linkList = [
         title: "Nova Loja",
         iconName: "plus",
       },
+      {
+        href: APP_ROUTES.DASHBOARD.STORE.BUSINESS_HOURS,
+        title: "Horário de Funcionamento",
+        iconName: "clock-circular-outline",
+      },
     ],
   },
 
