@@ -14,15 +14,8 @@ import { H3 } from "@component/Typography";
 import { Button } from "@component/buttons";
 import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
+import BusinessHours from "@supabaseutils/model/BusinessHours";
 
-interface TimeSlot {
-  open: string;
-  close: string;
-}
-
-interface BusinessHours {
-  [day: string]: TimeSlot[];
-}
 
 const initialBusinessHours: BusinessHours = {
   monday: [],

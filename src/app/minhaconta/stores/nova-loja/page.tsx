@@ -102,8 +102,16 @@ const StoreForm = ({
 
   return (
     <>
-      <DashboardPageHeader divider title="Meu Negócio" iconName="store-solid" />
-      <Grid container spacing={6}>
+      <Grid container splited spacing={6}>
+        <Grid item xs={12}>
+          <DashboardPageHeader
+            divider
+            title="Meu Negócio"
+            iconName="store-solid"
+          />
+        </Grid>
+      </Grid>
+      <Grid container splited spacing={6}>
         <Grid item xs={12}>
           <H3 mt="1.5rem">Vamos configurar sua loja?</H3>
         </Grid>

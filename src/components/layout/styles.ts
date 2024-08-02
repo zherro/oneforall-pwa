@@ -18,6 +18,7 @@ export const DashboardNavigationWrapper = styled(Card)`
     height: calc(100vh - 64px);
     box-shadow: none;
     overflow-y: auto;
+    max-width: 200px;
   }
 `;
 

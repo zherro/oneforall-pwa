@@ -1,9 +1,12 @@
+"use client";;
 import Box from "@component/Box";
 import Divider from "@component/Divider";
 import Typography from "@component/Typography";
 import Grid from "@component/grid/Grid";
+import { useSession } from "@supabaseutils/supabase.provider";
 
 const PedidosPage = () => {
+  const { tenant } = useSession();
   return (
     <>
       <Divider mt="2rem" />

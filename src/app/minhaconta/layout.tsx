@@ -10,17 +10,17 @@ import AppLayout from "@component/layout/layout-1";
 import { AuthGuard } from "@supabaseutils/supabase.provider";
 import styled from "styled-components";
 import StoryLoadBoard from "./StoryLoadBoard";
+import BussinesStatus from "@sections/BussinesStatus";
+import { usePathname } from "next/navigation";
 // import SubFooter from "@component/footer/SubFooter";
 
 export const StyledGrid = styled(Grid)`
-  padding: 0px 1rem;
   @media only screen and (max-width: 1124px) {
     display: none;
   }
 `;
 
 export const StyledGridContainer = styled(Grid)`
-  padding: 0px 1rem;
   @media only screen and (max-width: 1124px) {
     min-width: 100% !important;
   }
@@ -66,17 +66,34 @@ const SkelectonBoard = () => {
   );
 };
 
-
 export default function Layout({ children }) {
+  const path = usePathname();
+  const isDeliveryPath = path == "/minhaconta/pedidos";
+
   return (
     <AuthGuard skelecton={<StoryLoadBoard />}>
       <AppLayout fluidHeader={true}>
         <Grid container>
-          <StyledGrid lg={3}>
+          <StyledGrid item lg={2}>
             <DashboardNavigation></DashboardNavigation>
           </StyledGrid>
-          <StyledGridContainer item lg={9} xs={12}>
-            <Box maxWidth={"100%"}>{children}</Box>
+          <StyledGridContainer item lg={10} xs={12}>
+            {isDeliveryPath && (
+              <Box width="100%" position="fixed" shadow={6} bg="white">
+                <FlexBox
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  width="100%"
+                >
+                  <Box p="1rem">
+                    <BussinesStatus />
+                  </Box>
+                </FlexBox>
+              </Box>
+            )}
+            <Box mt={isDeliveryPath ? "68px" : 0} px="1rem" maxWidth={"100%"}>
+              {children}
+            </Box>
           </StyledGridContainer>
         </Grid>
       </AppLayout>
