@@ -17,7 +17,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import APP_ROUTES from "@routes/app.routes";
 import styled from "styled-components";
 import { isValidProp } from "@utils/utils";
-import StringUtils from "@utils/string";
+import StringUtils from "@utils/helpers/String.utils";
 
 // ====================================================================
 type HeaderProps = { isFixed?: boolean; className?: string };
@@ -48,8 +48,8 @@ const BoxImg = styled.div.withConfig({
 `;
 
 const concatQuery = (param, name, query): string => {
-  const prefix = StringUtils.isEmptyString(query) ? "?" : "&";
-  return StringUtils.notBlankString(param)
+  const prefix = StringUtils.isEmpty(query) ? "?" : "&";
+  return !StringUtils.isEmpty(param)
     ? `${query}${prefix}${name}=${param}`
     : query;
 };

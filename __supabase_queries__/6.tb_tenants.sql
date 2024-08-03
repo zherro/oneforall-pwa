@@ -16,6 +16,23 @@ CREATE TABLE public.tenants (
 	CONSTRAINT tenants_pkey PRIMARY KEY (id)
 );
 
+-- DROP FUNCTION public.auto_insert_tenant();
+
+CREATE OR REPLACE FUNCTION public.auto_insert_tenant()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+	INSERT INTO public.tenants
+	(id, created_at, updated_at, status, deleted, tenant_id, user_id, owner_id)
+	VALUES(new.id, now(), now(), 'A', false, new.tenant_id, auth.uid(), auth.uid());
+
+    RETURN new;
+END;
+$function$
+;
+
+
 -- DROP FUNCTION public.get_user_tenants();
 
 CREATE OR REPLACE FUNCTION public.get_user_tenants()

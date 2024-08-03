@@ -2,7 +2,7 @@ import Box from "@component/Box";
 import { Button } from "@component/buttons";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
-import { Header } from "@component/header";
+import Header from "@component/header/Header";
 import Navbar from "@component/navbar/Navbar";
 import Sticky from "@component/sticky";
 import Typography, { H2, H3 } from "@component/Typography";
