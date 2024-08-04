@@ -1,9 +1,19 @@
 # deletar user
 
+
 delete from public.profiles
 where
-  id = '07622419-e3cf-4f09-adf6-f66803affcd7';
+  email ilike 'cleiton.ti%';
 
 DELETE FROM auth.users
 WHERE
-  id = '07622419-e3cf-4f09-adf6-f66803affcd7';
+  email ilike 'cleiton.ti%';
+
+
+delete from public.profiles
+where
+  email ilike 'zhero.sub%';
+
+DELETE FROM auth.users
+WHERE
+  email ilike 'zhero.sub%';

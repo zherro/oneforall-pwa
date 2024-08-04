@@ -77,7 +77,7 @@ export async function signup(formData: any) {
   }
 
   const repository = new ProfileRecoveryRepository();
-  const { data: data2, error: error1 } = await repository.save({
+  const { data: data2, error: error1 } = await repository.saveAndGet({
     email: data1.email,
     recovery_code: generateCharacterCode(6),
     recovery_hash: getUuid(),

@@ -17,7 +17,7 @@ import { H1 } from "../Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
 import { logout } from "app/(auth)/actions";
 import Sidenav from "@component/sidenav/Sidenav";
-import useWindowSize, { useWindowIsTablet } from "@hook/useWindowSize";
+import { useWindowIsTablet } from "@hook/useWindowSize";
 import { DashboardNavigationMenu } from "@component/layout/DashboardNavigation";
 
 // ====================================================================

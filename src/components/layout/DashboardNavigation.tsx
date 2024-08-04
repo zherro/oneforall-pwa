@@ -46,7 +46,8 @@ export function DashboardNavigationMenu() {
     /* ===== Scrollbar CSS ===== */
     /* Firefox */
     // scrollbar-width: 10px;
-    // scrollbar-color: ${theme.colors.primary.main} ${theme.colors.primary.light};
+    // scrollbar-color: ${theme.colors.primary.main} ${theme.colors.primary
+      .light};
 
     /* Scrollbar Styling */
     &::-webkit-scrollbar {

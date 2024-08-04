@@ -12,7 +12,8 @@ export default class ProfileRecoveryRepository extends SupabaseRepository<Profil
       .select("id, recovery_hash, created_at, user_id")
       .eq("email", email)
       .eq("recovery_code", code)
-      .eq("status", StatusEntity.ACTIVE);
+      .eq("status", StatusEntity.ACTIVE)
+      .single();
   }
 
   async resetOldRecoveries(id: any) {

@@ -28,6 +28,10 @@ export default abstract class SupabaseRepository<T> {
     return this.supabase.from(this.TABLE).upsert(entity);
   }
 
+  public saveAndGet(entity: T) {
+    return this.save(entity).select().single();
+  }
+
   public findById(id: string) {
     return this.supabase.from(this.TABLE).select().eq("id", id);
   }
