@@ -34,7 +34,8 @@ const APP_ROUTES = {
 
     DELIVERY_DASHBOARD: `${dashboard}/pedidos`,
     SALES: {
-      NEW: `${dashboard}/sales/new`
+      NEW: `${dashboard}/sales/nova-venda`,
+      HISTORY: `${dashboard}/sales/history`
     },
   },
 

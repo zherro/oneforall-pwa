@@ -130,6 +130,11 @@ const linkList = [
         iconName: "robot",
       },
       {
+        href: APP_ROUTES.DASHBOARD.SALES.HISTORY,
+        title: "Histórico de Vendas/Pedidos",
+        iconName: "fa/solid/list-check",
+      },
+      {
         href: APP_ROUTES.DASHBOARD.SALES.NEW,
         title: "Novo Pedido/Venda",
         iconName: "plus",
