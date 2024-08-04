@@ -11,6 +11,10 @@ import LogoutButton from "@sections/auth/Logout";
 import { DashboardNavigationWrapper, StyledDashboardNav } from "./styles";
 import Divider from "../Divider";
 import { useSession } from "@supabaseutils/supabase.provider";
+import Box from "@component/Box";
+import styled from "styled-components";
+import { isValidProp } from "@utils/utils";
+import { useLaraTheme } from "@context/app-context/AppContext";
 
 export default function DashboardNavigation() {
   const pathname = usePathname();
@@ -28,84 +32,121 @@ export default function DashboardNavigation() {
 }
 
 export function DashboardNavigationMenu() {
+  const theme = useLaraTheme();
   const pathname = usePathname();
   const { tenant } = useSession();
 
+  const ScrollBox = styled.div.withConfig({
+    shouldForwardProp: (prop) => isValidProp(prop),
+  })`
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 100vh;
+
+    /* ===== Scrollbar CSS ===== */
+    /* Firefox */
+    // scrollbar-width: 10px;
+    // scrollbar-color: ${theme.colors.primary.main} ${theme.colors.primary.light};
+
+    /* Scrollbar Styling */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: ${theme.colors.gray[500]};
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+      background: ${theme.colors.primary[400]};
+    }
+  `;
+
   return (
-    <>
-      <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
-        {}
-      </Typography>
+    <ScrollBox>
+      <Box>
+        <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
+          {}
+        </Typography>
 
-      <StyledDashboardNav
-        px="1.5rem"
-        mb="1.25rem"
-        href={APP_ROUTES.DASHBOARD.STORE.MY_STORE}
-      >
-        <FlexBox alignItems="center" color="primary.main">
-          <div className="dashboard-nav-icon-holder">
-            <Icon variant="small" defaultcolor="primary.main" mr="10px">
-              store-solid
-            </Icon>
-          </div>
+        <StyledDashboardNav
+          px="1.5rem"
+          mb="1.25rem"
+          href={APP_ROUTES.DASHBOARD.STORE.MY_STORE}
+        >
+          <FlexBox alignItems="center" color="primary.main">
+            <div className="dashboard-nav-icon-holder">
+              <Icon variant="small" defaultcolor="primary.main" mr="10px">
+                store-solid
+              </Icon>
+            </div>
 
-          <SemiSpan
-            borderColor="gray.200"
-            style={{
-              borderBottom: "1px solid",
-            }}
-          >
-            {tenant?.name}
-          </SemiSpan>
-        </FlexBox>
+            <SemiSpan
+              borderColor="gray.200"
+              style={{
+                borderBottom: "1px solid",
+              }}
+            >
+              {tenant?.name}
+            </SemiSpan>
+          </FlexBox>
 
-        {/* <span>{item?.count}</span> */}
-      </StyledDashboardNav>
-      {linkList?.map(
-        (item) =>
-          item?.title && (
-            <Fragment key={item.title}>
-              <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
-                {item.title}
-              </Typography>
-
-              {item?.list?.map((item) => (
-                <StyledDashboardNav
-                  px="1.5rem"
-                  mb="1.25rem"
-                  href={item.href}
-                  key={item.title}
-                  isCurrentPath={pathname?.includes(item.href)}
+          {/* <span>{item?.count}</span> */}
+        </StyledDashboardNav>
+        {linkList?.map(
+          (item) =>
+            item?.title && (
+              <Fragment key={item.title}>
+                <Typography
+                  p="26px 30px 1rem"
+                  color="text.muted"
+                  fontSize="12px"
                 >
-                  <FlexBox alignItems="center">
-                    <div className="dashboard-nav-icon-holder">
-                      <Icon
-                        variant="small"
-                        defaultcolor="currentColor"
-                        mr="10px"
-                      >
-                        {item.iconName}
-                      </Icon>
-                    </div>
+                  {item.title}
+                </Typography>
 
-                    <span>{item.title}</span>
-                  </FlexBox>
+                {item?.list?.map((item) => (
+                  <StyledDashboardNav
+                    px="1.5rem"
+                    mb="1.25rem"
+                    href={item.href}
+                    key={item.title}
+                    isCurrentPath={pathname?.includes(item.href)}
+                  >
+                    <FlexBox alignItems="center">
+                      <div className="dashboard-nav-icon-holder">
+                        <Icon
+                          variant="small"
+                          defaultcolor="currentColor"
+                          mr="10px"
+                        >
+                          {item.iconName}
+                        </Icon>
+                      </div>
 
-                  <span>{item?.count}</span>
-                </StyledDashboardNav>
-              ))}
-            </Fragment>
-          )
-      )}
-      <FlexBox
-        alignItems="center"
-        flexDirection="column"
-        justifyContent="space-between"
-      >
-        <Divider width="225px" my="1rem" bg="primary.main" height="2px" />
-        <LogoutButton />
-      </FlexBox>
-    </>
+                      <span>{item.title}</span>
+                    </FlexBox>
+
+                    <span>{item?.count}</span>
+                  </StyledDashboardNav>
+                ))}
+              </Fragment>
+            )
+        )}
+        <FlexBox
+          alignItems="center"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Divider width="225px" my="1rem" bg="primary.main" height="2px" />
+          <LogoutButton />
+        </FlexBox>
+      </Box>
+    </ScrollBox>
   );
 }
 
