@@ -21,13 +21,19 @@ import { useWindowIsTablet } from "@hook/useWindowSize";
 import { DashboardNavigationMenu } from "@component/layout/DashboardNavigation";
 
 // ====================================================================
-type HeaderProps = { isFixed?: boolean; fluid?: boolean; className?: string };
+type HeaderProps = {
+  isFixed?: boolean;
+  fluid?: boolean;
+  className?: string;
+  showMenu?: boolean;
+};
 // =====================================================================
 
 export default function HeaderCustomer({
   isFixed,
   fluid,
   className,
+  showMenu = true,
 }: HeaderProps) {
   const signout: any = logout;
   const { state } = useAppContext();
@@ -121,7 +127,7 @@ export default function HeaderCustomer({
               >
                 <Icon size="28px">user</Icon>
               </IconButton>
-              {!isTablet && (
+              {(!showMenu || !isTablet) && (
                 <form>
                   <Button color="error" formAction={signout}>
                     Sair{" "}
@@ -131,7 +137,7 @@ export default function HeaderCustomer({
                   </Button>
                 </form>
               )}
-              {isTablet && (
+              {showMenu && isTablet && (
                 <Sidenav
                   open={open}
                   position="left"

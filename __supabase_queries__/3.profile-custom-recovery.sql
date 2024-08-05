@@ -70,20 +70,21 @@ BEGIN
     RETURN NEW;
 END $$ LANGUAGE 'plpgsql' security definer;
 
-CREATE OR REPLACE TRIGGER updatePasswordTrigger 
-    AFTER UPDATE
-ON public.profile_recovery
-FOR EACH ROW 
-    EXECUTE PROCEDURE updatePassword();
+-- gera loop recursivo
+-- CREATE OR REPLACE TRIGGER updatePasswordTrigger 
+--     AFTER UPDATE
+-- ON public.profile_recovery
+-- FOR EACH ROW 
+--     EXECUTE PROCEDURE updatePassword();
 
     
 
 
 -- confirm email by token
-create or replace function public.email_verification(
-  _secret_token text,
-  _code text,
-  _email text
+create or replace function public.user_email_verification(
+  secret_token text,
+  code text,
+  email text
 )
 returns void as $$
 declare
@@ -91,10 +92,10 @@ declare
 begin
   -- Verificar se o token é válido e não expirou
   update public.profile_recovery set used_at = now(), status = 'S'
-  where recovery_hash = _secret_token  and recovery_code = _code;
+  where recovery_hash = secret_token  and recovery_code = code;
 
   INSERT INTO public.profiles_email_confirmation
   (update_at, email, code)
-  VALUES(now(), _email, _code);
+  VALUES(now(), email, code);
 end;
 $$ language plpgsql;

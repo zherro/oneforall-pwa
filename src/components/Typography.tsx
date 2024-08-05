@@ -64,10 +64,10 @@ const Typography = styled.div.withConfig({
 `;
 
 const H1_responsive = styled(Typography)`
-  font-size: 1.25rem;
+  font-size: 1.45rem;
 
   @media (min-width: 768px) {
-    font-size: 30px;
+    font-size: 36px;
   }
 `;
 
@@ -79,22 +79,25 @@ const H2_responsive = styled(Typography)`
 
   // Dispositivos small (telefones em modo paisagem, com 576px ou mais)
   @media (min-width: 576px) {
-    font-size: 1.5rem;
+    
   }
 
   // Dispositivos médios (tablets com 768px ou mais)
   @media (min-width: 768px) {
-    font-size: 1.5rem;
+    
+    font-size: 36px;
   }
 
   // Dispositivos large (desktops com 992px ou mais)
   @media (min-width: 992px) {
-    font-size: 1.5rem;
+    
+    font-size: 36px;
   }
 
   // Dispositivos extra large (desktops grandes com 1200px ou mais)
   @media (min-width: 1200px) {
-    font-size: 1.5rem;
+    
+    font-size: 36px;
   }
 `;
 export const H1 = (props: CustomProps) => {

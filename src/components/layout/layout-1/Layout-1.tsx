@@ -13,6 +13,7 @@ type Props = {
   navbar?: ReactElement;
   fixedFooterOnMobile?: boolean;
   children: ReactNode;
+  showMenu?: boolean;
 };
 // ===============================================================================
 
@@ -21,13 +22,14 @@ export default function ShopLayout({
   fluidHeader,
   children,
   fixedFooterOnMobile = false,
+  showMenu = true,
 }: Props) {
   return (
     <StyledAppLayout>
       <Sticky fixedOn={0} scrollDistance={50}>
         <>
           <AddToHomeScreen />
-          <HeaderCustomer fluid={fluidHeader} />
+          <HeaderCustomer showMenu={showMenu} fluid={fluidHeader} />
         </>
       </Sticky>
 

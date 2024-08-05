@@ -38,14 +38,18 @@ export default class UserRepository extends SupabaseRepository<any> {
     _code: string,
     _email: string
   ) {
-    const { data, error: upddateError } = await this.supabase.rpc(
-      "email_verification",
-      {
-        _secret_token: _secret_token,
-        _code: _code,
-        _email: _email,
-      }
-    );
+    console.log({
+      _secret_token: _secret_token,
+      _code: _code,
+      _email: _email,
+    });
+    const { data, error: upddateError } = await this.supabase
+      .rpc("user_email_verification", {
+        secret_token: _secret_token,
+        code: _code,
+        email: _email,
+      })
+      .single();
 
     return upddateError;
   }

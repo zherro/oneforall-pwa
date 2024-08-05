@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       email
     );
 
-    if (error || ObjectUtils.isNull(data) || data.length <= 0) {
+    if (error || ObjectUtils.isNull(data) || data.id.length <= 0) {
       LOG.debug("error", error);
       LOG.debug("data", data);
       return httpResponse.error(
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     const userRepository = new UserRepository();
     // Atualizar a senha do usuário e validar o email
     const updateError = await userRepository.confirmEmail(
-      data[0]?.recovery_hash,
+      data?.recovery_hash,
       code,
       email
     );
