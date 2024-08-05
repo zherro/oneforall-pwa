@@ -55,6 +55,7 @@ export const API_ROUTES = {
   USER: {
     CONFIRM_EMAIL: "/api/confirm-email",
     PROFILE_CONFIGURE: "/api/profile-configure",
+    GET_MY_PROFILE: "/api/users"
   },
   CUSTOMER: {
     CATALOG: {

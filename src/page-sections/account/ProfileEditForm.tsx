@@ -13,9 +13,12 @@ import AvatarLoad from "@sections/account/avatarLoad";
 import { useAppContext } from "@context/app-context";
 import MESSAGES from "@data/messages";
 import { ProfileModel } from "@supabaseutils/model/Profile.model";
-import { UserData } from "@supabaseutils/model/user/UserData";
 import { mask } from "@lib/mask/lib/mask";
 import { useRouter } from "next/navigation";
+import { fetchGet } from "@hook/useFetch2";
+import { API_ROUTES } from "@routes/app.routes";
+import useNotify from "@hook/useNotify";
+import useHandleError from "@hook/useHandleError";
 
 let INITIAL_VALUES: ProfileModel = {
   full_name: "",
@@ -24,44 +27,39 @@ let INITIAL_VALUES: ProfileModel = {
   avatar_url: "",
 };
 
-export default function ProfileEditForm({
-  user,
-  profile,
-}: {
-  user: UserData;
-  profile: ProfileModel;
-}) {
+export default function ProfileEditForm() {
   const { dispatch } = useAppContext();
   const router = useRouter();
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
 
-  const [dataValues, setData] = useState({
-    ...INITIAL_VALUES,
-    ...(profile[0] || {}),
-    email: user.email,
-  });
+  const notify = useNotify();
+
+  const URI = API_ROUTES.USER.GET_MY_PROFILE;
+  const [profile, handleData] = useState<any>();
+  const [dataValues, setData] = useState(INITIAL_VALUES);
 
   const VALIDATION_SCHEMA = yup.object().shape({
     full_name: yup.string().required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
-    // username: yup.string().required("required"),
     email: yup
       .string()
       .email(MESSAGES.FORM.VALIDADION.INVALID_EMAIL)
       .required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
     phone: yup.string().required(MESSAGES.FORM.VALIDADION.REQUIRED_FIELD),
-    // birth_date: yup.date().required("invalid date")
-    // documentNumber: yup.string().required("campo obrigatório"),
-    // documentOwner: yup.string().required("informe o CPF do dono da loja"),
-    // companyShortName: yup.string().required("nos diga qual o nome da sua loja"),
-    // maketOperating: yup
-    //   .string()
-    //   .required("Escolha o tipo de negócio da sua loja"),
   });
 
   useEffect(() => {
-    setData({ ...dataValues, ...(profile[0] || {}) });
+    fetchGet(URI, {
+      notify: true,
+      headers: {},
+      handleData,
+      handleError: useHandleError(notify),
+    });
+  }, []);
+
+  useEffect(() => {
+    setData(profile || INITIAL_VALUES);
   }, [profile]);
 
   async function updateProfile(values: any) {
@@ -70,8 +68,8 @@ export default function ProfileEditForm({
 
       const { error } = await supabase.from("profiles").upsert({
         full_name: values.full_name || "",
-        username: user.email.split("@")[0],
-        id: user?.id as string,
+        username: profile?.email?.split("@")[0],
+        id: profile?.id as string,
         updated_at: new Date().toISOString(),
         avatar_url: values.avatar_url,
         phone: values?.phone,
@@ -136,7 +134,7 @@ export default function ProfileEditForm({
                   <Box my="auto" mb="22px" maxWidth="135px">
                     <AvatarLoad
                       size={64}
-                      uid={user?.id ?? null}
+                      uid={profile?.id ?? null}
                       url={avatarUrl || values?.avatar_url}
                       onUpload={(url) => {
                         setAvatarUrl(url);
@@ -161,18 +159,6 @@ export default function ProfileEditForm({
                     errorText={touched.full_name && errors.full_name}
                   />
                 </Grid>
-
-                {/* <Grid item md={6} xs={12}>
-                  <TextField
-                    fullwidth
-                    name="username"
-                    label="Nome de usuário"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.username}
-                    errorText={touched.username && errors.username}
-                  />
-                </Grid> */}
 
                 <Grid item md={6} xs={12}>
                   <TextField
@@ -207,19 +193,6 @@ export default function ProfileEditForm({
                     errorText={touched.phone && errors.phone}
                   />
                 </Grid>
-
-                {/* <Grid item md={6} xs={12}>
-                  <TextField
-                    fullwidth
-                    type="date"
-                    name="birth_date"
-                    label="Birth Date"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.birth_date}
-                    errorText={touched.birth_date && errors.birth_date}
-                  />
-                </Grid> */}
               </Grid>
             </Box>
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import HttpStatusCode from "./HttpStatusCode";
+import { BusinessException } from "@supabaseutils/bussines.exception";
 
 class HttpResponse {
   private statusCode: number;
@@ -42,6 +43,24 @@ class HttpResponse {
 
   private responsePayload(status: HttpStatusCode, body?: any) {
     return NextResponse.json(body || {}, { status });
+  }
+
+  errorHandler(error: any, status?: HttpStatusCode, msg?: string) {
+    if (error instanceof BusinessException) {
+      return new NextResponse(
+        JSON.stringify({
+          statusCode: error.status,
+          message: error.message,
+          cause: error.cause,
+        }),
+        {
+          status: error.status,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    return this.error(status, msg);
   }
 
   error(status?: HttpStatusCode, msg?: string) {

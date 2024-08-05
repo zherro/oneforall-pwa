@@ -1,25 +1,10 @@
-"use server";
+"use client";;
 import Grid from "@component/grid/Grid";
 import { H2 } from "@component/Typography";
 import ProfileEditForm from "@sections/account/ProfileEditForm";
-import { createClient } from "@supabaseutils/utils/server";
-import { redirect, useRouter } from "next/navigation";
 
-export default async function CompleteYourProfilePage() {
-  const supabase = createClient();
+export default function CompleteYourProfilePage() {
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user == null || user == undefined) {
-    redirect("/login");
-  }
-
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user?.id);
 
   return (
     <>
@@ -30,7 +15,7 @@ export default async function CompleteYourProfilePage() {
           </H2>
         </Grid>
         <Grid item xs={12}>
-          <ProfileEditForm user={user as any} profile={data as any} />
+          <ProfileEditForm />
         </Grid>
       </Grid>
     </>
