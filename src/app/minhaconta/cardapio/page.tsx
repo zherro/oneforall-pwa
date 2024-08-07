@@ -9,7 +9,9 @@ const CardapioHome = () => {
   return (
     <>
       {query.get("start") == "true" && <CardapioWelcome />}
-      {query.get("start") !== "true" && <PageCatalogFood />}
+      {query.get("start") !== "true" && (
+        <PageCatalogFood start={query.get("ido") == "true"} />
+      )}
     </>
   );
 };

@@ -8,7 +8,7 @@ import LinkCard from "@component/cards/LinkCard";
 import APP_ROUTES from "@routes/app.routes";
 import Box from "@component/Box";
 
-const CardapioWelcome = () => {
+const CardapioWelcome = ({setStartOwn}: any) => {
   const [statusCategory, setStatusCategory] = useState<boolean>(false);
 
   const width: any = useWindowSize();
@@ -55,7 +55,7 @@ const CardapioWelcome = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <LinkCard
-            link={APP_ROUTES.DASHBOARD.MY_CATALOG}
+            link={APP_ROUTES.DASHBOARD.MY_CATALOG+`?ido=true`}
             titleIcon="edit"
             titleIconProps={{
               color: "primary",

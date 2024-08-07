@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     size = size > 30 ? 30 : size;
     const tsv_search: string = searchParams.get("search") || "";
 
-    const { data, error, count } = await respository.paginated(page, size, {
+    const { data, error, count } = await respository.paginatedWithTenantOnly(page, size, {
       tsv_search,
     });
 

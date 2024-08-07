@@ -152,4 +152,43 @@ export default abstract class SupabaseRepository<T> {
 
     return queryRunner.order("created_at", { ascending: false });
   }
+
+  async paginatedWithTenantOnly(
+    page: number,
+    size: number,
+    query: {
+      tsv_search?: string;
+      order?: string[][];
+    }
+  ) {
+    const start = page <= 1 ? 0 : (page - 1) * size;
+
+    const queryRunner = this.from.select("*", { count: "exact" });
+
+    const user: UserData = await this.getUser();
+    const tenantId = user.user_metadata.tenant.id;
+    queryRunner.eq("tenant_id", tenantId);
+
+    const textSearch = this.fulltextSearchQuery(query.tsv_search);
+    if (!StringUtils.isEmpty(textSearch)) {
+      queryRunner.textSearch("tsv_search", textSearch, {
+        config: process.env.APP_LANGUAGE,
+      });
+    }
+
+    if (start == 0) {
+      queryRunner.limit(size);
+    } else {
+      queryRunner.range(start, start + size);
+    }
+
+    if (query.order != undefined && query.order.length > 0) {
+    }
+
+    LOG.debug(
+      `Search paginated on '${this.TABLE}' with: start={${start}}, size={${size}} `
+    );
+
+    return queryRunner.order("created_at", { ascending: false });
+  }
 }

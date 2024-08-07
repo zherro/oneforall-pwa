@@ -13,7 +13,7 @@ import Icon from "@component/icon/Icon";
 import { Accordion, AccordionHeader } from "@component/accordion";
 import { SemiSpan } from "@component/Typography";
 import Divider from "@component/Divider";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import Box from "@component/Box";
 import DeliveryCatalog from "./DeliveryCatalog";
@@ -22,6 +22,7 @@ import useNotify from "@hook/useNotify";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
 import { fetchGet } from "@hook/useFetch2";
 import TipBox from "@component/tips/TipBox";
+import CardapioWelcome from "../CardapioWelcome";
 
 // ======================================================
 type Props = { children: ReactNode };
@@ -36,7 +37,8 @@ const initialValues = {
   price: "0.00",
 };
 
-const PageCatalogFood = () => {
+const PageCatalogFood = ({ start = false }) => {
+  const query = useSearchParams();
   const API_URI_CATEGORIES = API_ROUTES.CUSTOMER.CATALOG.CATEGORY;
 
   const [category, handleDataCategory] = useState<any>();
@@ -103,148 +105,157 @@ const PageCatalogFood = () => {
 
   return (
     <>
-      <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <TitleCard
-            mt="2rem"
-            title="Cardápio"
-            text="Aqui você gerencia seu cardápio. Controla a disponibilidade dos seus itens e como eles serão apresentados para seus clientes."
-          />
-        </Grid>
-      </Grid>
-
-      <TipCard
-        tips={[
-          {
-            title: "Lojas no seu ramo têm ao menos 10 itens no cardápio",
-            text: "Turbine seu cardápio com entradas, petiscos, porções, bebidas, sobremesas, para atrair ainda mais clientes!",
-          },
-          {
-            title: "Tenha foto em ao menos 5 itens do seu cardápio",
-            text: "Itens com foto atraem maior atenção e podem resutar em mais pedidos.",
-          },
-        ]}
-      />
-
-      <Stack direction={"row-reverse"} alignItems={"end"}>
-        <Button
-          mt="2rem"
-          color="primary"
-          style={{ fontWeight: "400" }}
-          onClick={() => prefetchData(new Date())}
-        >
-          <Icon size="1.25rem" pr=".35rem">
-            fa/solid/arrows-rotate
-          </Icon>
-        </Button>
-        <Link href={APP_ROUTES.DASHBOARD.CATEGORY_NEW}>
-          <Button
-            mt="1.5rem"
-            variant="outlined"
-            color="primary"
-            style={{ fontWeight: "400" }}
-          >
-            <Icon size="1.25rem" pr=".35rem">
-              plus
-            </Icon>
-            Adicionar nova categoria
-          </Button>
-        </Link>
-      </Stack>
-
-      <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Stepper
-            square
-            aligin="start"
-            stepperList={stepperList}
-            selectedStep={selectedStep}
-            onChange={handleStepChange}
-          />
-        </Grid>
-        {(errorCategory && (
-          <Grid item xs={12}>
-            <TipBox
-              type="error"
-              text="Oh não! Ocorreu um erro inesperado ao tentar encontrar as categorias."
-            />
-          </Grid>
-        )) || <></>}
-      </Grid>
-      {/* <DeliveryCatalog /> */}
-      <Grid container spacing={0}>
-        {(category?.data?.length > 0 &&
-          category?.data?.map((cat: any) => (
-            <Grid item xs={12} key={cat.id}>
-              <Accordion expanded>
-                <AccordionHeader px="0px" py="6px" color="text.muted">
-                  <Box width="100%">
-                    <Flex width="100%">
-                      <SemiSpan className="cursor-pointer" mr="9px" mt="1rem">
-                        {cat.name}
-                      </SemiSpan>
-                      <Spacer />
-                      <Box mt="1rem" pr="1.5rem">
-                        <Stack direction="row">
-                          <Switch
-                            name="status"
-                            size="md"
-                            isChecked={cat.status == StatusEntity.ACTIVE}
-                            onChange={(event) => {}}
-                          />
-                          {cat.status && (
-                            <Text color="teal" fontWeight="bold">
-                              ATIVO
-                            </Text>
-                          )}
-                          {!cat.status && (
-                            <Text color="tomato" fontWeight="bold">
-                              PAUSADO
-                            </Text>
-                          )}
-                        </Stack>
-                      </Box>
-                    </Flex>
-                    <Divider width="100%" mt="1.5rem" bg="gray.400" />
-                  </Box>
-                </AccordionHeader>
-
-                <Grid item xs={12}>
-                  <Box backgroundColor="gray.300" pb="1rem" px="1rem">
-                    <Divider mb="1rem" />
-                    <Stack direction={"row-reverse"}>
-                      <Link
-                        href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`}
-                      >
-                        <Button
-                          mt=""
-                          bg="primary.main"
-                          color="white"
-                          padding="0.25rem"
-                          height="1.35rem"
-                          style={{
-                            fontWeight: "400",
-                            fontSize: "0.85rem",
-                            lineHeight: "1rem",
-                          }}
-                        >
-                          <Icon size="1rem" pr=".35rem">
-                            plus
-                          </Icon>
-                          Novo produto
-                        </Button>
-                      </Link>
-                    </Stack>
-                    <Box></Box>
-                  </Box>
-                </Grid>
-              </Accordion>
+      {!start && !loadingCategory && category?.data?.length <= 0 && (
+        <CardapioWelcome />
+      )}
+      {start && !loadingCategory && (category?.data?.length > 0 || start) && (
+        <>
+          <Grid container spacing={8}>
+            <Grid item xs={12}>
+              <TitleCard
+                mt="2rem"
+                title="Cardápio"
+                text="Aqui você gerencia seu cardápio. Controla a disponibilidade dos seus itens e como eles serão apresentados para seus clientes."
+              />
             </Grid>
-          ))) || <></>}
-      </Grid>
+          </Grid>
 
-      {(category || [])?.length <= 0 && <DeliveryCatalog />}
-      {/* !catalog?.category && (
+          <TipCard
+            tips={[
+              {
+                title: "Lojas no seu ramo têm ao menos 10 itens no cardápio",
+                text: "Turbine seu cardápio com entradas, petiscos, porções, bebidas, sobremesas, para atrair ainda mais clientes!",
+              },
+              {
+                title: "Tenha foto em ao menos 5 itens do seu cardápio",
+                text: "Itens com foto atraem maior atenção e podem resutar em mais pedidos.",
+              },
+            ]}
+          />
+
+          <Stack direction={"row-reverse"} alignItems={"end"}>
+            <Button
+              mt="2rem"
+              color="primary"
+              style={{ fontWeight: "400" }}
+              onClick={() => prefetchData(new Date())}
+            >
+              <Icon size="1.25rem" pr=".35rem">
+                fa/solid/arrows-rotate
+              </Icon>
+            </Button>
+            <Link href={APP_ROUTES.DASHBOARD.CATEGORY_NEW}>
+              <Button
+                mt="1.5rem"
+                variant="outlined"
+                color="primary"
+                style={{ fontWeight: "400" }}
+              >
+                <Icon size="1.25rem" pr=".35rem">
+                  plus
+                </Icon>
+                Adicionar nova categoria
+              </Button>
+            </Link>
+          </Stack>
+
+          <Grid container spacing={8}>
+            <Grid item xs={12}>
+              <Stepper
+                square
+                aligin="start"
+                stepperList={stepperList}
+                selectedStep={selectedStep}
+                onChange={handleStepChange}
+              />
+            </Grid>
+            {(errorCategory && (
+              <Grid item xs={12}>
+                <TipBox
+                  type="error"
+                  text="Oh não! Ocorreu um erro inesperado ao tentar encontrar as categorias."
+                />
+              </Grid>
+            )) || <></>}
+          </Grid>
+          {/* <DeliveryCatalog /> */}
+          <Grid container spacing={0}>
+            {(category?.data?.length > 0 &&
+              category?.data?.map((cat: any) => (
+                <Grid item xs={12} key={cat.id}>
+                  <Accordion expanded>
+                    <AccordionHeader px="0px" py="6px" color="text.muted">
+                      <Box width="100%">
+                        <Flex width="100%">
+                          <SemiSpan
+                            className="cursor-pointer"
+                            mr="9px"
+                            mt="1rem"
+                          >
+                            {cat.name}
+                          </SemiSpan>
+                          <Spacer />
+                          <Box mt="1rem" pr="1.5rem">
+                            <Stack direction="row">
+                              <Switch
+                                name="status"
+                                size="md"
+                                isChecked={cat.status == StatusEntity.ACTIVE}
+                                onChange={(event) => {}}
+                              />
+                              {cat.status && (
+                                <Text color="teal" fontWeight="bold">
+                                  ATIVO
+                                </Text>
+                              )}
+                              {!cat.status && (
+                                <Text color="tomato" fontWeight="bold">
+                                  PAUSADO
+                                </Text>
+                              )}
+                            </Stack>
+                          </Box>
+                        </Flex>
+                        <Divider width="100%" mt="1.5rem" bg="gray.400" />
+                      </Box>
+                    </AccordionHeader>
+
+                    <Grid item xs={12}>
+                      <Box backgroundColor="gray.300" pb="1rem" px="1rem">
+                        <Divider mb="1rem" />
+                        <Stack direction={"row-reverse"}>
+                          <Link
+                            href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`}
+                          >
+                            <Button
+                              mt=""
+                              bg="primary.main"
+                              color="white"
+                              padding="0.25rem"
+                              height="1.35rem"
+                              style={{
+                                fontWeight: "400",
+                                fontSize: "0.85rem",
+                                lineHeight: "1rem",
+                              }}
+                            >
+                              <Icon size="1rem" pr=".35rem">
+                                plus
+                              </Icon>
+                              Novo produto
+                            </Button>
+                          </Link>
+                        </Stack>
+                        <Box></Box>
+                      </Box>
+                    </Grid>
+                  </Accordion>
+                </Grid>
+              ))) || <></>}
+          </Grid>
+
+          {(category || [])?.length <= 0 && <DeliveryCatalog />}
+          {/* !catalog?.category && (
         <Grid container xs={12}>
           <Grid item xs={12}>
             <H1 mt="8rem" textAlign="center">
@@ -273,7 +284,9 @@ const PageCatalogFood = () => {
         </Grid>
       )*/}
 
-      <Divider width="100%" mt="5rem" />
+          <Divider width="100%" mt="5rem" />
+        </>
+      )}
     </>
   );
 };
