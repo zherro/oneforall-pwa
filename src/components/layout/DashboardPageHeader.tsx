@@ -38,7 +38,7 @@ export default function DashboardPageHeader({
   return (
     <>
       <Box mt="30px">
-        <Grid container splited={splited} >
+        <Grid container splited={splited}>
           <Grid item sm={8} xs={10}>
             <FlexBox>
               {iconName ? <Icon color="primary">{iconName}</Icon> : null}
@@ -52,9 +52,9 @@ export default function DashboardPageHeader({
             {button}
           </Grid>
 
-          {divider && (
+          {(divider && (
             <Divider height="1px" width="100%" bg="gray.400" mt="0.5rem" />
-          )}
+          )) || <></>}
         </Grid>
 
         {/* {isTablet && !!button && <Box mt="1rem">{button}</Box>} */}

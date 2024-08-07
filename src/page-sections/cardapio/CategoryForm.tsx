@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Select from "@component/Select";
@@ -18,7 +18,7 @@ import { useState } from "react";
 import { fetchPost } from "@hook/useFetch2";
 
 const initialValues = {
-  name: "Nome da categoria",
+  name: "",
   category_type: "food",
   info: "",
   status: StatusEntity.ACTIVE,
@@ -77,14 +77,14 @@ const CategoryForm = () => {
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container splited spacing={4}>
         <Grid item xs={12}>
           <Divider width="100%" mb="1.5rem" mt="0.25rem" bg="gray.400" />
         </Grid>
       </Grid>
 
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={6}>
+        <Grid container splited spacing={6}>
           <Grid item sm={6} xs={12}>
             <TextField
               fullwidth
@@ -157,12 +157,12 @@ const CategoryForm = () => {
                 }
               />
 
-              {values.status && (
+              {values.status == StatusEntity.ACTIVE && (
                 <Text color="teal" fontWeight="bold">
                   ATIVO
                 </Text>
               )}
-              {!values.status && (
+              {values.status !== StatusEntity.ACTIVE && (
                 <Text color="tomato" fontWeight="bold">
                   PAUSADO
                 </Text>

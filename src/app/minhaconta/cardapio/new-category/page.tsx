@@ -5,7 +5,7 @@ import CategoryForm from "@sections/cardapio/CategoryForm";
 const NewCategoryPage = () => {
   return (
     <>
-      <DashboardPageHeader title="Nova categoria" iconName="plus" />
+      <DashboardPageHeader splited title="Nova categoria" iconName="plus" />
       <CategoryForm />
     </>
   );
