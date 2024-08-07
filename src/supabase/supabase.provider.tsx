@@ -19,8 +19,8 @@ import { UserData } from "./model/user/UserData";
 import SessionUtils from "./session";
 import ObjectUtils from "@utils/helpers/Object.utils";
 import { LOG } from "@utils/log";
-import { dbStore } from "@utils/db/IndexedDBUtil";
 import DB_KEYS from "@utils/db/keys";
+import storageUtil from "@utils/db/LocalStorageUtil";
 
 type MaybeSession = Session | UserData | null;
 
@@ -180,26 +180,21 @@ function validateAutorizedsPaths(
     process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
   ).split(",");
 
-  const hasCompleted = false;
+  if (isCompleted) {
+    storageUtil(user.id).set(DB_KEYS.LAST_COMPLETE_ATTEMPT, new Date());
+  }
 
-  alert(JSON.stringify(user))
-  try {
-    dbStore(user.id).get(DB_KEYS.LAST_COMPLETE_ATTEMPT);
-  } catch (ignored) {}
+  let requireProfile = ObjectUtils.isNull(
+    storageUtil(user.id).get(DB_KEYS.LAST_COMPLETE_ATTEMPT)
+  );
 
   if (isAuthenticated) {
-    if (path == "/complete-your-profile" && isCompleted) {
+    if (path == "/complete-your-profile" && isCompleted && !requireProfile) {
       router.push("/profile-completed");
-    } else if (!isCompleted) {
+    } else if (!isCompleted && requireProfile) {
       router.push("/complete-your-profile");
     } else if (paths.includes(path)) {
       router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
-    }
-
-    if (
-      process.env.APP_STORE_CONTEXT_REQUIRED == "true" &&
-      tenant.id == user.id
-    ) {
     }
   }
 }

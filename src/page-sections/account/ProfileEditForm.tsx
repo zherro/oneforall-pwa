@@ -21,6 +21,7 @@ import useNotify from "@hook/useNotify";
 import useHandleError from "@hook/useHandleError";
 import { dbStore } from "@utils/db/IndexedDBUtil";
 import DB_KEYS from "@utils/db/keys";
+import storageUtil from "@utils/db/LocalStorageUtil";
 
 let INITIAL_VALUES: ProfileModel = {
   full_name: "",
@@ -65,12 +66,7 @@ export default function ProfileEditForm() {
   }, [profile]);
 
   async function updateProfile(values: any) {
-    try {
-      dbStore(profile.id).addOrUpdate(
-        DB_KEYS.LAST_COMPLETE_ATTEMPT,
-        new Date()
-      );
-    } catch (ignored) {}
+    storageUtil(profile.id).set(DB_KEYS.LAST_COMPLETE_ATTEMPT, new Date());
 
     try {
       setLoading(true);
