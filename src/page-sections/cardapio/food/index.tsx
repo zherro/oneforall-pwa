@@ -28,15 +28,6 @@ import CardapioWelcome from "../CardapioWelcome";
 type Props = { children: ReactNode };
 // ======================================================
 
-const initialValues = {
-  name: "Nome do produto",
-  session: "food",
-  info: "",
-  status: false,
-  disponibility: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"],
-  price: "0.00",
-};
-
 const PageCatalogFood = ({ start = false }) => {
   const query = useSearchParams();
   const API_URI_CATEGORIES = API_ROUTES.CUSTOMER.CATALOG.CATEGORY;
@@ -108,7 +99,7 @@ const PageCatalogFood = ({ start = false }) => {
       {!start && !loadingCategory && category?.data?.length <= 0 && (
         <CardapioWelcome />
       )}
-      {start && !loadingCategory && (category?.data?.length > 0 || start) && (
+      {!loadingCategory && (category?.data?.length > 0 || start) && (
         <>
           <Grid container spacing={8}>
             <Grid item xs={12}>
@@ -191,6 +182,7 @@ const PageCatalogFood = ({ start = false }) => {
                             className="cursor-pointer"
                             mr="9px"
                             mt="1rem"
+                            color="gray.900"
                           >
                             {cat.name}
                           </SemiSpan>
@@ -201,14 +193,16 @@ const PageCatalogFood = ({ start = false }) => {
                                 name="status"
                                 size="md"
                                 isChecked={cat.status == StatusEntity.ACTIVE}
-                                onChange={(event) => {}}
+                                onChange={(event) => {
+                                  cat.status = StatusEntity.ACTIVE
+                                }}
                               />
-                              {cat.status && (
+                              {cat.status == StatusEntity.ACTIVE && (
                                 <Text color="teal" fontWeight="bold">
                                   ATIVO
                                 </Text>
                               )}
-                              {!cat.status && (
+                              {cat.status !== StatusEntity.ACTIVE && (
                                 <Text color="tomato" fontWeight="bold">
                                   PAUSADO
                                 </Text>

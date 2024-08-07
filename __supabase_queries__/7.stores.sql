@@ -40,7 +40,7 @@ AS $function$
 BEGIN
 	INSERT INTO public.tenants
 	(id, created_at, updated_at, status, deleted, tenant_id, user_id, owner_id)
-	VALUES(new.id, now(), now(), 'A', false, new.id, auth.uid(), auth.uid());
+	VALUES(new.id, now(), now(), 'A', false, new.tenant_id, auth.uid(), auth.uid());
 
     RETURN new;
 END;
