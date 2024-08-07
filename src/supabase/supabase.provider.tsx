@@ -19,6 +19,8 @@ import { UserData } from "./model/user/UserData";
 import SessionUtils from "./session";
 import ObjectUtils from "@utils/helpers/Object.utils";
 import { LOG } from "@utils/log";
+import { dbStore } from "@utils/db/IndexedDBUtil";
+import DB_KEYS from "@utils/db/keys";
 
 type MaybeSession = Session | UserData | null;
 
@@ -177,6 +179,13 @@ function validateAutorizedsPaths(
   const paths = (
     process.env.APP_AUTH_IF_AUTHENTICATED_DONT_USE_ROUTES || ""
   ).split(",");
+
+  const hasCompleted = false;
+
+  alert(JSON.stringify(user))
+  try {
+    dbStore(user.id).get(DB_KEYS.LAST_COMPLETE_ATTEMPT);
+  } catch (ignored) {}
 
   if (isAuthenticated) {
     if (path == "/complete-your-profile" && isCompleted) {

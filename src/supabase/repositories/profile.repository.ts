@@ -1,6 +1,7 @@
 import { BusinessException } from "@supabaseutils/bussines.exception";
 import SupabaseRepository from "@supabaseutils/types/repository";
 import HttpStatusCode from "@utils/http/HttpStatusCode";
+import { LOG } from "@utils/log";
 
 export default class ProfileRepository extends SupabaseRepository<any> {
   constructor() {
@@ -28,7 +29,10 @@ export default class ProfileRepository extends SupabaseRepository<any> {
       .eq("id", user?.id)
       .single();
 
+      console.log('data', data)
+
     if (error) {
+      LOG.error("m=getMyProfile, error: ", error);
       throw new BusinessException(
         "Não conseguimos ecnontrar sua conta! Se o problema continuar, contate nosso suporte."
       );

@@ -68,4 +68,5 @@ class IndexedDBUtil {
   }
 }
 
-export const dbStore = new IndexedDBUtil("oneForAllDB", "myStore");
+export const dbStore = (store: string) =>
+  new IndexedDBUtil("bimodb", (store || "").replaceAll("-", ""));

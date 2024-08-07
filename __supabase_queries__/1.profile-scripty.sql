@@ -17,8 +17,7 @@ create table profiles (
 alter table profiles
   enable row level security;
 
-create policy "Public profiles are viewable by everyone." on "public"."profiles" as permissive for select to anon using (true);
-
+create policy "Users can get their own profile." on "public"."profiles" as permissive for select to public using ((( SELECT uid() AS uid) = id));
 create policy "Users can insert their own profile." on profiles
   for insert with check ((select auth.uid()) = id);
 
