@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import HttpStatusCode from "./HttpStatusCode";
 import { BusinessException } from "@supabaseutils/bussines.exception";
+import { LOG } from "@utils/log";
 
 class HttpResponse {
   private statusCode: number;
@@ -46,6 +47,7 @@ class HttpResponse {
   }
 
   errorHandler(error: any, status?: HttpStatusCode, msg?: string) {
+    LOG.error("ERRO :::: ", error)
     if (error instanceof BusinessException) {
       return new NextResponse(
         JSON.stringify({

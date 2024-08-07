@@ -35,7 +35,7 @@ const APP_ROUTES = {
     DELIVERY_DASHBOARD: `${dashboard}/pedidos`,
     SALES: {
       NEW: `${dashboard}/sales/nova-venda`,
-      HISTORY: `${dashboard}/sales/history`
+      HISTORY: `${dashboard}/sales/history`,
     },
   },
 
@@ -48,6 +48,9 @@ const APP_ROUTES = {
 };
 
 export const API_ROUTES = {
+  PLAN: {
+    FREE: "/api/plan/free",
+  },
   TICKETS: "/api/tickets",
   BUKET: {
     GET: "/api/bucket",
@@ -55,7 +58,7 @@ export const API_ROUTES = {
   USER: {
     CONFIRM_EMAIL: "/api/confirm-email",
     PROFILE_CONFIGURE: "/api/profile-configure",
-    GET_MY_PROFILE: "/api/users"
+    GET_MY_PROFILE: "/api/users",
   },
   CUSTOMER: {
     CATALOG: {
@@ -74,8 +77,8 @@ export const API_ROUTES = {
   },
 
   STORE: {
-    LIST: "/api/stores",
-    NEW: "/api/stores",
+    MY_STORES: "/api/stores/my-stores",
+    NEW: "/api/stores/my-stores",
   },
 
   TENANT: {

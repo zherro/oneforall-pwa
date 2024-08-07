@@ -20,6 +20,7 @@ export default function useFetch(uri: string, options, config: FetchOptions) {
     fetch(uri, options)
       .then((response) => response.json())
       .then((data) => {
+        console.log(config.handleData)
         config.onLoading && config.onLoading(false);
         // IF response is error
         if (data?.statusCode > 299 && config.handleError) {

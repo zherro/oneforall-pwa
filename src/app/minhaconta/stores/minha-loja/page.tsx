@@ -33,7 +33,7 @@ const MYStorePage = () => {
   const query = useSearchParams();
   const notify = useNotify();
   const { tenant } = useSession();
-  const URI = API_ROUTES.STORE.LIST;
+  const URI = API_ROUTES.STORE.MY_STORES;
   const TENANT_URI = API_ROUTES.TENANT.CHANGE;
   const [data, handleData] = useState<any>([]);
 
@@ -71,28 +71,34 @@ const MYStorePage = () => {
 
   return (
     <>
-      <DashboardPageHeader divider title="Minha Loja" iconName="store-solid" />
       {tenant?.tenant_id && (
-        <Grid container>
-          <Grid item xs={12}>
-            <FlexBox justifyContent="end" mt="0.5rem">
-              <Button color="blue" variant="outlined" >
-                Editar <Icon>edit</Icon>
-              </Button>
-            </FlexBox>
-            <Box mt="1rem">
-              <Typography fontSize="1.15rem">Nome:</Typography>
-              <SemiSpan fontSize="1.15rem">{tenant.name}</SemiSpan>
-            </Box>
-            <Box mt="1rem">
-              <Badge title={getStoreMarketTypeName(tenant.market_type)} />
-            </Box>
-            <Box mt="1rem">
-              <Typography fontSize="1.15rem">Status:</Typography>
-              <StatusLabel status={tenant.status} />
-            </Box>
+        <>
+          <DashboardPageHeader
+            divider
+            title="Minha Loja"
+            iconName="store-solid"
+          />
+          <Grid container>
+            <Grid item xs={12}>
+              <Box mt="1rem">
+                <Typography fontSize="1.15rem">Nome:</Typography>
+                <SemiSpan fontSize="1.15rem">{tenant.name}</SemiSpan>
+              </Box>
+              <Box mt="1rem">
+                <Badge title={getStoreMarketTypeName(tenant.market_type)} />
+              </Box>
+              <Box mt="1rem">
+                <Typography fontSize="1.15rem">Status:</Typography>
+                <StatusLabel status={tenant.status} />
+              </Box>
+              <FlexBox justifyContent="start" mt="1.5rem" mb="2rem">
+                <Button color="blue" variant="outlined">
+                  Editar <Icon>edit</Icon>
+                </Button>
+              </FlexBox>
+            </Grid>
           </Grid>
-        </Grid>
+        </>
       )}
 
       {(query.get("change") && <></>) || (
@@ -103,8 +109,8 @@ const MYStorePage = () => {
           <Grid item xs={12}>
             <Link href={APP_ROUTES.DASHBOARD.STORE.NEW_STORE}>
               <Button
-                ml="1rem"
                 mt="1rem"
+                mb="2rem"
                 py="1.75rem"
                 variant="outlined"
                 color="primary.main"
@@ -130,7 +136,7 @@ const MYStorePage = () => {
         </Grid>
         {data?.data?.map((store) => (
           <Grid item xs={12} sm={6} md={4} lg={3} horizontal_spacing={12}>
-            <Box maxWidth="100%" paddingX="0.5rem" marginLeft="-0.5rem">
+            <Box maxWidth="100%" marginLeft="-0.5rem">
               <Box
                 key={store.id}
                 border="1px solid"
@@ -152,7 +158,6 @@ const MYStorePage = () => {
                   <Badge title={getStoreMarketTypeName(store.market_type)} />
                   <StatusLabel status={store.status} />
                 </FlexBox>
-                {store.tenant_id}
                 <FlexBox justifyContent="center">
                   <Button
                     onClick={() => changeTenant(store.tenant_id)}

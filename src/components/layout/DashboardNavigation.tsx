@@ -92,7 +92,7 @@ export function DashboardNavigationMenu() {
                 borderBottom: "1px solid",
               }}
             >
-              {tenant?.name}
+              {tenant && tenant?.name || 'Criar Loja'} 
             </SemiSpan>
           </FlexBox>
 

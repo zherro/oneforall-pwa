@@ -2,16 +2,18 @@
 import { Box } from "@chakra-ui/react";
 import { getBusinessStatus } from "@supabaseutils/model/BusinessHours";
 import { useSession } from "@supabaseutils/supabase.provider";
-import { dbStore } from "@utils/IndexedDBUtil";
+import { dbStore } from "@utils/db/IndexedDBUtil";
 import { useEffect, useState } from "react";
 
 const BussinesStatus = () => {
-  const { tenant } = useSession();
+  const { tenant, session } = useSession();
   const [status, setStatus] = useState<string>();
 
   useEffect(() => {
     const run = async () => {
-      const stored = await dbStore.get(`business-hours-${tenant?.id}`);
+      const stored = await dbStore(session.id).get(
+        `business-hours-${tenant?.id}`
+      );
       const sts = getBusinessStatus(stored);
       setStatus(sts);
     };

@@ -5,10 +5,22 @@ import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import { H2, H3, SemiSpan } from "@component/Typography";
 import { useLaraTheme } from "@context/app-context/AppContext";
+import { fetchPost } from "@hook/useFetch2";
+import useHandleError from "@hook/useHandleError";
+import useNotify from "@hook/useNotify";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ChoseYourPlan = () => {
   const theme = useLaraTheme();
+  const router = useRouter();
+  const notify = useNotify();
+
+  const URI = API_ROUTES.PLAN.FREE;
+  const [loading, onLoading] = useState<boolean>(false);
+  const [redirect, setRedirect] = useState<boolean>(false);
 
   // styled components
   const ChoseBox = styled(Box)({
@@ -19,6 +31,23 @@ const ChoseYourPlan = () => {
     padding: "0.5rem",
     margin: "0.75rem 10px",
   });
+
+  useEffect(() => {
+    if (redirect) {
+      router.push(APP_ROUTES.DASHBOARD.HOME);
+    }
+  }, [redirect]);
+
+  const joinToFree = () => {
+    fetchPost(URI, {}, {
+      handleData: (data) => {
+        setRedirect(true);
+        console.log("sadadadads")
+      },
+      handleError: useHandleError(notify),
+      onLoading,
+    });
+  };
 
   return (
     <>
@@ -63,7 +92,15 @@ const ChoseYourPlan = () => {
                 Este plano é ideial para quem está começando, ou quer
                 experimentar as funcionalidades basicas da plataforma!
               </SemiSpan>
-              <Button mt="1rem" bg="primary.main" color="white">
+              <Button
+                disabled={loading}
+                mt="1rem"
+                bg="primary.main"
+                color="white"
+                onClick={() => {
+                  joinToFree();
+                }}
+              >
                 Quero o plano Gratuito
               </Button>
             </ChoseBox>

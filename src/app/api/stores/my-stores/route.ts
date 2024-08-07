@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     const respository = new StoreRepository();
 
-    const { data, error, count } = await respository.paginated(page, size, {
+    const { data, error, count } = await respository.paginatedTenant(page, size, {
       tsv_search,
     });
 
