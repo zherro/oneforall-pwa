@@ -17,6 +17,7 @@ export interface DashboardPageHeaderProps {
   iconName?: string;
   button?: ReactNode;
   divider?: boolean;
+  splited?: boolean;
 }
 // ==============================================================
 
@@ -24,7 +25,8 @@ export default function DashboardPageHeader({
   iconName,
   title,
   button,
-  divider
+  divider,
+  splited = false,
 }: DashboardPageHeaderProps) {
   const [open, setOpen] = useState(false);
 
@@ -36,7 +38,7 @@ export default function DashboardPageHeader({
   return (
     <>
       <Box mt="30px">
-        <Grid container spacing={6}>
+        <Grid container splited={splited} >
           <Grid item sm={8} xs={10}>
             <FlexBox>
               {iconName ? <Icon color="primary">{iconName}</Icon> : null}
@@ -49,8 +51,11 @@ export default function DashboardPageHeader({
           <Grid item sm={4} xs={2}>
             {button}
           </Grid>
+
+          {divider && (
+            <Divider height="1px" width="100%" bg="gray.400" mt="0.5rem" />
+          )}
         </Grid>
-        {divider && <Divider height="1px" width="100%" bg="gray.400" mt="0.5rem" />}
 
         {/* {isTablet && !!button && <Box mt="1rem">{button}</Box>} */}
       </Box>

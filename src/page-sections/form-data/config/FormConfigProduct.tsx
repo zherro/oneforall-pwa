@@ -7,7 +7,7 @@ import TextField from "@component/text-field";
 import { Button } from "@component/buttons";
 import { fetchPost } from "@hook/useFetch2";
 import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useNotify from "@hook/useNotify";
 import { useRouter } from "next/navigation";
 import FlexBox from "@component/FlexBox";
@@ -39,13 +39,20 @@ const initialValues = {
   name: "",
 };
 
-const FormConfigProduct = () => {
+const FormConfigProduct = ({
+  edit = false,
+  data,
+}: {
+  edit: boolean;
+  data: any;
+}) => {
   const router = useRouter();
   const URI = API_ROUTES.ADMIN.CONFIG_PRODUCT_TABLE;
   const notify = useNotify();
 
-  const [formValues, setFormValues] =
-    useState<typeof initialValues>(initialValues);
+  const [formValues, setFormValues] = useState<typeof initialValues>(
+    data || initialValues
+  );
   const [loading, onLoading] = useState<boolean>(false);
 
   const saveData = (values: any) => {
@@ -87,10 +94,10 @@ const FormConfigProduct = () => {
 
   return (
     <>
-      <Grid container spacing={6} vertical_spacing={4}>
+      <Grid container splited vertical_spacing={4}>
         <Grid item xs={12}>
           <MiniSessionTile
-            mt="1rem"
+            mt="1.5rem"
             title="Você está criando um novo produto"
             icon="fa/solid/chalkboard-user"
             divider
@@ -98,11 +105,16 @@ const FormConfigProduct = () => {
         </Grid>
       </Grid>
 
-      <form className="content" onSubmit={handleSubmit}>
-        <Grid container horizontal_spacing={6} vertical_spacing={4}>
+      <form
+        className="content"
+        onSubmit={handleSubmit}
+        style={{ width: "100%" }}
+      >
+        <Grid container containerCenter splited>
           <Grid item xs={12}>
             <TextField
               fullwidth
+              mt="0.75rem"
               mb="1.25rem"
               name="name"
               type="text"
@@ -137,7 +149,7 @@ const FormConfigProduct = () => {
                 type="submit"
                 disabled={!isValid || isSubmitting || loading}
               >
-                Adicionar Novo Produto
+                Salvar Produto
               </Button>
             </FlexBox>
           </Grid>

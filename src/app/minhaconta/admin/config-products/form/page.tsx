@@ -3,13 +3,25 @@ import APP_ROUTES from "@routes/app.routes";
 import FormConfigProduct from "@sections/form-data/config/FormConfigProduct";
 import FormToolbox from "@sections/forms/FormToolbox";
 
-export default function ConfigProductTablePage() {
+export default function ConfigProductTablePage({
+  edit = false,
+  data,
+}: {
+  edit: boolean;
+  data: any;
+}) {
   return (
     <>
-      <DashboardPageHeader divider title="Novo Produto" iconName="plus" />
+      <DashboardPageHeader
+        splited
+        divider
+        title="Novo Produto"
+        iconName="plus"
+      />
 
       <FormToolbox
-        title="Ferramentas"
+        justifyContent="end"
+        // title="Ferramentas"
         icon="fa/solid/wrench"
         actions={[
           {
@@ -19,7 +31,7 @@ export default function ConfigProductTablePage() {
           },
         ]}
       />
-      <FormConfigProduct />
+      <FormConfigProduct edit={edit} data={data} />
     </>
   );
 }

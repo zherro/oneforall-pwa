@@ -34,7 +34,7 @@ export default abstract class SupabaseRepository<T> {
   }
 
   public findById(id: string) {
-    return this.supabase.from(this.TABLE).select().eq("id", id);
+    return this.supabase.from(this.TABLE).select().eq("id", id).single();
   }
 
   public findByTenant(uuid: string) {

@@ -1,22 +1,24 @@
 import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Icon from "@component/icon/Icon";
-import { SemiSpan } from "@component/Typography";
+import Typography, { SemiSpan } from "@component/Typography";
 
 const MiniSessionTile = ({
   mt = "0px",
   icon,
   title,
   divider,
+  justifyContent,
 }: {
   mt?: string;
   divider: boolean;
-  icon: string;
-  title: string;
+  icon?: string;
+  title?: string;
+  justifyContent?: "end" | "start" | "center";
 }) => {
   return (
     <>
-      <FlexBox mt={mt}>
+      <FlexBox mt={mt} justifyContent={justifyContent}>
         {icon && (
           <Icon size="1rem" mt="4px" mr="0.5rem" color="primary">
             {icon}

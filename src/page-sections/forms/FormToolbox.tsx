@@ -4,6 +4,7 @@ import Icon from "@component/icon/Icon";
 import Link from "next/link";
 import MiniSessionTile from "./MiniSessionTitle";
 import Grid from "@component/grid/Grid";
+import { Divider } from "@chakra-ui/react";
 
 const FormToolbox = ({
   mb = "0px",
@@ -11,11 +12,12 @@ const FormToolbox = ({
   title,
   divider,
   actions,
+  justifyContent,
 }: {
   mb?: string;
   divider?: boolean;
-  icon: string;
-  title: string;
+  icon?: string;
+  title?: string;
   actions?: {
     color?: string;
     icon?: string;
@@ -23,13 +25,24 @@ const FormToolbox = ({
     variant?: any;
     link?: string;
   }[];
+  justifyContent?: "end" | "start" | "center";
 }) => {
   return (
     <>
       <Grid container splited vertical_spacing={6}>
         <Grid item xs={12}>
-          <MiniSessionTile mt="1rem" title={title} icon={icon} divider />
-          <FlexBox justifyContent="start" mb={mb}>
+          {title && (
+            <MiniSessionTile
+              justifyContent="end"
+              mt="1.5rem"
+              title={title}
+              icon={icon || ""}
+              divider
+            />
+          )}
+          {!title && <Divider width="100%" mb="1rem" />}
+
+          <FlexBox justifyContent="end" mb={mb}>
             {actions?.map((a, idx) => (
               <Link href={a.link || "#"} key={idx}>
                 <Button

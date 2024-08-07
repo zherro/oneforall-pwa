@@ -17,6 +17,9 @@ CREATE TABLE public.profile_claims (
 	CONSTRAINT profile_claims_pkey PRIMARY KEY (id)
 );
 
+alter table "config_products_table" enable row level security;
+
+
 create policy "Enable insert for users based on user_id" on "public"."profile_claims" as permissive for insert to authenticated with check ((( SELECT uid() AS uid) = user_id));
 
 create policy "Enable read access for own claims" on "public"."profile_claims" as permissive for select to authenticated using ((( SELECT uid() AS uid) = user_id));

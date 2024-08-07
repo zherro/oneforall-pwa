@@ -25,3 +25,4 @@ alter table "config_products_table" enable row level security;
 
 create policy "Anyone authenticated can select" on "public"."config_products_table" as permissive for select to authenticated using (true);
 create policy "Only admin and gestor" on "public"."config_products_table" as permissive for insert to authenticated with check (is_claims_admin());
+create policy "Enable update for users based on user_id" on "public"."config_products_table" as permissive for update to authenticated using (is_claims_admin());
