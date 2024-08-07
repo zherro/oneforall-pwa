@@ -1,10 +1,8 @@
-"use client";
+"use client";;
 import { Skeleton, SkeletonCircle } from "@chakra-ui/react";
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
-import { H2 } from "@component/Typography";
 import Grid from "@component/grid/Grid";
-import Icon from "@component/icon/Icon";
 import DashboardNavigation from "@component/layout/DashboardNavigation";
 import AppLayout from "@component/layout/layout-1";
 import { AuthGuard } from "@supabaseutils/supabase.provider";

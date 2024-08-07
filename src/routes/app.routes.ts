@@ -79,6 +79,7 @@ export const API_ROUTES = {
   STORE: {
     MY_STORES: "/api/stores/my-stores",
     NEW: "/api/stores/my-stores",
+    UPDATE_BUSSINES_HOURS: "/api/stores/my-stores/update-bussines-hours",
   },
 
   TENANT: {

@@ -15,9 +15,11 @@ import Box from "@component/Box";
 import styled from "styled-components";
 import { isValidProp } from "@utils/utils";
 import { useLaraTheme } from "@context/app-context/AppContext";
+import ObjectUtils from "@utils/helpers/Object.utils";
 
 export default function DashboardNavigation() {
   const pathname = usePathname();
+  const { tenant } = useSession();
 
   return (
     <DashboardNavigationWrapper
@@ -39,9 +41,12 @@ export function DashboardNavigationMenu() {
   const ScrollBox = styled.div.withConfig({
     shouldForwardProp: (prop) => isValidProp(prop),
   })`
+    position: fixed;
+    background-color: white;
+
     overflow-x: hidden;
     overflow-y: scroll;
-    max-height: 100vh;
+    max-height: calc(100vh - 64px);
 
     /* ===== Scrollbar CSS ===== */
     /* Firefox */
@@ -76,7 +81,7 @@ export function DashboardNavigationMenu() {
 
         <StyledDashboardNav
           px="1.5rem"
-          mb="1.25rem"
+          mb="1rem"
           href={APP_ROUTES.DASHBOARD.STORE.MY_STORE}
         >
           <FlexBox alignItems="center" color="primary.main">
@@ -88,11 +93,13 @@ export function DashboardNavigationMenu() {
 
             <SemiSpan
               borderColor="gray.200"
+              color="primary"
+              fontSize="1rem"
               style={{
                 borderBottom: "1px solid",
               }}
             >
-              {tenant && tenant?.name || 'Criar Loja'} 
+              {(tenant && tenant?.name) || "Criar Loja"}
             </SemiSpan>
           </FlexBox>
 
@@ -110,31 +117,34 @@ export function DashboardNavigationMenu() {
                   {item.title}
                 </Typography>
 
-                {item?.list?.map((item) => (
-                  <StyledDashboardNav
-                    px="1.5rem"
-                    mb="1.25rem"
-                    href={item.href}
-                    key={item.title}
-                    isCurrentPath={pathname?.includes(item.href)}
-                  >
-                    <FlexBox alignItems="center">
-                      <div className="dashboard-nav-icon-holder">
-                        <Icon
-                          variant="small"
-                          defaultcolor="currentColor"
-                          mr="10px"
-                        >
-                          {item.iconName}
-                        </Icon>
-                      </div>
+                {item?.list?.map(
+                  (item) =>
+                    validateRules(item.rules, { tenant: tenant }) && (
+                      <StyledDashboardNav
+                        px="1.5rem"
+                        mb="1.25rem"
+                        href={item.href}
+                        key={item.title}
+                        isCurrentPath={pathname?.includes(item.href)}
+                      >
+                        <FlexBox alignItems="center">
+                          <div className="dashboard-nav-icon-holder">
+                            <Icon
+                              variant="small"
+                              defaultcolor="currentColor"
+                              mr="10px"
+                            >
+                              {item.iconName}
+                            </Icon>
+                          </div>
 
-                      <span>{item.title}</span>
-                    </FlexBox>
+                          <span>{item.title}</span>
+                        </FlexBox>
 
-                    <span>{item?.count}</span>
-                  </StyledDashboardNav>
-                ))}
+                        <span>{item?.count}</span>
+                      </StyledDashboardNav>
+                    )
+                )}
               </Fragment>
             )
         )}
@@ -142,6 +152,7 @@ export function DashboardNavigationMenu() {
           alignItems="center"
           flexDirection="column"
           justifyContent="space-between"
+          mb="2rem"
         >
           <Divider width="225px" my="1rem" bg="primary.main" height="2px" />
           <LogoutButton />
@@ -150,6 +161,31 @@ export function DashboardNavigationMenu() {
     </ScrollBox>
   );
 }
+
+interface RulesProps {
+  tenantRequired: boolean;
+  tenantType: string | null;
+}
+
+interface RulesParamProps {
+  tenant?: any;
+}
+
+const defaultRules: RulesProps = {
+  tenantRequired: false,
+  tenantType: null,
+};
+
+const validateRules = (rules: RulesProps, params: RulesParamProps) => {
+  let canGet = true;
+  if (canGet && rules?.tenantRequired) {
+    canGet = ObjectUtils.nonNull(params.tenant?.id);
+  }
+  if (canGet && ObjectUtils.nonNull(rules?.tenantType)) {
+    canGet = rules.tenantType == params.tenant?.type;
+  }
+  return canGet;
+};
 
 const linkList = [
   {
@@ -162,7 +198,6 @@ const linkList = [
       },
     ],
   },
-
   {
     title: "VENDAS",
     list: [
@@ -185,6 +220,17 @@ const linkList = [
   },
 
   process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
+    title: "MEUS PRODUTOS",
+    list: [
+      {
+        href: APP_ROUTES.DASHBOARD.MY_CATALOG,
+        title: "Gerenciar Produtos",
+        iconName: "fa/solid/boxes-stacked",
+      },
+    ],
+  },
+
+  process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
     title: "MEU NEGÓCIO",
     list: [
       {
@@ -193,6 +239,7 @@ const linkList = [
         iconName: "store-solid",
       },
       {
+        rules: { ...defaultRules, tenantRequired: true, tenantType: "store" },
         href: APP_ROUTES.DASHBOARD.STORE.MY_STORE + "?change=true",
         title: "Gerenciar Outra Loja",
         iconName: "fa/solid/arrows-rotate",
@@ -203,20 +250,10 @@ const linkList = [
         iconName: "plus",
       },
       {
+        rules: { ...defaultRules, tenantRequired: true, tenantType: "store" },
         href: APP_ROUTES.DASHBOARD.STORE.BUSINESS_HOURS,
         title: "Horário de Funcionamento",
         iconName: "clock-circular-outline",
-      },
-    ],
-  },
-
-  process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
-    title: "MEUS PRODUTOS",
-    list: [
-      {
-        href: APP_ROUTES.DASHBOARD.MY_CATALOG,
-        title: "Gerenciar Produtos",
-        iconName: "fa/solid/boxes-stacked",
       },
     ],
   },

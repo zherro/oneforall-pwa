@@ -24,7 +24,9 @@ export async function POST(
       );
     }
 
-    const { data, error } = await repository.findByTenant(params?.uuid).single();
+    const { data, error } = await repository
+      .findByTenant(params?.uuid)
+      .single();
 
     if (error) {
       LOG.error("Erron when get profiles", error);
@@ -33,7 +35,7 @@ export async function POST(
 
     await repository.getSupabase().auth.updateUser({
       data: {
-        tenant: data,
+        tenant: { ...data, type: "store" },
       },
     });
 
