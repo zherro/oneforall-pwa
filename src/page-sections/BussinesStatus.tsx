@@ -10,16 +10,16 @@ const BussinesStatus = () => {
   const [status, setStatus] = useState<string>();
 
   useEffect(() => {
-    const run = async () => {
-      const stored = await dbStore(session.id).get(
-        `business-hours-${tenant?.id}`
-      );
-      const sts = getBusinessStatus(stored);
-      setStatus(sts);
-    };
+    // const run = async () => {
+    //   const stored = await dbStore(session.id).get(
+    //     `business-hours-${tenant?.id}`
+    //   );
+    //   const sts = getBusinessStatus(stored);
+    //   setStatus(sts);
+    // };
 
-    run();
-  }, []);
+    // session && run();
+  }, [session]);
 
   return (
     <Box

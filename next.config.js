@@ -18,8 +18,8 @@ const prod = {
   api_url: "https://bimoapp.boracuiaba.com:8881",
 };
 
-const envDefault = dev;
-// const envDefault = prod;
+// const envDefault = dev;
+const envDefault = prod;
 
 const nextConfig = {
   images: {

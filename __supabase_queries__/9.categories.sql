@@ -19,7 +19,7 @@ CREATE TABLE public.categories (
 );
 
 
-alter table "data_bucket" enable row level security;
+alter table "categories" enable row level security;
 
 create policy "Can insert own categories" on "public"."categories" as permissive for insert to authenticated with check (true);
 

@@ -30,3 +30,5 @@ CREATE TABLE public.products (
 	CONSTRAINT products_pkey PRIMARY KEY (id),
 	CONSTRAINT products_uid_key UNIQUE (uid)
 );
+
+alter table "products" enable row level security;
