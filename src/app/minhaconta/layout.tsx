@@ -72,10 +72,10 @@ export default function Layout({ children }) {
     <AuthGuard skelecton={<StoryLoadBoard />}>
       <AppLayout fluidHeader={true}>
         <Grid container>
-          <StyledGrid item lg={2}>
+          <StyledGrid item lg={3}>
             <DashboardNavigation></DashboardNavigation>
           </StyledGrid>
-          <StyledGridContainer item lg={10} xs={12}>
+          <StyledGridContainer item lg={9} xs={12}>
             {isDeliveryPath && (
               <Box width="100%" position="fixed" shadow={6} bg="white">
                 <FlexBox
