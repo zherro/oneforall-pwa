@@ -96,12 +96,12 @@ const PedidosPage = () => {
               </FlexBox>
             </Box>
           </Box>
-          <Box>
+          {/* <Box>
             <img
               width="100%"
               src="https://lp.querodelivery.com/wp-content/webp-express/webp-images/uploads/2023/06/tela-parceiro-querodelivery-2.jpg.webp"
             />
-          </Box>
+          </Box> */}
         </Grid>
       </Grid>
     </>
