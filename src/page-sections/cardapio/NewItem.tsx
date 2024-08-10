@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Card from "@component/Card";
@@ -76,6 +76,7 @@ const NewProductItem = ({
     handleBlur,
     handleChange,
     handleSubmit,
+    setValues,
     setFieldValue,
     isValid,
     isSubmitting,
@@ -84,6 +85,11 @@ const NewProductItem = ({
     onSubmit: handleFormSubmit,
     validationSchema,
   });
+
+  // Use o useEffect para atualizar os valores quando initialValues mudar
+  useEffect(() => {
+    setValues(initialValues);
+  }, [initialValues, setValues]);
 
   return (
     <Fragment>

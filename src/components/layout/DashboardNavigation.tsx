@@ -18,8 +18,6 @@ import { useLaraTheme } from "@context/app-context/AppContext";
 import ObjectUtils from "@utils/helpers/Object.utils";
 
 export default function DashboardNavigation() {
-  const pathname = usePathname();
-  const { tenant } = useSession();
 
   return (
     <DashboardNavigationWrapper

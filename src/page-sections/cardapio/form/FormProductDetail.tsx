@@ -1,4 +1,5 @@
 import { Stack } from "@chakra-ui/react";
+import Box from "@component/Box";
 import SwitchField from "@component/custom/SwitchField";
 import Divider from "@component/Divider";
 import Grid from "@component/grid/Grid";
@@ -73,6 +74,7 @@ export default function getFormProductDetail(
               value={values.sale_delivery}
               setFieldValue={setFieldValue}
             />
+            <Box mb="1.5rem" />
           </Grid>
           <Grid item xs={12} md={6} spacing={0}>
             <SwitchField
@@ -82,11 +84,12 @@ export default function getFormProductDetail(
               value={values.sale_pickup_in_store}
               setFieldValue={setFieldValue}
             />
+            <Box mb="1.5rem" />
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12} spacing={0}>
-        <Divider width="100%" mt="1rem" />
+        <Divider width="100%" mt="0rem" />
       </Grid>
       <Grid item xs={12} spacing={0}>
         <TextField

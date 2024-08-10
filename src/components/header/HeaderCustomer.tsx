@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Box from "@component/Box";
 import Image from "@component/Image";
@@ -11,7 +11,7 @@ import { Tiny } from "@component/Typography";
 import { Button, IconButton } from "@component/buttons";
 import { useAppContext } from "@context/app-context";
 import StyledHeader from "./styles";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import APP_ROUTES from "@routes/app.routes";
 import { H1 } from "../Typography";
 import { useSession } from "@supabaseutils/supabase.provider";
@@ -38,11 +38,21 @@ export default function HeaderCustomer({
   const signout: any = logout;
   const { state } = useAppContext();
   const { isAuthenticated } = useSession();
+  const pathname = usePathname();
+  const [lastPath, setPath] = useState("");
   const [open, setOpen] = useState(false);
-  const toggleSidenav = () => setOpen(!open);
+
+  const toggleSidenav = () => setOpen((open) => !open);
   const router = useRouter();
 
   const isTablet: any = useWindowIsTablet();
+
+  useEffect(() => {
+    if (lastPath !== pathname) {
+      setPath(pathname);
+      setOpen(false);
+    }
+  }, [pathname]);
 
   const CART_HANDLE = (
     <Box ml="20px" position="relative">

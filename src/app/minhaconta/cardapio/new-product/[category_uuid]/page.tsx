@@ -36,6 +36,15 @@ interface ScreenContentProps {
 }
 
 // ======================================================
+interface FormConfig {
+  type?: string;
+  typeData?: any;
+  showForm?: boolean;
+  productData?: ProductModel | any;
+  category: CategoryModel | null;
+}
+
+// ======================================================
 
 const screenContentInitial: ScreenContentProps = {
   screen: "home",
@@ -50,17 +59,17 @@ const screenContentInitial: ScreenContentProps = {
   ],
 };
 
-const screenContentInitialUpdated = (step: number = 0): ScreenContentProps => {
+const screenContentInitialUpdated = (started: boolean): ScreenContentProps => {
   return {
     screen: "home",
     title: "Novo Produto",
     hat: "Siga as super dicas que reservamos pra você, e arrase nas vendas!",
     stepperList: [
       { title: "Detalhes", disabled: false, hidden: false },
-      { title: "Fotos", disabled: !(step >= 2), hidden: false },
-      { title: "Preços", disabled: !(step >= 3), hidden: false },
-      { title: "Disponibilidade", disabled: !(step >= 4), hidden: false },
-      { title: "Complementos", disabled: !(step >= 5), hidden: false },
+      { title: "Fotos", disabled: started, hidden: false },
+      { title: "Preços", disabled: started, hidden: false },
+      { title: "Disponibilidade", disabled: started, hidden: false },
+      { title: "Complementos", disabled: started, hidden: false },
     ],
   };
 };
@@ -92,7 +101,6 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
 
   // routes
   const CATEGORY_ID = params["category_uuid"];
-  const TYPE = query.get("type");
   const STEP = query.get("step");
 
   if (CATEGORY_ID == null) {
@@ -106,21 +114,9 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   // routes
 
   // STATES
+  const [formConfig, setFormConfig] = useState<FormConfig>({ category: null });
   const [loading, onLoading] = useState(false);
-  const [showForm, setShowForm] = useState<boolean>(
-    TYPE != undefined || productId != undefined ? true : false
-  );
 
-  const [type, setType] = useState(TYPE ? productType[TYPE] : {});
-
-  const [category, setCategory] = useState<CategoryModel | null>(null);
-  const [productData, setProductData] = useState<ProductModel | any>({
-    ...initialState,
-    category_id: CATEGORY_ID,
-    product_type: TYPE,
-  });
-
-  // STATES  - STEPS
   const [nextStep, setNextStep] = useState<string | undefined>(STEP);
 
   // STATES
@@ -128,28 +124,54 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   // EFFECTS
 
   useEffect(() => {
+    const type = query.get("type");
+    const typeData = type ? productType[type] : {};
+    const productData = {
+      ...initialState,
+      category_id: CATEGORY_ID,
+      product_type: type,
+    };
+    const showForm =
+      ObjectUtils.nonNull(type) || ObjectUtils.nonNull(productId)
+        ? true
+        : false;
+
+    setFormConfig((cfg) => ({
+      ...cfg,
+      type,
+      showForm,
+      typeData,
+      productData,
+    }));
+  }, [query]);
+
+  useEffect(() => {
     if (ObjectUtils.nonNull(CATEGORY_ID)) {
       fetchGet(API_URI_CATEGORIES, {
-        handleData: (data) => setCategory(data),
+        handleData: (category) =>
+          setFormConfig((cfg) => ({ ...cfg, category })),
       });
     }
 
     if (ObjectUtils.nonNull(productId)) {
       fetchGet(API_URI_PRODUCTS + `/${productId}`, {
-        handleData: (data) => setProductData(data),
+        handleData: (productData) =>
+          setFormConfig((cfg) => ({ ...cfg, productData })),
         handleError,
       });
     }
-  }, []);
+  }, [params, productId]);
 
   useEffect(() => {
     if (nextStep == "2") {
       actionStep(2);
       router.replace(path);
+    } else if (nextStep == "start" || nextStep == "update") {
+      apiSendData(formConfig.productData);
     }
   }, [nextStep]);
 
-  // EFFECTS
+  // END EFFECTS
 
   // form
   const [files, setFiles] = useState<any>();
@@ -162,18 +184,21 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
     });
   };
 
-  const saveProduct = (product: ProductModel) => {
-    let stp = ObjectUtils.isNull(product.id) ? "start" : "update";
+  const saveProduct = async (productData: ProductModel) => {
+    let stp = ObjectUtils.isNull(productData.id) ? "start" : "update";
+    await setFormConfig((cfg) => ({ ...cfg, productData }));
     setNextStep(stp);
+  };
 
+  const apiSendData = (product: ProductModel) => {
     fetchPost(API_URI_PRODUCTS, product, {
       onLoading,
-      handleData: (data) => {
-        setProductData(data);
+      handleData: (productData) => {
+        setFormConfig((cfg) => ({ ...cfg, productData }));
         nextStep == "start" &&
-          router.push(
+          router.replace(
             APP_ROUTES.DASHBOARD.PRODUCT_NEW +
-              `/${CATEGORY_ID}/${data.id}?step=2`
+              `/${CATEGORY_ID}/${productData.id}?step=2`
           );
         notify({
           status: "success",
@@ -191,15 +216,13 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
   const [screenContent, setScreenContent] = useState<ScreenContentProps>(
     StringUtils.isEmpty(productId)
       ? screenContentInitial
-      : screenContentInitialUpdated(1)
+      : screenContentInitialUpdated(true)
   );
   const [selectedStep, setSelectedStep] = useState(1);
 
   const actionStep = useCallback(
     (ind: number) => {
-      if (ind > selectedStep) {
-        setScreenContent(screenContentInitialUpdated(ind));
-      }
+      setScreenContent(screenContentInitialUpdated(ObjectUtils.isNull(productId)));
 
       if (selectedStep != ind) {
         setSelectedStep(ind);
@@ -234,9 +257,9 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
 
   return (
     <Fragment>
-      {!showForm && <ChoseProductTypePage />}
+      {!formConfig.showForm && <ChoseProductTypePage />}
 
-      {showForm && (
+      {formConfig.showForm && (
         <Grid container splited vertical_spacing={8}>
           <Grid item xs={12}>
             <Divider mt="1rem" />
@@ -249,8 +272,8 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
         </Grid>
       )}
 
-      {showForm && screenContent?.stepperList && (
-        <Grid container splited spacing={8}>
+      {formConfig.showForm && screenContent?.stepperList && (
+        <Grid container splited vertical_spacing={8}>
           <Grid item xs={12}>
             <Stepper
               select={selectedStep}
@@ -264,11 +287,11 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
         </Grid>
       )}
 
-      {showForm && productData != null && productData?.uid > 0 && (
+      {formConfig.showForm && ObjectUtils.nonNull(formConfig.productData) && (
         <NewProductItem
-          category={category}
-          productType={type}
-          initialValues={productData}
+          category={formConfig.category}
+          productType={formConfig.typeData}
+          initialValues={formConfig.productData}
           files={files}
           setFiles={setFiles}
           submited={loading}

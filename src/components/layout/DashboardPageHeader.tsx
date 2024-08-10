@@ -1,13 +1,10 @@
-"use client";
-import { ReactNode, useState } from "react";
+"use client";;
+import { ReactNode } from "react";
 import Box from "@component/Box";
 import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
 import { H2 } from "@component/Typography";
 import useWindowSize from "@hook/useWindowSize";
-import Sidenav from "@component/sidenav/Sidenav";
-import { DashboardNavigationMenu } from "./DashboardNavigation";
-import { IconButton } from "../buttons";
 import Grid from "@component/grid/Grid";
 import Divider from "@component/Divider";
 
@@ -28,10 +25,6 @@ export default function DashboardPageHeader({
   divider,
   splited = false,
 }: DashboardPageHeaderProps) {
-  const [open, setOpen] = useState(false);
-
-  const toggleSidenav = () => setOpen((open) => !open);
-
   const width: any = useWindowSize();
   const isTablet = width < 1025;
 
