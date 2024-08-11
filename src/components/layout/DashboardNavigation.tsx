@@ -39,6 +39,7 @@ export function DashboardNavigationMenu() {
   const ScrollBox = styled.div.withConfig({
     shouldForwardProp: (prop) => isValidProp(prop),
   })`
+    width: 270px;
     position: fixed;
     background-color: white;
 

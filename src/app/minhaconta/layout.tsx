@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { Skeleton, SkeletonCircle } from "@chakra-ui/react";
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
@@ -21,6 +21,14 @@ export const StyledGrid = styled(Grid)`
 export const StyledGridContainer = styled(Grid)`
   @media only screen and (max-width: 1124px) {
     min-width: 100% !important;
+  }
+`;
+
+export const NavSpacer = styled(Box)`
+  width: 270px;
+
+  @media only screen and (max-width: 1124px) {
+    display: none;
   }
 `;
 
@@ -71,28 +79,32 @@ export default function Layout({ children }) {
   return (
     <AuthGuard skelecton={<StoryLoadBoard />}>
       <AppLayout fluidHeader={true}>
-        <Grid container>
-          <StyledGrid item lg={3}>
+        <Grid>
+          <NavSpacer>
             <DashboardNavigation></DashboardNavigation>
-          </StyledGrid>
-          <StyledGridContainer item lg={9} xs={12}>
-            {isDeliveryPath && (
-              <Box width="100%" position="fixed" shadow={6} bg="white">
-                <FlexBox
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  width="100%"
-                >
-                  <Box p="1rem">
-                    <BussinesStatus />
-                  </Box>
-                </FlexBox>
+          </NavSpacer>
+
+          <FlexBox>
+            <NavSpacer></NavSpacer>
+            <Box flexGrow={1}>
+              {isDeliveryPath && (
+                <Box width="100%" position="fixed" shadow={6} bg="white">
+                  <FlexBox
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    width="100%"
+                  >
+                    <Box p="1rem">
+                      <BussinesStatus />
+                    </Box>
+                  </FlexBox>
+                </Box>
+              )}
+              <Box mt={isDeliveryPath ? "68px" : 0} px="1rem" maxWidth={"100%"}>
+                {children}
               </Box>
-            )}
-            <Box mt={isDeliveryPath ? "68px" : 0} px="1rem" maxWidth={"100%"}>
-              {children}
             </Box>
-          </StyledGridContainer>
+          </FlexBox>
         </Grid>
       </AppLayout>
     </AuthGuard>
