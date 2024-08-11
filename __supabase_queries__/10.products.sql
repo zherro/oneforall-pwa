@@ -27,8 +27,31 @@ CREATE TABLE public.products (
 	cost_price numeric NULL,
 	discount numeric NULL,
 	discount_percent numeric NULL,
+	tsv_search tsvector NULL,
 	CONSTRAINT products_pkey PRIMARY KEY (id),
 	CONSTRAINT products_uid_key UNIQUE (uid)
 );
 
 alter table "products" enable row level security;
+
+CREATE INDEX idx_products_tsv ON public.products USING gin (tsv_search);
+
+
+CREATE OR REPLACE FUNCTION public.for_trigger_products()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    NEW.tsv_search :=  regexp_replace(regexp_replace(func_remove_acentos_lowercase(NEW.name::text),  '[^a-zA-Z0-9\s]', ' ', 'g'), '\b\w{1,2}\b', '', 'g') || ' J01N ';
+    RETURN NEW;
+END;
+$function$
+;
+
+create trigger before_change_products before
+insert
+    or
+update
+    on
+    public.products for each row execute function for_trigger_products();
+

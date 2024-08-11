@@ -63,6 +63,20 @@ export default class StringUtils {
 
     return str;
   }
+
+  static removeDiacritics(text: string): string {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  static replaceSpecialChars(text: string): string {
+    // Substituir letras com acento e cedilha por letras sem acento
+    text = this.removeDiacritics(text);
+
+    // Substituir 'ç' e 'Ç' por 'c' e 'C'
+    text = text.replace(/ç/g, "c").replace(/Ç/g, "C");
+
+    return text;
+  }
 }
 
 const isEmpty = (str: any): boolean => StringUtils.isEmpty(str);

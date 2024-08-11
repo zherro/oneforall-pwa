@@ -91,6 +91,10 @@ export const API_ROUTES = {
     USERS: "/api/admin/profiles",
     CONFIG_PRODUCT_TABLE: "/api/admin/config-products-table",
   },
+
+  CATALOG: {
+    PRODUCT_SEARCH: "/api/catalog/search"
+  }
 };
 
 export default APP_ROUTES;

@@ -59,7 +59,6 @@ function mask(
     : multimasker(String(value), pattern, options);
 }
 
-
 /**
  * Aplica a máscara ao valor fornecido.
  * @param {string | number} value - Valor a ser mascarado.
@@ -67,62 +66,71 @@ function mask(
  * @param {any} options - Opções adicionais.
  * @returns {string} - Valor mascarado no formato monetário brasileiro.
  */
-function maskMoney(value: string | number, pattern: string, options?: any): string {
+function maskMoney(
+  value: string | number,
+  pattern?: string,
+  options?: any
+): string {
+  pattern =
+    pattern !== undefined && pattern !== null && pattern.length > 0
+      ? pattern
+      : "999.999.999.999,99";
+
   // Verifica se a máscara tem o caractere '#' no início
-  const unlimitedPattern = pattern.startsWith('#');
+  const unlimitedPattern = pattern.startsWith("#");
 
   // Remove o '#' se estiver presente no início da máscara
   const cleanPattern = unlimitedPattern ? pattern.slice(1) : pattern;
 
   // Remove todos os caracteres não numéricos
-  let numericValue = (unMask(''+value)).replace(/\D/g, '').replace(/^0+/, '');
-  const maxLengt = unMask(cleanPattern).replace(/\D/g, '').length;
+  let numericValue = unMask("" + value)
+    .replace(/\D/g, "")
+    .replace(/^0+/, "");
+  const maxLengt = unMask(cleanPattern).replace(/\D/g, "").length;
 
-  if(numericValue.length <= 0) {
-    numericValue = '0';
-  } else if(numericValue.length > maxLengt) {
+  if (numericValue.length <= 0) {
+    numericValue = "0";
+  } else if (numericValue.length > maxLengt) {
     numericValue = numericValue.substring(0, maxLengt);
   }
 
-  const reverseValue = (numericValue || '').split('').reverse().join('');
-  const reversePatter= (cleanPattern || '').split('').reverse().join('');
+  const reverseValue = (numericValue || "").split("").reverse().join("");
+  const reversePatter = (cleanPattern || "").split("").reverse().join("");
 
   // Determina a quantidade de casas decimais <baseado na máscara
   const decimalLength = 2; // Sempre tratamos os dois últimos números como casas decimais
 
-  const revv = reverseValue.split('');
-  const revp = reversePatter.split('');
+  const revv = reverseValue.split("");
+  const revp = reversePatter.split("");
 
-  console.log(revv)
-  console.log(revp)
+  console.log(revv);
+  console.log(revp);
 
-  let formattedValue = '';
+  let formattedValue = "";
   let auxIndx = 0;
 
   for (let i = 0; i < revv.length; i++) {
-    if(revp[auxIndx] == '9') {
+    if (revp[auxIndx] == "9") {
       formattedValue += revv[i];
-    } else if(ObjectUtils.isNull(revp[auxIndx]) && unlimitedPattern) {
+    } else if (ObjectUtils.isNull(revp[auxIndx]) && unlimitedPattern) {
       formattedValue += revv[i];
-    } else if(ObjectUtils.nonNull(revp[auxIndx])) {
+    } else if (ObjectUtils.nonNull(revp[auxIndx])) {
       formattedValue += revp[auxIndx] + revv[i];
       auxIndx++;
     }
     auxIndx++;
-    console.log(formattedValue , revp[i] , revv[i])
+    console.log(formattedValue, revp[i], revv[i]);
   }
 
-  formattedValue = (formattedValue || '').split('').reverse().join('');
+  formattedValue = (formattedValue || "").split("").reverse().join("");
 
   // Formata o valor numérico
   if (numericValue.length <= decimalLength) {
-    formattedValue = '0.' + numericValue.padStart(decimalLength, '0');
+    formattedValue = "0," + numericValue.padStart(decimalLength, "0");
   }
 
   return formattedValue;
 }
-
-
 
 // /**
 //  * Aplica a máscara ao valor fornecido.
