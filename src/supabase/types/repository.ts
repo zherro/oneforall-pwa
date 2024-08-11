@@ -1,10 +1,9 @@
 import { PostgrestQueryBuilder } from "@supabase/postgrest-js";
-import { SupabaseClient, User } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { UserData } from "@supabaseutils/model/user/UserData";
 import { createClient } from "@supabaseutils/utils/server";
 import StringUtils from "@utils/helpers/String.utils";
 import { LOG } from "@utils/log";
-import { promises } from "dns";
 
 export default abstract class SupabaseRepository<T> {
   protected supabase: SupabaseClient;
@@ -77,6 +76,11 @@ export default abstract class SupabaseRepository<T> {
   async getUser(): Promise<any> {
     const data: UserData | any = await this.supabase.auth.getUser();
     return data?.data?.user;
+  }
+
+  async getTenantId(): Promise<string> {
+    const user: any = await this.getUser();
+    return user.user_metadata.tenant.id;
   }
 
   paginated(

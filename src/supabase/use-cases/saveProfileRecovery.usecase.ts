@@ -3,7 +3,6 @@ import { IngestionData } from "./processor/ingestion-data";
 import { UnitProcessor } from "./processor/unit.processor";
 import ProfileRecoveryModel from "@supabaseutils/model/ProfileRecovery.model";
 import ProfileRecoveryRepository from "@supabaseutils/repositories/profileRecovery.repository";
-import ObjectUtils from "@utils/helpers/Object.utils";
 import StringUtils from "@utils/helpers/String.utils";
 import { BusinessException } from "@supabaseutils/bussines.exception";
 
@@ -19,7 +18,8 @@ export default class SaveProfileRecoveryUsecase extends UnitProcessor<any> {
     const { data: dataUser } = await profileRepository.getByEmail(entity.email);
 
     if (
-      ObjectUtils.isNull(dataUser) ||
+      dataUser == null ||
+      dataUser == undefined ||
       dataUser.length <= 0 ||
       StringUtils.isEmpty(dataUser[0].id)
     ) {
@@ -28,7 +28,7 @@ export default class SaveProfileRecoveryUsecase extends UnitProcessor<any> {
 
     entity.user_id = dataUser[0].id;
     const { data, error } = await profileRecoveryRepository.save(entity);
-    await profileRecoveryRepository.resetOldRecoveries(data.id);
+    await profileRecoveryRepository.resetOldRecoveries(data?.id);
 
     ingestionData.output = { data, error };
     return ingestionData;

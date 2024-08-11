@@ -6,7 +6,18 @@ import useWindowSize from "@hook/useWindowSize";
 import TitleCard from "@component/cards/TitleCard";
 import TipCard from "@component/cards/TipCard";
 import Stepper from "@component/Stepper";
-import { Flex, Spacer, Stack, Switch, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spacer,
+  Stack,
+  Switch,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { Button } from "@component/buttons";
 import Icon from "@component/icon/Icon";
@@ -23,6 +34,7 @@ import { StatusEntity } from "@supabaseutils/model/types/Status.type";
 import { fetchGet } from "@hook/useFetch2";
 import TipBox from "@component/tips/TipBox";
 import CardapioWelcome from "../CardapioWelcome";
+import { maskMoney } from "@lib/mask/lib/mask";
 
 // ======================================================
 type Props = { children: ReactNode };
@@ -30,7 +42,7 @@ type Props = { children: ReactNode };
 
 const PageCatalogFood = ({ start = false }) => {
   const query = useSearchParams();
-  const API_URI_CATEGORIES = API_ROUTES.CUSTOMER.CATALOG.CATEGORY;
+  const API_URI_CARDAPIO = API_ROUTES.CUSTOMER.CATALOG.MY_CARDAPIO;
 
   const [category, handleDataCategory] = useState<any>();
   const [errorCategory, handleErrorCategory] = useState<any>();
@@ -57,7 +69,7 @@ const PageCatalogFood = ({ start = false }) => {
   }, []);
 
   useEffect(() => {
-    fetchGet(API_URI_CATEGORIES, {
+    fetchGet(API_URI_CARDAPIO, {
       notify: true,
       headers: {},
       handleData: handleDataCategory,
@@ -99,7 +111,7 @@ const PageCatalogFood = ({ start = false }) => {
       {!start && !loadingCategory && category?.data?.length <= 0 && (
         <CardapioWelcome />
       )}
-      {!loadingCategory && (category?.data?.length > 0 || start) && (
+      {!loadingCategory && (category?.length > 0 || start) && (
         <>
           <Grid container spacing={8}>
             <Grid item xs={12}>
@@ -170,83 +182,186 @@ const PageCatalogFood = ({ start = false }) => {
             )) || <></>}
           </Grid>
           {/* <DeliveryCatalog /> */}
-          <Grid container spacing={0}>
-            {(category?.data?.length > 0 &&
-              category?.data?.map((cat: any) => (
-                <Grid item xs={12} key={cat.id}>
-                  <Accordion expanded>
-                    <AccordionHeader px="0px" py="6px" color="text.muted">
-                      <Box width="100%">
-                        <Flex width="100%">
-                          <SemiSpan
-                            className="cursor-pointer"
-                            mr="9px"
-                            mt="1rem"
-                            color="gray.900"
-                          >
-                            {cat.name}
-                          </SemiSpan>
-                          <Spacer />
-                          <Box mt="1rem" pr="1.5rem">
-                            <Stack direction="row">
-                              <Switch
-                                name="status"
-                                size="md"
-                                isChecked={cat.status == StatusEntity.ACTIVE}
-                                onChange={(event) => {
-                                  cat.status = StatusEntity.ACTIVE
-                                }}
-                              />
-                              {cat.status == StatusEntity.ACTIVE && (
-                                <Text color="teal" fontWeight="bold">
-                                  ATIVO
-                                </Text>
-                              )}
-                              {cat.status !== StatusEntity.ACTIVE && (
-                                <Text color="tomato" fontWeight="bold">
-                                  PAUSADO
-                                </Text>
-                              )}
-                            </Stack>
-                          </Box>
-                        </Flex>
-                        <Divider width="100%" mt="1.5rem" bg="gray.400" />
-                      </Box>
-                    </AccordionHeader>
 
-                    <Grid item xs={12}>
-                      <Box backgroundColor="gray.300" pb="1rem" px="1rem">
-                        <Divider mb="1rem" />
-                        <Stack direction={"row-reverse"}>
-                          <Link
-                            href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.id}`}
-                          >
-                            <Button
-                              mt=""
-                              bg="primary.main"
-                              color="white"
-                              padding="0.25rem"
-                              height="1.35rem"
-                              style={{
-                                fontWeight: "400",
-                                fontSize: "0.85rem",
-                                lineHeight: "1rem",
-                              }}
-                            >
-                              <Icon size="1rem" pr=".35rem">
-                                plus
-                              </Icon>
-                              Novo produto
-                            </Button>
-                          </Link>
-                        </Stack>
-                        <Box></Box>
-                      </Box>
-                    </Grid>
-                  </Accordion>
+          {(category?.length > 0 &&
+            category?.map((cat: any) => (
+              <Box
+                mt="1.5rem"
+                width="100%"
+                border="1px solid"
+                borderColor="gray.500"
+                borderRadius="8px"
+                p="0.75rem"
+              >
+                <Grid container key={cat.id}>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Box mb="1rem">
+                      <SemiSpan
+                        className="cursor-pointer"
+                        mr="9px"
+                        color="gray.900"
+                        fontSize="1.15rem"
+                        fontWeight="600"
+                      >
+                        {cat.category}
+                      </SemiSpan>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Box mb="1rem" pl="2rem" style={{ float: "right" }}>
+                      <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          aria-label="Options"
+                          icon={
+                            <Icon color="secondary">
+                              fa/solid/ellipsis-vertical
+                            </Icon>
+                          }
+                          variant="outline"
+                        />
+                        <MenuList>
+                          <MenuItem>Editar</MenuItem>
+                          <MenuItem>Excluir</MenuItem>
+                          {/*  TODO - opcao duplicar */}
+                        </MenuList>
+                      </Menu>
+                    </Box>
+
+                    <Box pl="1.5rem" style={{ float: "right" }}>
+                      <Switch
+                        name="status"
+                        size="md"
+                        isChecked={cat.category_status == StatusEntity.ACTIVE}
+                        onChange={(event) => {
+                          cat.status = StatusEntity.ACTIVE;
+                        }}
+                      />
+                      {cat.category_status == StatusEntity.ACTIVE && (
+                        <Text color="teal" fontWeight="bold">
+                          ATIVO
+                        </Text>
+                      )}
+                      {cat.category_status !== StatusEntity.ACTIVE && (
+                        <Text color="tomato" fontWeight="bold">
+                          PAUSADO
+                        </Text>
+                      )}
+                    </Box>
+                    <Box pr="1.5rem" style={{ float: "right" }}>
+                      <Link
+                        href={`${APP_ROUTES.DASHBOARD.PRODUCT_NEW}/${cat.category_id}`}
+                      >
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          style={{
+                            fontWeight: "400",
+                            fontSize: "0.85rem",
+                            lineHeight: "1rem",
+                          }}
+                        >
+                          <Icon size="1rem" pr=".35rem">
+                            plus
+                          </Icon>
+                          Adicionar Item
+                        </Button>
+                      </Link>
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box backgroundColor="gray.200" width="100%">
+                      {cat.products?.map((product) => (
+                        <Box key={product.product_id}>
+                          <Divider
+                            width="100%"
+                            bg="gray.500"
+                            height="1px"
+                            mb="1rem"
+                          />
+                          <Grid container>
+                            <Grid item xs={12} sm={12} md={6}>
+                              <Box mb="1rem" px="0.5rem">
+                                <SemiSpan
+                                  className="cursor-pointer"
+                                  mr="9px"
+                                  color="gray.900"
+                                  fontSize="1rem"
+                                >
+                                  {product.product}
+                                </SemiSpan>
+                              </Box>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6}>
+                              <Box
+                                mb="1rem"
+                                pl="2rem"
+                                style={{ float: "right" }}
+                              >
+                                <Menu>
+                                  <MenuButton
+                                    as={IconButton}
+                                    aria-label="Options"
+                                    icon={
+                                      <Icon color="secondary">
+                                        fa/solid/ellipsis-vertical
+                                      </Icon>
+                                    }
+                                    variant="outline"
+                                  />
+                                  <MenuList>
+                                    <MenuItem>Editar</MenuItem>
+                                    <MenuItem>Excluir</MenuItem>
+                                    {/*  TODO - opcao duplicar */}
+                                  </MenuList>
+                                </Menu>
+                              </Box>
+
+                              <Box pl="1.5rem" style={{ float: "right" }}>
+                                <Switch
+                                  name="status"
+                                  size="md"
+                                  isChecked={
+                                    product.product_status ==
+                                    StatusEntity.ACTIVE
+                                  }
+                                  onChange={(event) => {
+                                    product.status = StatusEntity.ACTIVE;
+                                  }}
+                                />
+                                {product.product_status ==
+                                  StatusEntity.ACTIVE && (
+                                  <Text color="teal" fontWeight="bold">
+                                    ATIVO
+                                  </Text>
+                                )}
+                                {product.product_status !==
+                                  StatusEntity.ACTIVE && (
+                                  <Text color="tomato" fontWeight="bold">
+                                    PAUSADO
+                                  </Text>
+                                )}
+                              </Box>
+                              <Box pr="1.5rem" style={{ float: "right" }} pt="0.5rem">
+                                <SemiSpan
+                                  fontSize="1rem"
+                                  border="1px solid"
+                                  p="0.5rem"
+                                  borderRadius="5px"
+                                >
+                                  R$ {maskMoney(product.price, "###.###.###,99")}
+                                </SemiSpan>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Grid>
                 </Grid>
-              ))) || <></>}
-          </Grid>
+              </Box>
+            ))) || <></>}
 
           {(category || [])?.length <= 0 && <DeliveryCatalog />}
           {/* !catalog?.category && (

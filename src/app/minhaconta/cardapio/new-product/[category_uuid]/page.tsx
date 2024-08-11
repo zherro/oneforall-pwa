@@ -22,6 +22,7 @@ import ObjectUtils from "@utils/helpers/Object.utils";
 import ChoseProductTypePage from "@sections/cardapio/product/ChoseProductType";
 import { fetchGet, fetchPost } from "@hook/useFetch2";
 import { productType } from "@data/productTypes";
+import FormToolbox from "@sections/forms/FormToolbox";
 
 // ======================================================
 type screens = "home" | "price" | "complements" | "image" | "disponibility";
@@ -222,7 +223,9 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
 
   const actionStep = useCallback(
     (ind: number) => {
-      setScreenContent(screenContentInitialUpdated(ObjectUtils.isNull(productId)));
+      setScreenContent(
+        screenContentInitialUpdated(ObjectUtils.isNull(productId))
+      );
 
       if (selectedStep != ind) {
         setSelectedStep(ind);
@@ -270,6 +273,21 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
             />
           </Grid>
         </Grid>
+      )}
+
+      {formConfig.showForm && (
+        <FormToolbox
+          justifyContent="end"
+          // title="Ferramentas"
+          icon="fa/solid/wrench"
+          actions={[
+            {
+              title: "Ver meus itens",
+              icon: "fa/solid/list-check",
+              link: APP_ROUTES.DASHBOARD.MY_CATALOG,
+            },
+          ]}
+        />
       )}
 
       {formConfig.showForm && screenContent?.stepperList && (
