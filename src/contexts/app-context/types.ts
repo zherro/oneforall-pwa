@@ -1,3 +1,5 @@
+import SessionUtils from "@supabaseutils/session";
+
 export interface ContextProps {
   state: InitialState;
   dispatch: (args: ActionType) => void;
@@ -8,6 +10,7 @@ export interface InitialState {
   cart: CartItem[];
   isHeaderFixed: boolean;
   notify: NotifyMessage;
+  session?: SessionUtils;
 }
 
 export interface NotifyMessage  {
@@ -55,5 +58,10 @@ interface ThemeActionType {
   payload: string;
 }
 
+interface SessionActionType {
+  type: "SESSION";
+  payload: SessionUtils;
+}
 
-export type ActionType = CartActionType | LayoutActionType | NotifyActionType | ThemeActionType;
+
+export type ActionType = CartActionType | LayoutActionType | NotifyActionType | ThemeActionType | SessionActionType;

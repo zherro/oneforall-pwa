@@ -9,7 +9,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { useToast } from '@chakra-ui/react';
+import { useToast } from "@chakra-ui/react";
 
 // TYPES
 import { ActionType, InitialState, ContextProps } from "./types";
@@ -20,20 +20,28 @@ import { getTheme } from "@utils/utils";
 // import { initGA, logPageView } from "@lib/gtag";
 import { useRouter } from "next/navigation";
 
-const INITIAL_STATE = { theme: 'GREEN', cart: INITIAL_CART, isHeaderFixed: false, notify: {}};
+const INITIAL_STATE = {
+  theme: "GREEN",
+  cart: INITIAL_CART,
+  isHeaderFixed: false,
+  notify: {},
+  session: undefined,
+};
 
 export const AppContext = createContext<ContextProps>({
   state: INITIAL_STATE,
-  dispatch: () => {}
+  dispatch: () => {},
 });
 
 const reducer = (state: InitialState, action: ActionType) => {
   switch (action.type) {
+    case "SESSION":
+      return { ...state, session: action.payload };
     case "THEME":
-      return {...state, theme: action.payload };
+      return { ...state, theme: action.payload };
 
     case "NOTIFY":
-      console.log('setou')
+      console.log("setou");
       return { ...state, notify: action.payload };
 
     case "TOGGLE_HEADER":
@@ -67,21 +75,21 @@ const reducer = (state: InitialState, action: ActionType) => {
 };
 
 export function AppProvider({ children }: PropsWithChildren<any>) {
-  const router = useRouter()
-  const toast = useToast()
+  const router = useRouter();
+  const toast = useToast();
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   const notifyToast = useCallback(() => {
-    if(state.notify.status != null) {
+    if (state.notify.status != null) {
       toast({
-        position: state.notify.position || 'top',
+        position: state.notify.position || "top",
         status: state.notify.status,
         title: state.notify.title,
         description: state.notify.description,
-        variant: state.notify.variant || 'left-accent',
+        variant: state.notify.variant || "left-accent",
         isClosable: true,
-      })
+      });
     }
   }, [state.notify]);
 
@@ -98,8 +106,9 @@ export function AppProvider({ children }: PropsWithChildren<any>) {
   //   };
   // }, [router.events]);
 
-
-  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+  );
 }
 
 export const useAppContext = () => useContext<ContextProps>(AppContext);
@@ -107,4 +116,4 @@ export const useAppContext = () => useContext<ContextProps>(AppContext);
 export const useLaraTheme = () => {
   const { state } = useAppContext();
   return theme(state.theme);
-}
+};

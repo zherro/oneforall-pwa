@@ -21,6 +21,7 @@ import ObjectUtils from "@utils/helpers/Object.utils";
 import { LOG } from "@utils/log";
 import DB_KEYS from "@utils/db/keys";
 import storageUtil from "@utils/db/LocalStorageUtil";
+import { useAppContext } from "@context/app-context";
 
 type MaybeSession = Session | UserData | null;
 
@@ -38,6 +39,7 @@ export default function SupabaseProvider({
   children: React.ReactNode;
   // session: MaybeSession
 }) {
+  const { dispatch } = useAppContext();
   const supabaseClient = createClient();
   const supabase = createClientComponentClient<any>();
   const router = useRouter();
@@ -91,6 +93,14 @@ export default function SupabaseProvider({
 
   useEffect(() => {
     const sessionUtils = new SessionUtils(session);
+
+    if (sessionUtils.isAuthenticated()) {
+      dispatch({
+        type: "SESSION",
+        payload: sessionUtils,
+      });
+    }
+
     validateAutorizedsPaths(
       sessionUtils.signature(),
       sessionUtils.isAuthenticated(),
