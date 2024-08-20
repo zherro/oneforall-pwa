@@ -29,6 +29,10 @@ type Context = {
   supabase: SupabaseClient<any, string>;
   session: MaybeSession;
   revalidate: any;
+  auth: {
+    isAuthenticated: boolean;
+    loaded: boolean;
+  };
 };
 
 export const SupabaseContext = createContext<Context | undefined>(undefined);
@@ -46,21 +50,36 @@ export default function SupabaseProvider({
   const path: any = usePathname();
   const [session, setSession] = useState<any>(null);
   const [lastPath, setLastPath] = useState<any>(null);
+  const [refreshdsAt, refreshd] = useState<Date | null>(null);
+  const [auth, setAuth] = useState<{
+    isAuthenticated: boolean;
+    loaded: boolean;
+  }>({
+    isAuthenticated: false,
+    loaded: false,
+  });
 
   // POR AlGUM MOTIVO FICA SETANDO A O SESSION PRA null - nunca mecha
   // supabase.auth.onAuthStateChange(async (_event, sessionNew) => {
   //   await setSession(sessionNew);
   // });
 
-  const fetchSession = async () => {
+  const fetchSession = useCallback(async () => {
     const {
       data: { user },
     } = await supabaseClient.auth.getUser();
-    setSession(user);
-  };
+    await setSession(user);
+    setAuth({
+      isAuthenticated: new SessionUtils(user).isAuthenticated(),
+      loaded: true,
+    });
+  }, []);
+
+  const revalidate = fetchSession;
 
   useEffect(() => {
     LOG.debug("Provider->fetchSession");
+    refreshd(new Date());
     fetchSession();
   }, []);
 
@@ -93,11 +112,17 @@ export default function SupabaseProvider({
 
   useEffect(() => {
     const sessionUtils = new SessionUtils(session);
+    setLastPath(path);
 
     if (sessionUtils.isAuthenticated()) {
       dispatch({
         type: "SESSION",
         payload: sessionUtils,
+      });
+    } else {
+      dispatch({
+        type: "SESSION",
+        payload: undefined,
       });
     }
 
@@ -110,14 +135,17 @@ export default function SupabaseProvider({
       sessionUtils.getTenant(),
       sessionUtils.getUser()
     );
-  }, [path, session]);
-
-  const revalidate = useCallback(() => {
-    fetchSession();
-  }, []);
+  }, [path, session, refreshdsAt]);
 
   return (
-    <SupabaseContext.Provider value={{ supabase, session, revalidate }}>
+    <SupabaseContext.Provider
+      value={{
+        supabase,
+        session,
+        revalidate,
+        auth,
+      }}
+    >
       <>{children}</>
     </SupabaseContext.Provider>
   );
@@ -126,54 +154,28 @@ export default function SupabaseProvider({
 // authGuard.js
 export const AuthGuard = ({ skelecton, children }) => {
   const router = useRouter();
-  const supabase = useSupabase();
-  const { isAuthenticated } = useSession();
+  let context = useContext(SupabaseContext);
 
-  const [loading, setLoading] = useState<boolean>(true);
   const [auth, setAuth] = useState<boolean>(false);
 
-  const path: any = usePathname();
-
-  const validateProfile = async () => {
-    const user = await supabase.auth.getSession();
-
-    if (path != APP_ROUTES.USER.PROFILE_CONFIGURE) {
-      if (user?.data?.session?.user?.user_metadata?.completed != true) {
-        router.replace(APP_ROUTES.USER.PROFILE_CONFIGURE);
-      }
-
-      // if (isNull(user?.data?.session?.user?.user_metadata?.tenant?.id)) {
-      //   router.refresh();
-      //   router.replace(APP_ROUTES.USER.PROFILE_SELECT_COMPANY);
-      // }
-    }
-
-    setLoading(false);
-  };
-
   useEffect(() => {
-    const supabaseClient = createClient();
-
-    const validate = async () => {
-      LOG.debug("Validate session");
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-
-      const sUser = new SessionUtils(user);
-
-      if (sUser.isAuthenticated() == true) {
-        setLoading(false);
-        setAuth(true);
+    if (context?.auth.loaded) {
+      if (context?.auth.isAuthenticated) {
+        setTimeout(() => {
+          setAuth(true);
+        }, 1000); // 2000ms = 2 segundos
       } else {
+        // alert("vvv");
         router.push("/login");
       }
-    };
+    }
+  }, [context?.auth.isAuthenticated]);
 
-    validate();
+  useEffect(() => {
+    context?.revalidate();
   }, []);
 
-  return loading && !auth ? skelecton : children;
+  return !context?.auth.loaded && !auth ? skelecton : children;
 };
 
 function validateAutorizedsPaths(
@@ -198,7 +200,7 @@ function validateAutorizedsPaths(
     storageUtil(user.id).get(DB_KEYS.LAST_COMPLETE_ATTEMPT)
   );
 
-  if (isAuthenticated) {
+  if (isAuthenticated && path != APP_ROUTES.DASHBOARD.WELCOME) {
     if (path == "/complete-your-profile" && isCompleted && !requireProfile) {
       router.push("/profile-completed");
     } else if (!isCompleted && requireProfile) {
@@ -207,22 +209,6 @@ function validateAutorizedsPaths(
       router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");
     }
   }
-}
-
-export function SupabaseAuthGuard({ children }: { children: React.ReactNode }) {
-  const { session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log("session", session);
-
-    if (session == null) {
-      console.log("asasdasdadadasdad");
-      router.push("/login");
-    }
-  }, [session]);
-
-  return (session == null && <>Ta indo</>) || <>{children}</>;
 }
 
 export const useSupabase = <
@@ -268,3 +254,5 @@ export const useSession = () => {
     isCompleted: session?.isCompleted(),
   };
 };
+
+export const useSupabaseContext = () => useContext(SupabaseContext);

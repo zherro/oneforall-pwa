@@ -37,7 +37,6 @@ export default function HeaderCustomer({
 }: HeaderProps) {
   const signout: any = logout;
   const { state } = useAppContext();
-  const { isAuthenticated } = useSession();
   const pathname = usePathname();
   const [lastPath, setPath] = useState("");
   const [open, setOpen] = useState(false);
@@ -107,13 +106,13 @@ export default function HeaderCustomer({
         </FlexBox>
 
         <FlexBox className="header-right" alignItems="center">
-          {(!isAuthenticated || false) && (
+          {(!state?.session?.isAuthenticated() || false) && (
             <>
               <Link
                 href="/login"
                 style={{ border: "1px solid #cdcdcd", borderRadius: 6 }}
               >
-                <Button>Entrar</Button>
+                <Button>Entrar {''+state?.session?.isAuthenticated()}</Button>
               </Link>
               <Link
                 href="/signup"
@@ -127,7 +126,7 @@ export default function HeaderCustomer({
               </Link>
             </>
           )}
-          {isAuthenticated && (
+          {state?.session?.isAuthenticated() && (
             <>
               <IconButton
                 onClick={() => router.push(APP_ROUTES.AUTH.LOGIN)}

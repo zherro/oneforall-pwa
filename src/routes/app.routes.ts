@@ -19,6 +19,7 @@ const APP_ROUTES = {
   },
 
   DASHBOARD: {
+    WELCOME: `${dashboard}/welcome-back`,
     HOME: dashboard,
     PROFILE: `${dashboard}/profile`,
     STORE: {

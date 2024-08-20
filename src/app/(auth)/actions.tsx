@@ -49,7 +49,7 @@ export async function login(formData: any) {
   revalidatePath("/", "layout");
 
   setTimeout(() => {}, 3000);
-  redirect(APP_ROUTES.DASHBOARD.HOME);
+  redirect(APP_ROUTES.DASHBOARD.WELCOME);
 }
 
 export async function signup(formData: any) {

@@ -60,7 +60,7 @@ interface ThemeActionType {
 
 interface SessionActionType {
   type: "SESSION";
-  payload: SessionUtils;
+  payload: SessionUtils | undefined;
 }
 
 
