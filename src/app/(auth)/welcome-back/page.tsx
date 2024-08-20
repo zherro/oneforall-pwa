@@ -1,4 +1,4 @@
-"use client";
+"use client";;
 import FlexBox from "@component/FlexBox";
 import Icon from "@component/icon/Icon";
 import Typography, { H2 } from "@component/Typography";
@@ -49,23 +49,37 @@ const WelcomeBack = () => {
   const supabaseContext = useSupabaseContext();
   const [message, setMessage] = useState<string>("");
 
+  const [timeoutAuth, setTimedOut] = useState<boolean>(false);
+
   const start = Date.now();
+
+  // após 8 segundos redireciona para o Login
+  setTimeout(() => {
+    setTimedOut(true);
+  }, 12000);
 
   // Chamar a função para começar o processo
   useEffect(() => {
+    supabaseContext?.revalidate();
     logLoginMessages(setMessage);
   }, []);
 
   useEffect(() => {
-    if (supabaseContext?.auth.isAuthenticated) {
+    if (timeoutAuth && !supabaseContext?.auth?.isAuthenticated) {
+      router.push(APP_ROUTES.AUTH.LOGIN);
+    }
+  }, [timeoutAuth]);
+
+  useEffect(() => {
+    if (supabaseContext?.auth?.isAuthenticated) {
       const elapsedTime = Date.now() - start;
-      const delay = Math.max(30000 - elapsedTime, 0); // Garante que a página permaneça aberta por 3 segundos
+      const delay = Math.max(2500 - elapsedTime, 0); // Garante que a página permaneça aberta por 3 segundos
 
       setTimeout(() => {
-        alert('a')
+        router.push(APP_ROUTES.DASHBOARD.HOME);
       }, delay); // O redirecionamento acontecerá após o delay calculado
     }
-  }, [supabaseContext?.auth.isAuthenticated, router, start]);
+  }, [supabaseContext?.auth?.isAuthenticated, router, start]);
 
   return (
     <>
@@ -73,7 +87,7 @@ const WelcomeBack = () => {
         Oi, estamos preparando seu acesso!
       </H2>
       <Typography textAlign="center" mb="1rem" mt="2rem">
-        {supabaseContext?.auth.isAuthenticated ? (
+        {supabaseContext?.auth?.isAuthenticated ? (
           <b>"Bem Vindo! Login com sucesso!!!"</b>
         ) : (
           message
