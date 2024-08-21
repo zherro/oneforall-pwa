@@ -41,4 +41,12 @@ export default class SessionUtils {
   userMetaData(): UserMetaData {
     return this.session?.user_metadata;
   }
+
+  isAdmin(): boolean {
+    return false;
+  }
+
+  tenantStore(): boolean {
+    return this.getTenant().type == "store";
+  }
 }

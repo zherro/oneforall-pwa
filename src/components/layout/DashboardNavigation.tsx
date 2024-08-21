@@ -10,15 +10,18 @@ import LogoutButton from "@sections/auth/Logout";
 // STYLED COMPONENTS
 import { DashboardNavigationWrapper, StyledDashboardNav } from "./styles";
 import Divider from "../Divider";
-import { useSession } from "@supabaseutils/supabase.provider";
+import {
+  useSession,
+  useSupabaseContext,
+} from "@supabaseutils/supabase.provider";
 import Box from "@component/Box";
 import styled from "styled-components";
 import { isValidProp } from "@utils/utils";
 import { useLaraTheme } from "@context/app-context/AppContext";
 import ObjectUtils from "@utils/helpers/Object.utils";
+import SessionUtils from "@supabaseutils/session";
 
 export default function DashboardNavigation() {
-
   return (
     <DashboardNavigationWrapper
       px="0px"
@@ -35,6 +38,7 @@ export function DashboardNavigationMenu() {
   const theme = useLaraTheme();
   const pathname = usePathname();
   const { tenant } = useSession();
+  const context = useSupabaseContext();
 
   const ScrollBox = styled.div.withConfig({
     shouldForwardProp: (prop) => isValidProp(prop),
@@ -106,7 +110,12 @@ export function DashboardNavigationMenu() {
         </StyledDashboardNav>
         {linkList?.map(
           (item) =>
-            item?.title && (
+            item?.title &&
+            validateRules(
+              item.rules,
+              { tenant: tenant },
+              context?.auth.session
+            ) && (
               <Fragment key={item.title}>
                 <Typography
                   p="26px 30px 1rem"
@@ -118,7 +127,11 @@ export function DashboardNavigationMenu() {
 
                 {item?.list?.map(
                   (item) =>
-                    validateRules(item.rules, { tenant: tenant }) && (
+                    validateRules(
+                      item.rules,
+                      { tenant: tenant },
+                      context?.auth.session
+                    ) && (
                       <StyledDashboardNav
                         px="1.5rem"
                         mb="1.25rem"
@@ -164,6 +177,8 @@ export function DashboardNavigationMenu() {
 interface RulesProps {
   tenantRequired: boolean;
   tenantType: string | null;
+  adminOnly: boolean;
+  onlyWithStore: boolean;
 }
 
 interface RulesParamProps {
@@ -173,15 +188,27 @@ interface RulesParamProps {
 const defaultRules: RulesProps = {
   tenantRequired: false,
   tenantType: null,
+  adminOnly: false,
+  onlyWithStore: false,
 };
 
-const validateRules = (rules: RulesProps, params: RulesParamProps) => {
+const validateRules = (
+  rules: RulesProps,
+  params: RulesParamProps,
+  session?: SessionUtils
+) => {
   let canGet = true;
   if (canGet && rules?.tenantRequired) {
     canGet = ObjectUtils.nonNull(params.tenant?.id);
   }
   if (canGet && ObjectUtils.nonNull(rules?.tenantType)) {
     canGet = rules.tenantType == params.tenant?.type;
+  }
+  if (canGet && rules?.adminOnly == true) {
+    canGet = session?.isAdmin() == true;
+  }
+  if (canGet && rules?.onlyWithStore == true) {
+    canGet = session?.tenantStore() == true;
   }
   return canGet;
 };
@@ -198,6 +225,7 @@ const linkList = [
     ],
   },
   {
+    rules: { ...defaultRules, onlyWithStore: true },
     title: "VENDAS",
     list: [
       {
@@ -219,6 +247,7 @@ const linkList = [
   },
 
   process.env.APP_STORE_CONTEXT_REQUIRED == "true" && {
+    rules: { ...defaultRules, onlyWithStore: true },
     title: "MEUS PRODUTOS",
     list: [
       {
@@ -273,6 +302,10 @@ const linkList = [
     ],
   },
   {
+    rules: {
+      ...defaultRules,
+      adminOnly: true,
+    },
     title: "ADMINISTRADOR",
     list: [
       {

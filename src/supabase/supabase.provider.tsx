@@ -32,6 +32,7 @@ type Context = {
   auth: {
     isAuthenticated: boolean;
     loaded: boolean;
+    session: SessionUtils;
   };
 };
 
@@ -54,9 +55,11 @@ export default function SupabaseProvider({
   const [auth, setAuth] = useState<{
     isAuthenticated: boolean;
     loaded: boolean;
+    session: SessionUtils;
   }>({
     isAuthenticated: false,
     loaded: false,
+    session: new SessionUtils(undefined),
   });
 
   // POR AlGUM MOTIVO FICA SETANDO A O SESSION PRA null - nunca mecha
@@ -69,9 +72,11 @@ export default function SupabaseProvider({
       data: { user },
     } = await supabaseClient.auth.getUser();
     await setSession(user);
+    const session = new SessionUtils(user);
     setAuth({
-      isAuthenticated: new SessionUtils(user).isAuthenticated(),
+      isAuthenticated: session.isAuthenticated(),
       loaded: true,
+      session,
     });
   }, []);
 
@@ -169,7 +174,7 @@ export const AuthGuard = ({ skelecton, children }) => {
         router.push("/login");
       }
     }
-  }, [context?.auth.isAuthenticated]);
+  }, [context?.auth.isAuthenticated, context?.auth.loaded]);
 
   useEffect(() => {
     context?.revalidate();
@@ -200,10 +205,10 @@ function validateAutorizedsPaths(
     storageUtil(user.id).get(DB_KEYS.LAST_COMPLETE_ATTEMPT)
   );
 
-  if (isAuthenticated && path != APP_ROUTES.DASHBOARD.WELCOME) {
+  if (isAuthenticated && path != APP_ROUTES.DASHBOARD.WELCOME && path != "/signout") {
     if (path == "/complete-your-profile" && isCompleted && !requireProfile) {
       router.push("/profile-completed");
-    } else if (!isCompleted && requireProfile) {
+    } else if (isCompleted != true && requireProfile) {
       router.push("/complete-your-profile");
     } else if (paths.includes(path)) {
       router.push(process.env.APP_AUTH_IF_AUTHENTICATED_REDIRECT_TO || "/");

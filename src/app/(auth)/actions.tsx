@@ -40,6 +40,7 @@ export async function login(formData: any) {
         company_short_name: (data.user.email, "Meu Perfil@mail.com").split(
           "@"
         )[0],
+        type: "user",
       },
     },
   });
@@ -170,5 +171,5 @@ export async function logout() {
   }
 
   revalidatePath("/", "layout");
-  redirect("/login");
+  redirect("/signout");
 }

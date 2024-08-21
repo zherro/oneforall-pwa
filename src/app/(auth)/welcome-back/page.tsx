@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import FlexBox from "@component/FlexBox";
 import Icon from "@component/icon/Icon";
 import Typography, { H2 } from "@component/Typography";
@@ -76,7 +76,11 @@ const WelcomeBack = () => {
       const delay = Math.max(2500 - elapsedTime, 0); // Garante que a página permaneça aberta por 3 segundos
 
       setTimeout(() => {
-        router.push(APP_ROUTES.DASHBOARD.HOME);
+        if (supabaseContext.auth.session.isCompleted()) {
+          router.push(APP_ROUTES.DASHBOARD.HOME);
+        } else {
+          router.push("/complete-your-profile");
+        }
       }, delay); // O redirecionamento acontecerá após o delay calculado
     }
   }, [supabaseContext?.auth?.isAuthenticated, router, start]);
@@ -88,7 +92,7 @@ const WelcomeBack = () => {
       </H2>
       <Typography textAlign="center" mb="1rem" mt="2rem">
         {supabaseContext?.auth?.isAuthenticated ? (
-          <b>"Bem Vindo! Login com sucesso!!!"</b>
+          <b>Bem Vindo! Login com sucesso!!!</b>
         ) : (
           message
         )}

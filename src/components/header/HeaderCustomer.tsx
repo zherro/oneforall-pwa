@@ -112,7 +112,7 @@ export default function HeaderCustomer({
                 href="/login"
                 style={{ border: "1px solid #cdcdcd", borderRadius: 6 }}
               >
-                <Button>Entrar {''+state?.session?.isAuthenticated()}</Button>
+                <Button>Entrar</Button>
               </Link>
               <Link
                 href="/signup"

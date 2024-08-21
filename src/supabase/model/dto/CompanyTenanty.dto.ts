@@ -8,4 +8,5 @@ export interface CompanyTenantyDTO {
     status: StatusEntity;
     user_id?: string;
     tenant_id?: string;
+    type: "user" | "store";
 }

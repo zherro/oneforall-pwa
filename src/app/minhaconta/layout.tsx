@@ -86,7 +86,13 @@ export default function Layout({ children }) {
 
           <FlexBox>
             <NavSpacer></NavSpacer>
-            <Box flexGrow={1}>
+            <Box
+              flexGrow={1}
+              style={{
+                float: "left",
+                width: "calc(100% - 270px)",
+              }}
+            >
               {isDeliveryPath && (
                 <Box width="100%" position="fixed" shadow={6} bg="white">
                   <FlexBox
