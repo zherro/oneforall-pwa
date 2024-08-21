@@ -9,6 +9,7 @@ const APP_ROUTES = {
     RECOVERY: "/recovery",
   },
   USER: {
+    PROFILE_OBBOARD: "/profile/onboard",
     PROFILE: "/profile",
     PROFILE_DATA: "/profile/data",
     PROFILE_CONFIGURE: "/profile-configure",
@@ -60,6 +61,7 @@ export const API_ROUTES = {
     CONFIRM_EMAIL: "/api/confirm-email",
     PROFILE_CONFIGURE: "/api/profile-configure",
     GET_MY_PROFILE: "/api/users",
+    PROFILE_ONBOARD: "/api/users/onboard"
   },
   CUSTOMER: {
     CATALOG: {

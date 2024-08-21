@@ -34,6 +34,10 @@ export default class SessionUtils {
     return this.userMetaData()?.completed || false;
   }
 
+  onboardCompleted(): boolean {
+    return this.userMetaData()?.onboardCompleted || false;
+  }
+
   signature(): string {
     return this.userMetaData()?.signature || "none";
   }

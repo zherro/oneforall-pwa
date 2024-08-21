@@ -47,7 +47,8 @@ class HttpResponse {
   }
 
   errorHandler(error: any, status?: HttpStatusCode, msg?: string) {
-    LOG.error("ERRO :::: ", error)
+    LOG.error("ERRO :::: ", error);
+
     if (error instanceof BusinessException) {
       return new NextResponse(
         JSON.stringify({
@@ -62,7 +63,7 @@ class HttpResponse {
       );
     }
 
-    return this.error(status, msg);
+    return this.error(status || HttpStatusCode.INTERNAL_SERVER_ERROR, msg);
   }
 
   error(status?: HttpStatusCode, msg?: string) {

@@ -21,8 +21,10 @@ export interface UserData {
 }
 
 export interface UserMetaData {
+  name?: string;
   signature: string;
   completed: boolean;
+  onboardCompleted?: boolean;
   email: string;
   email_verified: boolean;
   phone_verified: boolean;
