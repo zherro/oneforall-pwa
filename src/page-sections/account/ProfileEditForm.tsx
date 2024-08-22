@@ -1,4 +1,4 @@
-"use client";
+"use client";;
 import * as yup from "yup";
 import { Formik } from "formik";
 
@@ -14,12 +14,11 @@ import { useAppContext } from "@context/app-context";
 import MESSAGES from "@data/messages";
 import { ProfileModel } from "@supabaseutils/model/Profile.model";
 import { mask } from "@lib/mask/lib/mask";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { fetchGet } from "@hook/useFetch2";
-import { API_ROUTES } from "@routes/app.routes";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import useNotify from "@hook/useNotify";
 import useHandleError from "@hook/useHandleError";
-import { dbStore } from "@utils/db/IndexedDBUtil";
 import DB_KEYS from "@utils/db/keys";
 import storageUtil from "@utils/db/LocalStorageUtil";
 
@@ -33,6 +32,7 @@ let INITIAL_VALUES: ProfileModel = {
 export default function ProfileEditForm() {
   const { dispatch } = useAppContext();
   const router = useRouter();
+  const path = usePathname();
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -96,6 +96,7 @@ export default function ProfileEditForm() {
         },
       });
       router.refresh();
+      if(path !== APP_ROUTES.DASHBOARD.PROFILE)
       router.push("/profile-completed");
     } catch (error) {
       dispatch({

@@ -1,15 +1,20 @@
 "use client";
-import { H2 } from "@component/Typography";
+import Box from "@component/Box";
+import FlexBox from "@component/FlexBox";
+import Grid from "@component/grid/Grid";
+import Icon from "@component/icon/Icon";
+import Typography, { H2, SemiSpan } from "@component/Typography";
 import { fetchGet } from "@hook/useFetch2";
 import { API_ROUTES } from "@routes/app.routes";
 import { useSupabaseContext } from "@supabaseutils/supabase.provider";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const MyAccountHomePage = () => {
   const context = useSupabaseContext();
 
   const URI = API_ROUTES.USER.PROFILE_ONBOARD;
-  const [onboard, handleData] = useState<any>();
+  const [onboard, handleData] = useState<any>([]);
   const [loading, onLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,6 +30,41 @@ const MyAccountHomePage = () => {
     <>
       <H2>Olá, {context?.auth.session?.userMetaData().name}</H2>
       {JSON.stringify(onboard)}
+      <Grid container splited>
+        <Grid item xs={12}>
+          <Box>
+            {onboard?.steps?.map((step, idx) => (
+              <Box
+                my="0.5rem"
+                borderBottom="1px solid"
+                borderColor="gray.300"
+                pb="0.5rem"
+              >
+                <Link href={step.link}>
+                  <FlexBox>
+                    {step.completed ? (
+                      <Icon>fa/solid/circle-check</Icon>
+                    ) : (
+                      <div
+                        style={{
+                          border: "solid 1px #cdcdcd",
+                          width: "12px",
+                          height: "12px",
+                          borderRadius: "50%",
+                          marginTop: "5px",
+                          marginRight: "0.5rem",
+                        }}
+                      ></div>
+                    )}
+                    <Typography fontWeight="500">{step.title}</Typography>
+                  </FlexBox>
+                  <SemiSpan>{step.description}</SemiSpan>
+                </Link>
+              </Box>
+            ))}
+          </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };

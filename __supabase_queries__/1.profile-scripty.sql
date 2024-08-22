@@ -9,7 +9,8 @@ create table profiles (
   avatar_url text,
   website text,
   phone text,
-
+	onboard bool DEFAULT false NOT NULL,
+  
   constraint username_length check (char_length(username) >= 3)
 );
 -- Set up Row Level Security (RLS)
