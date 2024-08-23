@@ -20,7 +20,11 @@ alter table "profiles_onboard" enable row level security;
 
 create policy "Enable read access for all authenticated users" on "public"."profiles_onboard" as permissive for select to authenticated using (true);
 
+create policy "Users can insert their own profiles_onboard." on profiles
+  for insert with check ((select auth.uid()) = id);
 
+create policy "Users can update own profiles_onboard." on profiles
+  for update using ((select auth.uid()) = id);
 
 -- DROP FUNCTION fun_update_welcome_task;
 

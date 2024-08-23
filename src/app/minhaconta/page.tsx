@@ -40,10 +40,12 @@ const MyAccountHomePage = () => {
                 borderColor="gray.300"
                 pb="0.5rem"
               >
-                <Link href={step.link}>
+                <Link href={step.completed ? "#" : step.link}>
                   <FlexBox>
                     {step.completed ? (
-                      <Icon>fa/solid/circle-check</Icon>
+                      <Icon size={14} mt="4px" mr="0.5rem" color="success">
+                        fa/solid/circle-check
+                      </Icon>
                     ) : (
                       <div
                         style={{
@@ -56,7 +58,14 @@ const MyAccountHomePage = () => {
                         }}
                       ></div>
                     )}
-                    <Typography fontWeight="500">{step.title}</Typography>
+                    <Typography
+                      fontWeight="500"
+                      style={
+                        step.completed ? { textDecoration: "line-through" } : {}
+                      }
+                    >
+                      {step.title}
+                    </Typography>
                   </FlexBox>
                   <SemiSpan>{step.description}</SemiSpan>
                 </Link>

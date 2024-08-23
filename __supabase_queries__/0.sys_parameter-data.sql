@@ -9,7 +9,7 @@ VALUES(1, '2024-08-21 04:31:18.581', 'A', false, 'ONBOARD_STEPS', NULL, NULL, NU
     "completed": false,
     "completedAt": null,
     "description": "Complete seu perfil",
-    "id": "complete-your-profile"
+    "id": "complete_your_profile"
   },
   {
     "link": "/minhaconta/stores/minha-loja",
@@ -17,7 +17,7 @@ VALUES(1, '2024-08-21 04:31:18.581', 'A', false, 'ONBOARD_STEPS', NULL, NULL, NU
     "completed": false,
     "completedAt": null,
     "description": "Configure sua loja para desbloquear novas funcionalidades!",
-    "id": "create-store"
+    "id": "create_store"
   },
   {
     "link": "/minhaconta/stores/minha-loja",
@@ -25,7 +25,7 @@ VALUES(1, '2024-08-21 04:31:18.581', 'A', false, 'ONBOARD_STEPS', NULL, NULL, NU
     "completed": false,
     "completedAt": null,
     "description": "Depois de criar uma loja, começe a gerencia-la através do menu MEU NEGÓCIO.",
-    "id": "my-store"
+    "id": "my_store"
   }
 ]'::jsonb, NULL);
 
