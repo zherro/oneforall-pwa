@@ -59,9 +59,6 @@ $$ LANGUAGE plpgsql;
 -- SELECT update_task_status_by_user_id('user-uuid', 'complete-your-profile');
 
 
-
-
-
 CREATE OR REPLACE FUNCTION fun_update_welcome_task_complete_your_profile()
 RETURNS trigger AS $$
 DECLARE
@@ -101,7 +98,53 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION fun_update_welcome_task_create_store()
+RETURNS trigger AS $$
+DECLARE
+    dynamic_table_name text := 'stores';  -- Nome da tabela estático ou definido por outra lógica
+    task_id text := 'create_store';  -- ID da tarefa estático ou definido por outra lógica
+    query text;
+    result_exists boolean;
+BEGIN
+    -- Construindo a query dinâmica para verificar a condição
+    query := format('
+        SELECT 1 
+        FROM %I 
+        WHERE id = %L 
+        AND onboard = false
+    ', dynamic_table_name, NEW.id);
+
+    -- Executa a consulta dinâmica e armazena o resultado
+    EXECUTE query INTO result_exists;
+
+    -- Verifique a condição na tabela dinâmica
+    IF result_exists THEN
+        -- Chama a função de atualização se a condição for atendida
+        PERFORM fun_update_welcome_task(auth.uid()::uuid, task_id::text);
+
+        -- Atualiza o campo 'onboard' para true na tabela dinâmica
+        query := format('
+            UPDATE %I
+            SET onboard = true
+            WHERE id = %L
+        ', dynamic_table_name, NEW.id);
+        EXECUTE query;
+    END IF;
+    
+    -- Retorna NEW para prosseguir com o update na tabela original
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 CREATE TRIGGER trigger_onboard_complete_your_profile
 AFTER UPDATE ON profiles
 FOR EACH ROW
 EXECUTE FUNCTION fun_update_welcome_task_complete_your_profile();
+
+CREATE TRIGGER trigger_onboard_create_store
+AFTER INSERT ON stores
+FOR EACH ROW
+EXECUTE FUNCTION fun_update_welcome_task_create_store();
+
