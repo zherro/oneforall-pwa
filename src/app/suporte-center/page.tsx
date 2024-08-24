@@ -1,23 +1,20 @@
-"use client";
+"use client";;
 import { Divider } from "@chakra-ui/react";
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
-import Icon from "@component/icon/Icon";
 import Pagination from "@component/pagination";
 import { SearchInput } from "@component/search-box";
 import TableResponsive, {
   TableCell,
   TableRow,
 } from "@component/table-responsive";
-import Typography, { H2, SemiSpan, Span } from "@component/Typography";
+import { H2, Span } from "@component/Typography";
 import { useLaraTheme } from "@context/app-context/AppContext";
 import { usePagination } from "@hook/usePagination";
 import { API_ROUTES } from "@routes/app.routes";
-import DefaultList from "@sections/forms/DefaultList";
 import statusOf from "@supabaseutils/model/types/Status.type";
 import { useSupabaseContext } from "@supabaseutils/supabase.provider";
-import Link from "next/link";
 import { useState } from "react";
 
 const MyAccountHomePage = () => {

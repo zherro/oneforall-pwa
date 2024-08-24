@@ -102,6 +102,7 @@ export const API_ROUTES = {
 
   CATALOG: {
     PRODUCT_SEARCH: "/api/catalog/search",
+    EXIST_CATALOG_FOR_TENANT: "/api/catalog/exists-by-tenant",
   },
 };
 
