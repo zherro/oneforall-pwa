@@ -195,4 +195,11 @@ export default abstract class SupabaseRepository<T> {
 
     return queryRunner.order("created_at", { ascending: false });
   }
+
+  async updateOnboard(task_id: string) {
+    return this.supabase.rpc("fun_update_welcome_task", {
+      p_user_id: await this.getUserId(),
+      p_task_id: task_id,
+    });
+  }
 }

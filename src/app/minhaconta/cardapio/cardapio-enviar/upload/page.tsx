@@ -27,13 +27,17 @@ const CardapioUploadPage = () => {
   );
 
   const upload = (body: any[]) => {
-    fetchPost(API_URI, body, {
-      notify: true,
-      handleData: () =>
-        router.push(
-          APP_ROUTES.DASHBOARD.MY_CATALOG_SEND_FILE_CARDAPIO + "/completed"
-        ),
-    });
+    fetchPost(
+      API_URI + "?create_ticket=true&ticket_type=criar_cardapio",
+      body,
+      {
+        notify: true,
+        handleData: () =>
+          router.push(
+            APP_ROUTES.DASHBOARD.MY_CATALOG_SEND_FILE_CARDAPIO + "/completed"
+          ),
+      }
+    );
   };
 
   return (

@@ -33,6 +33,11 @@ export async function POST(
       return httpResponse.error();
     }
 
+    const { error: errorOnboard } = await tenantRepository.updateOnboard(
+      "my_store"
+    );
+    LOG.debug("ERROR OBOARD", errorOnboard);
+
     await repository.getSupabase().auth.updateUser({
       data: {
         tenant: { ...data, type: "store" },

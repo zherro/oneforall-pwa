@@ -33,17 +33,17 @@ export async function login(formData: any) {
     }
   }
 
-  await supabase.auth.updateUser({
-    data: {
-      tenant: {
-        id: data.user.id,
-        company_short_name: (data.user.email, "Meu Perfil@mail.com").split(
-          "@"
-        )[0],
-        type: "user",
-      },
-    },
-  });
+  // await supabase.auth.updateUser({
+  //   data: {
+  //     tenant: {
+  //       id: data.user.id,
+  //       company_short_name: (data.user.email, "Meu Perfil@mail.com").split(
+  //         "@"
+  //       )[0],
+  //       type: "user",
+  //     },
+  //   },
+  // });
 
   LOG.debug("USER AUTH OK", data);
 

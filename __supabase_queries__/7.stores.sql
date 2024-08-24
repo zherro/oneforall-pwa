@@ -19,6 +19,7 @@ CREATE TABLE public.stores (
 	user_id uuid DEFAULT auth.uid() NOT NULL,
 	tenant_id uuid DEFAULT gen_random_uuid() NOT NULL,
 	business_hours jsonb NULL,
+	onboard bool DEFAULT false NOT NULL,
 	CONSTRAINT stores_pkey PRIMARY KEY (id)
 );
 

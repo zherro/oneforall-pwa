@@ -13,6 +13,9 @@ import SessionUtils from "@supabaseutils/session";
 import { BusinessException } from "@supabaseutils/bussines.exception";
 import HttpStatusCode from "@utils/http/HttpStatusCode";
 import validateUserAuth from "@supabaseutils/service/validateUserAuth.service";
+import TicketsRepository from "@supabaseutils/repositories/tickets.repository";
+import ClaimRepository from "@supabaseutils/repositories/Claim.repository";
+import { CrudService } from "@supabaseutils/Crud.service";
 
 // Configurar o cliente S3 da DigitalOcean
 const s3Client = new S3({
@@ -24,6 +27,19 @@ const s3Client = new S3({
     secretAccessKey: "C/qpn4fFfKWGk32vK3HS6/LnpDaGCbiFA991Hh0r63o",
   },
 });
+
+const imageFileTypes: string[] = [
+  "image/jpeg", // JPEG/JPG
+  "image/jpg", // JPEG/JPG
+  "image/png", // PNG
+  "image/gif", // GIF
+  "image/bmp", // BMP
+  "image/webp", // WEBP
+];
+
+function isSupportedImageType(file: FileData): boolean {
+  return imageFileTypes.includes(file.type);
+}
 
 async function resizeAndOptimizeImage(buffer, width) {
   try {
@@ -58,9 +74,12 @@ const handleBase64ToBuffer = (base64String) => {
   return base64String.replace(/^data:image\/\w+;base64,/, "");
 };
 
-async function upload({ path, base64Image, width, name }, optimize = false) {
+async function upload(
+  { path, base64File, width, name, ContentType = "image/webp" },
+  optimize = false
+) {
   // Converter a string Base64 em um buffer
-  const buffer = Buffer.from(handleBase64ToBuffer(base64Image), "base64");
+  const buffer = Buffer.from(handleBase64ToBuffer(base64File), "base64");
 
   // Redimensionar e otimizar a imagem
   const optimizedBuffer = !optimize
@@ -73,7 +92,7 @@ async function upload({ path, base64Image, width, name }, optimize = false) {
     Key: `${process.env.S3_BUKET_NAME}/${path}/${name}.webp`,
     Body: optimizedBuffer,
     ACL: "public-read", // Define a permissão para público
-    ContentType: "image/webp",
+    ContentType,
   };
 
   const command = new PutObjectCommand(uploadParams);
@@ -82,6 +101,36 @@ async function upload({ path, base64Image, width, name }, optimize = false) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Parse query parameters from the request URL
+    const { searchParams } = new URL(request.url);
+    const createTicket = searchParams.get("create_ticket");
+    const ticketType: any = searchParams.get("ticket_type");
+    let afterUpload = (file: FileData) => {};
+
+    const ticketRepository = new TicketsRepository();
+    const user: UserData = await ticketRepository.getUser();
+
+    // Ensure createTicket is a string and validate its value if necessary
+
+    LOG.debug("creating ticket: ", ticketType);
+    LOG.debug("Is ADMIN", await new ClaimRepository().isAdmin());
+
+    const service = new CrudService(ticketRepository);
+
+    afterUpload = async (file: FileData) => {
+      await service.createOrUpdateWithTenant(request, {
+        type: ticketType,
+        message: "Oi, cadastre meu cardapio!",
+        tenant_id: user.user_metadata.tenant.id,
+        name: user.user_metadata.first_name,
+        email: user.email,
+        asset_data: {
+          fileId: file.id,
+          name: file.name,
+        },
+      });
+    };
+
     // Parse the JSON body
     const files: FileData[] = await request.json();
 
@@ -92,6 +141,9 @@ export async function POST(request: NextRequest) {
 
     for (let i = 0; i < files.length; i++) {
       uploadFiles(files[i]);
+      if (createTicket == "true") {
+        afterUpload(files[i]);
+      }
       files[i].status = StatusEntity.ACTIVE;
       files[i].tenant_id = tenant.id;
       files[i].user_id = userId;
@@ -123,23 +175,33 @@ const imageSizes = [
 
 async function uploadFiles(file: FileData) {
   if (ObjectUtils.nonNull(file)) {
-    await upload({
-      path: file.id,
-      base64Image: file.base64,
-      width: 100,
-      name: "original",
-    });
+    if (isSupportedImageType(file)) {
+      await upload({
+        path: file.id,
+        base64File: file.base64,
+        width: 100,
+        name: "original",
+      });
 
-    for (let j = 0; j < imageSizes.length; j++) {
-      await upload(
-        {
-          path: file.id,
-          base64Image: file.base64,
-          width: imageSizes[j].size,
-          name: imageSizes[j].name,
-        },
-        true
-      );
+      for (let j = 0; j < imageSizes.length; j++) {
+        await upload(
+          {
+            path: file.id,
+            base64File: file.base64,
+            width: imageSizes[j].size,
+            name: imageSizes[j].name,
+          },
+          true
+        );
+      }
+    } else {
+      await upload({
+        path: file.id,
+        base64File: file.base64,
+        width: 0,
+        name: "original",
+        ContentType: file.type,
+      });
     }
   }
 }

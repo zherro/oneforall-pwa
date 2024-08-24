@@ -6,6 +6,8 @@ export interface UserData {
   sub: string;
   email: string;
   user_metadata: {
+    first_name: string;
+    name: string;
     tenant: {
       id: string;
       status: StatusEntity;

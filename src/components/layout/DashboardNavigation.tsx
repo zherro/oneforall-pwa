@@ -251,7 +251,7 @@ const linkList = [
     title: "MEUS PRODUTOS",
     list: [
       {
-        href: APP_ROUTES.DASHBOARD.MY_CATALOG,
+        href: APP_ROUTES.DASHBOARD.MY_CATALOG + "?start=true",
         title: "Gerenciar Produtos",
         iconName: "fa/solid/boxes-stacked",
       },

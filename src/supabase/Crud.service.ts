@@ -42,9 +42,9 @@ export class CrudService {
     }
   }
 
-  async createOrUpdateWithTenant(request: NextRequest) {
+  async createOrUpdateWithTenant(request: NextRequest, payload?: any) {
     try {
-      const formData = await request.json();
+      const formData = payload ? payload : await request.json();
       const user: UserData = await this.repository.getUser();
 
       formData.user_id = user?.id;

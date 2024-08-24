@@ -55,6 +55,7 @@ const CardapioEnviarArquivo = () => {
                   color="primary"
                   variant="outlined"
                   style={{ fontSize: "1rem" }}
+                  mb="1.55rem"
                 >
                   Enviar por whatsapp
                 </Button>
@@ -97,15 +98,15 @@ const CardapioEnviarArquivo = () => {
                 Upload de foto ou PDF
               </Button>
             </Link>
-            <SemiSpan marginTop="1.5rem" fontSize="1rem">
-              Se preferir, envie uma foto ou pdf do seu catalogo.
+            <SemiSpan marginTop="1.5rem" fontSize="1rem" textAlign="center">
+              Em até 12 horras uteis seu cardápio estará configurado.
             </SemiSpan>
           </FlexBox>
         </Grid>
 
         <Grid item xs={12}>
           <FlexBox>
-            <Link href={APP_ROUTES.DASHBOARD.MY_CATALOG}>
+            <Link href={APP_ROUTES.DASHBOARD.MY_CATALOG + "?start=true"}>
               <SemiSpan
                 fontSize="1rem"
                 color="primary.main"
