@@ -18,6 +18,9 @@ const APP_ROUTES = {
   SUPORT: {
     FORM: "/suporte",
   },
+  SUPORT_CENTER: {
+    LIST: "/suporte-center",
+  },
 
   DASHBOARD: {
     WELCOME: `/welcome-back`,
@@ -53,7 +56,9 @@ export const API_ROUTES = {
   PLAN: {
     FREE: "/api/plan/free",
   },
-  TICKETS: "/api/tickets",
+  SUPORT_CENTER: {
+    TICKETS_ALL: "/api/suport-center",
+  },
   BUKET: {
     GET: "/api/bucket",
   },
@@ -61,7 +66,7 @@ export const API_ROUTES = {
     CONFIRM_EMAIL: "/api/confirm-email",
     PROFILE_CONFIGURE: "/api/profile-configure",
     GET_MY_PROFILE: "/api/users",
-    PROFILE_ONBOARD: "/api/users/onboard"
+    PROFILE_ONBOARD: "/api/users/onboard",
   },
   CUSTOMER: {
     CATALOG: {
@@ -96,8 +101,8 @@ export const API_ROUTES = {
   },
 
   CATALOG: {
-    PRODUCT_SEARCH: "/api/catalog/search"
-  }
+    PRODUCT_SEARCH: "/api/catalog/search",
+  },
 };
 
 export default APP_ROUTES;

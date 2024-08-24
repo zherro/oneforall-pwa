@@ -328,4 +328,30 @@ const linkList = [
       // },
     ],
   },
+  {
+    rules: {
+      ...defaultRules,
+    },
+    title: "SUPORTE",
+    list: [
+      {
+        href: APP_ROUTES.SUPORT_CENTER.LIST,
+        title: "Cards",
+        iconName: "fa/solid/dumpster-fire",
+      },
+      {
+        href: APP_ROUTES.ADMIN.CONFIG_PRODUCTS_TABLE,
+        title: "Tabela de Produtos",
+        iconName: "fa/regular/rectangle-list",
+      },
+      // { href: "/orders", title: "Orders", iconName: "bag", count: 5 },
+      // { href: "/wish-list", title: "Wishlist", iconName: "heart", count: 19 },
+      // {
+      //   href: "/support-tickets",
+      //   title: "Support Tickets",
+      //   iconName: "customer-service",
+      //   count: 1,
+      // },
+    ],
+  },
 ];
