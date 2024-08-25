@@ -34,6 +34,14 @@ VALUES(1, '2024-08-21 04:31:18.581', 'A', false, 'ONBOARD_STEPS', NULL, NULL, NU
     "completedAt": null,
     "description": "Adicione uma nova categoria, essa é uma forma de ajudarmos a organizar melhor os itens da sua loja.",
     "id": "start_catalog"
+  },
+  {
+    "link": "/minhaconta/cardapio?start=true",
+    "title": "Configure o seu primeiro item/produto!",
+    "completed": false,
+    "completedAt": null,
+    "description": "Preparamos uma forma especial para cadastrar e organizar seus itens/produtos. Divirta-se!",
+    "id": "start_catalog_new_item"
   }
 ]'::jsonb, NULL);
 

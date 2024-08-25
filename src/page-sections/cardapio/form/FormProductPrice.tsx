@@ -5,6 +5,7 @@ import MiniTtile from "@component/custom/MiniTitle";
 import TextFieldMoney from "@component/custom/TextFieldMoney";
 import Grid from "@component/grid/Grid";
 import Icon from "@component/icon/Icon";
+import NumberUtils from "@utils/helpers/Number.utils";
 
 const PriceStep = ({
   handleBlur,
@@ -26,7 +27,20 @@ const PriceStep = ({
           value={values.price}
           setFieldValue={setFieldValue}
           errorText={touched.price && errors.price}
-          max={999999.99}
+          onChange={(value: number) => {
+            const v = NumberUtils.onlyNumberToDecimal(value);
+            const d = NumberUtils.onlyNumberToDecimal(values.discount);
+            const p = NumberUtils.onlyNumberToDecimal(values.discount_percent);
+
+            if (+v > 0 && +p > 0) {
+              setFieldValue("discount_percent", ((+v * 100) / +p).toFixed(2));
+            }
+
+            if (+v > 0 && +d > 0) {
+              setFieldValue("discount", ((+p / 100) * +v).toFixed(2));
+            }
+          }}
+          max={99999999}
         />
       </Grid>
       <Grid item xs={6}>
@@ -64,13 +78,20 @@ const PriceStep = ({
                 value={values.discount}
                 setFieldValue={setFieldValue}
                 errorText={touched.discount && errors.discount}
-                onChange={(value: number) =>
-                  setFieldValue(
-                    "discount_percent",
-                    ((value * 100) / values.price).toFixed(2)
-                  )
-                }
-                max={+values.price}
+                onChange={(value: number) => {
+                  const v = NumberUtils.onlyNumberToDecimal(value);
+                  const p = NumberUtils.onlyNumberToDecimal(values.price);
+
+                  if (+v > 0 && +p > 0) {
+                    setFieldValue(
+                      "discount_percent",
+                      ((+v * 100) / +p).toFixed(2)
+                    );
+                  } else {
+                    setFieldValue("discount_percent", 0.0);
+                  }
+                }}
+                max={NumberUtils.onlyNumber(values.price)}
               />
             </Grid>
             <Grid item xs={6} md={4}>
@@ -81,13 +102,17 @@ const PriceStep = ({
                 value={values.discount_percent}
                 setFieldValue={setFieldValue}
                 errorText={touched.discount_percent && errors.discount_percent}
-                onChange={(value: number) =>
-                  setFieldValue(
-                    "discount",
-                    ((values.price / 100) * value).toFixed(2)
-                  )
-                }
-                max={100.0}
+                onChange={(value: number) => {
+                  const v = NumberUtils.onlyNumberToDecimal(value);
+                  const p = NumberUtils.onlyNumberToDecimal(values.price);
+
+                  if (+v > 0 && +p > 0) {
+                    setFieldValue("discount", ((+p / 100) * +v).toFixed(2));
+                  } else {
+                    setFieldValue("discount", 0.0);
+                  }
+                }}
+                max={10000}
               />
             </Grid>
           </Grid>

@@ -88,6 +88,10 @@ function maskMoney(
     .replace(/^0+/, "");
   const maxLengt = unMask(cleanPattern).replace(/\D/g, "").length;
 
+  if (options?.max != undefined && numericValue > options.max) {
+    numericValue = "" + options.max;
+  }
+
   if (numericValue.length <= 0) {
     numericValue = "0";
   } else if (numericValue.length > maxLengt) {

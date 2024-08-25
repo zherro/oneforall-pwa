@@ -1,6 +1,7 @@
 import { CrudService } from "@supabaseutils/Crud.service";
 import CategoriesRepository from "@supabaseutils/repositories/catalog/Categories.repository";
 import ClaimRepository from "@supabaseutils/repositories/Claim.repository";
+import TenantRepository from "@supabaseutils/repositories/Tenant.repository";
 import httpResponse from "@utils/http/HttpResponse";
 import { LOG } from "@utils/log";
 import { NextRequest } from "next/server";
@@ -16,9 +17,13 @@ export async function GET(request: NextRequest) {
     size = size > 30 ? 30 : size;
     const tsv_search: string = searchParams.get("search") || "";
 
-    const { data, error, count } = await respository.paginatedWithTenantOnly(page, size, {
-      tsv_search,
-    });
+    const { data, error, count } = await respository.paginatedWithTenantOnly(
+      page,
+      size,
+      {
+        tsv_search,
+      }
+    );
 
     if (error) {
       LOG.error("Erron when list profiles", error);
@@ -41,6 +46,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const repository = new CategoriesRepository();
+
+  const { error: errorOnboard } = await repository.updateOnboard(
+    "start_catalog"
+  );
+  LOG.debug("ERROR OBOARD", errorOnboard);
 
   LOG.debug("Is ADMIN", await new ClaimRepository().isAdmin());
   const service = new CrudService(repository);

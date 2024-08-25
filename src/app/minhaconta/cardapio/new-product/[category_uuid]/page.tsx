@@ -23,6 +23,7 @@ import ChoseProductTypePage from "@sections/cardapio/product/ChoseProductType";
 import { fetchGet, fetchPost } from "@hook/useFetch2";
 import { productType } from "@data/productTypes";
 import FormToolbox from "@sections/forms/FormToolbox";
+import NumberUtils from "@utils/helpers/Number.utils";
 
 // ======================================================
 type screens = "home" | "price" | "complements" | "image" | "disponibility";
@@ -187,6 +188,13 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
 
   const saveProduct = async (productData: ProductModel) => {
     let stp = ObjectUtils.isNull(productData.id) ? "start" : "update";
+    productData.price = +NumberUtils.onlyNumberToDecimal(productData.price);
+    productData.discount = +NumberUtils.onlyNumberToDecimal(
+      productData.discount
+    );
+    productData.discount_percent = +NumberUtils.onlyNumberToDecimal(
+      productData.discount_percent
+    );
     await setFormConfig((cfg) => ({ ...cfg, productData }));
     setNextStep(stp);
   };

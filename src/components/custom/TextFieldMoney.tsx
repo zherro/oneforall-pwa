@@ -31,9 +31,9 @@ const TextFieldMoney = ({
   setFieldValue,
   errorText,
   onChange,
-  digits=0,
-  max=999999999999999.99,
-  mt="0rem"
+  digits = 0,
+  max = 99999999999999999,
+  mt = "0rem",
 }: TextFieldMoney) => (
   <TextField
     mt={mt}
@@ -45,13 +45,7 @@ const TextFieldMoney = ({
     onBlur={handleBlur}
     value={value}
     onChange={(e: any) => {
-      let vl = maskMoney(e.target.value, [
-        "9.999",
-        "99.999",
-        "999.999",
-        "9999.999",
-        "99999.99",
-      ], {max});
+      let vl = maskMoney(e.target.value, undefined, { max });
       setFieldValue(id, vl);
       onChange && onChange(vl);
     }}

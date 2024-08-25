@@ -7,7 +7,7 @@ import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import Image from "@component/Image";
 import { SearchInput } from "@component/search-box";
-import Typography, { H2, H3 } from "@component/Typography";
+import Typography, { H3 } from "@component/Typography";
 import { fetchGet } from "@hook/useFetch2";
 import useHandleError from "@hook/useHandleError";
 import useNotify from "@hook/useNotify";
