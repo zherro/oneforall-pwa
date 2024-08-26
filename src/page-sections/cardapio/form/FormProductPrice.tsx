@@ -5,6 +5,7 @@ import MiniTtile from "@component/custom/MiniTitle";
 import TextFieldMoney from "@component/custom/TextFieldMoney";
 import Grid from "@component/grid/Grid";
 import Icon from "@component/icon/Icon";
+import { maskMoney } from "@lib/mask/lib/mask";
 import NumberUtils from "@utils/helpers/Number.utils";
 
 const PriceStep = ({
@@ -24,20 +25,20 @@ const PriceStep = ({
           id="price"
           label="Preço - R$"
           handleBlur={handleBlur}
-          value={values.price}
+          value={maskMoney(values.price)}
           setFieldValue={setFieldValue}
           errorText={touched.price && errors.price}
           onChange={(value: number) => {
             const v = NumberUtils.onlyNumberToDecimal(value);
-            const d = NumberUtils.onlyNumberToDecimal(values.discount);
             const p = NumberUtils.onlyNumberToDecimal(values.discount_percent);
 
             if (+v > 0 && +p > 0) {
-              setFieldValue("discount_percent", ((+v * 100) / +p).toFixed(2));
+              setFieldValue("discount", ((+v / 100) * +p).toFixed(2));
             }
 
-            if (+v > 0 && +d > 0) {
-              setFieldValue("discount", ((+p / 100) * +v).toFixed(2));
+            if (+v <= 0) {
+              setFieldValue("discount_percent", "000");
+              setFieldValue("discount", "000");
             }
           }}
           max={99999999}
@@ -75,7 +76,7 @@ const PriceStep = ({
                 id="discount"
                 label="Preço com desconto"
                 handleBlur={handleBlur}
-                value={values.discount}
+                value={maskMoney(values.discount)}
                 setFieldValue={setFieldValue}
                 errorText={touched.discount && errors.discount}
                 onChange={(value: number) => {
@@ -99,7 +100,7 @@ const PriceStep = ({
                 id="discount_percent"
                 label="Desconto em %"
                 handleBlur={handleBlur}
-                value={values.discount_percent}
+                value={maskMoney(values.discount_percent)}
                 setFieldValue={setFieldValue}
                 errorText={touched.discount_percent && errors.discount_percent}
                 onChange={(value: number) => {

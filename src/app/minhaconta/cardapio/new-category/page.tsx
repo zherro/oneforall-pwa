@@ -2,11 +2,11 @@
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import CategoryForm from "@sections/cardapio/CategoryForm";
 
-const NewCategoryPage = () => {
+const NewCategoryPage = ({ uuid, data }: { uuid?: string; data?: any }) => {
   return (
     <>
       <DashboardPageHeader splited title="Nova categoria" iconName="plus" />
-      <CategoryForm />
+      <CategoryForm uuid={uuid} data={data} />
     </>
   );
 };

@@ -240,7 +240,14 @@ const NewProductItem = ({
                   </Button>
                 )}
                 {page !== "home" && selectedStep == 4 && (
-                  <Button variant="contained" color="primary">
+                  <Button
+                    onClick={(e) => {
+                      saveCallback(values, files);
+                      setFiles([]);
+                    }}
+                    variant="contained"
+                    color="primary"
+                  >
                     Salvar Produto
                   </Button>
                 )}

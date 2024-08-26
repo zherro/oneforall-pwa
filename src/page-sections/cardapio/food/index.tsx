@@ -221,7 +221,16 @@ const PageCatalogFood = ({ start = false }) => {
                           variant="outline"
                         />
                         <MenuList>
-                          <MenuItem>Editar</MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              router.push(
+                                APP_ROUTES.DASHBOARD.CATEGORY_NEW +
+                                  `/${cat.category_id}`
+                              );
+                            }}
+                          >
+                            Editar
+                          </MenuItem>
                           <MenuItem>Excluir</MenuItem>
                           {/*  TODO - opcao duplicar */}
                         </MenuList>
@@ -311,7 +320,16 @@ const PageCatalogFood = ({ start = false }) => {
                                     variant="outline"
                                   />
                                   <MenuList>
-                                    <MenuItem>Editar</MenuItem>
+                                    <MenuItem
+                                      onClick={() => {
+                                        router.push(
+                                          APP_ROUTES.DASHBOARD.PRODUCT_NEW +
+                                            `/${cat.category_id}/${product.product_id}`
+                                        );
+                                      }}
+                                    >
+                                      Editar
+                                    </MenuItem>
                                     <MenuItem>Excluir</MenuItem>
                                     {/*  TODO - opcao duplicar */}
                                   </MenuList>
@@ -343,14 +361,18 @@ const PageCatalogFood = ({ start = false }) => {
                                   </Text>
                                 )}
                               </Box>
-                              <Box pr="1.5rem" style={{ float: "right" }} pt="0.5rem">
+                              <Box
+                                pr="1.5rem"
+                                style={{ float: "right" }}
+                                pt="0.5rem"
+                              >
                                 <SemiSpan
                                   fontSize="1rem"
                                   border="1px solid"
                                   p="0.5rem"
                                   borderRadius="5px"
                                 >
-                                  R$ {maskMoney(product.price, "###.###.###,99")}
+                                  R$ {maskMoney(product.price / 100)}
                                 </SemiSpan>
                               </Box>
                             </Grid>

@@ -188,14 +188,14 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
 
   const saveProduct = async (productData: ProductModel) => {
     let stp = ObjectUtils.isNull(productData.id) ? "start" : "update";
-    productData.price = +NumberUtils.onlyNumberToDecimal(productData.price);
-    productData.discount = +NumberUtils.onlyNumberToDecimal(
-      productData.discount
-    );
-    productData.discount_percent = +NumberUtils.onlyNumberToDecimal(
+    productData.price = NumberUtils.onlyNumber(productData.price);
+    productData.discount = NumberUtils.onlyNumber(productData.discount);
+    productData.discount_percent = NumberUtils.onlyNumber(
       productData.discount_percent
     );
+
     await setFormConfig((cfg) => ({ ...cfg, productData }));
+    apiSendData(productData);
     setNextStep(stp);
   };
 

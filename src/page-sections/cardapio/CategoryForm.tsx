@@ -14,8 +14,11 @@ import { StatusEntity } from "@supabaseutils/model/types/Status.type";
 import Link from "next/link";
 import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { fetchPost } from "@hook/useFetch2";
+import { useEffect, useState } from "react";
+import { fetchGet, fetchPost } from "@hook/useFetch2";
+import StringUtils from "@utils/helpers/String.utils";
+import useHandleError from "@hook/useHandleError";
+import useNotify from "@hook/useNotify";
 
 const initialValues = {
   name: "",
@@ -30,7 +33,7 @@ const validationSchema = yup.object().shape({
   category_type: yup.string().required("Selecione a sessão da categoria"),
 });
 
-const CategoryForm = () => {
+const CategoryForm = ({ uuid, data }: { uuid?: string; data?: any }) => {
   const selectSections = mainCategories.map((cat) => ({
     label: cat.name,
     value: cat.id,
@@ -39,12 +42,12 @@ const CategoryForm = () => {
   const router = useRouter();
   const URI = API_ROUTES.CUSTOMER.CATALOG.CATEGORY;
 
-  const [formValues, setFormValues] =
-    useState<typeof initialValues>(initialValues);
+  const [formValues, setFormValues] = useState<typeof initialValues>(
+    uuid ? data : initialValues
+  );
   const [loading, onLoading] = useState<boolean>(false);
 
   const saveData = (values: any) => {
-    console.log("aaaaaa");
     fetchPost(URI, values, {
       notify: true,
       headers: {},
@@ -66,6 +69,7 @@ const CategoryForm = () => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setValues,
     setFieldValue,
     isValid,
     isSubmitting,
