@@ -28,8 +28,16 @@ const MyAccountHomePage = () => {
 
   return (
     <>
-      <H2>Olá, {context?.auth.session?.userMetaData().name}</H2>
-      {JSON.stringify(onboard)}
+      <Grid container splited>
+        <Grid item xs={12}>
+          <Box mb="1.5rem">
+            <H2>Olá, {context?.auth.session?.userMetaData().name}</H2>
+          </Box>
+        </Grid>
+      </Grid>
+      {
+        // JSON.stringify(onboard)
+      }
       <Grid container splited>
         <Grid item xs={12}>
           <Box>

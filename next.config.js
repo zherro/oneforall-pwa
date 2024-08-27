@@ -19,7 +19,7 @@ const prod = {
 };
 
 // const envDefault = dev;
-const envDefault = dev;
+const envDefault = prod;
 
 const nextConfig = {
   images: {
