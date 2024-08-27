@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import Box from "@component/Box";
 import { Button } from "@component/buttons";
 import FlexBox from "@component/FlexBox";
@@ -11,19 +11,27 @@ const ProfileCompletedPage = () => {
   const isTablet: any = useWindowIsTablet();
 
   return (
-    <Box p="0.75rem" mb="3rem" textAlign="center" width="100%">
+    <Box p="0.75rem 2.5rem" mb="3rem" textAlign="center" width="100%">
       <FlexBox justifyContent="center">
         <Icon size={isTablet ? 280 : 320}>story-set/Account-rafiki</Icon>
       </FlexBox>
-      <H1 responsive textAlign="center" mb="1.25rem">
-        Perfil Criado!
-      </H1>
-      <H2 responsive textAlign="center" mb="1.25rem">
-      Já deixamos tudo preparado.
+      <H2 responsive textAlign="center" mb="1.25rem" color="primary.main">
+        Já deixamos tudo preparado.
       </H2>
-      <SemiSpan fontSize={isTablet ? "1rem" : "1.25rem"} textAlign="center">
-        Agora você pode começar a utilizar a plataforma, e escolher um plano que
-        mais combina com seu negócio.
+      <Box maxWidth="800px" margin="1rem auto">
+        <SemiSpan fontSize={isTablet ? "1rem" : "1.25rem"} textAlign="center">
+          Agora você pode começar a utilizar a plataforma, e escolher um plano
+          que mais combina com seu negócio.
+        </SemiSpan>
+      </Box>
+
+      <SemiSpan
+        fontSize="1rem"
+        textAlign="center"
+        mb="1.25rem"
+        color="gray.600"
+      >
+        Perfil Criado com sucesso!
       </SemiSpan>
 
       <FlexBox justifyContent="center">

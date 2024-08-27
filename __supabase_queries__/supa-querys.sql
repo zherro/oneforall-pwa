@@ -10,6 +10,17 @@ WHERE
   email ilike 'cleiton.ti%';
 
 
+
+delete from public.profiles
+where
+  email ilike 'souza.larii.silva@gmail.com';
+
+DELETE FROM auth.users
+WHERE
+  email ilike 'souza.larii.silva@gmail.com';
+
+
+
 delete from public.profiles
 where
   email ilike 'zhero.sub%';

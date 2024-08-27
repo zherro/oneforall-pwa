@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import * as yup from "yup";
 import { Formik } from "formik";
 
@@ -96,8 +96,8 @@ export default function ProfileEditForm() {
         },
       });
       router.refresh();
-      if(path !== APP_ROUTES.DASHBOARD.PROFILE)
-      router.push("/profile-completed");
+      if (path !== APP_ROUTES.DASHBOARD.PROFILE)
+        router.push("/profile-completed");
     } catch (error) {
       dispatch({
         type: "NOTIFY",
@@ -134,7 +134,14 @@ export default function ProfileEditForm() {
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
-            <Box mb="30px">
+            <Box
+              mb="30px"
+              border="1px solid"
+              borderColor="primary.100"
+              borderRadius="8px"
+              p="2rem 0.75rem"
+              shadow={4}
+            >
               <Grid container horizontal_spacing={6} vertical_spacing={6}>
                 <Grid item xs={12}>
                   <Box my="auto" mb="22px" maxWidth="135px">

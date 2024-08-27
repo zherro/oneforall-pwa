@@ -38,9 +38,13 @@ export async function GET(request: NextRequest) {
 
     const respository = new StoreRepository();
 
-    const { data, error, count } = await respository.paginatedTenant(page, size, {
-      tsv_search,
-    });
+    const { data, error, count } = await respository.paginatedTenant(
+      page,
+      size,
+      {
+        tsv_search,
+      }
+    );
 
     if (error) {
       LOG.error("Erron when list profiles", error);
@@ -56,7 +60,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     LOG.error("Error processing request:", error);
 
-    // Return an error response
-    return httpResponse.error();
+    return httpResponse.ok({
+      data: [],
+      page: 1,
+      size: 0,
+      total: 0,
+    });
   }
 }

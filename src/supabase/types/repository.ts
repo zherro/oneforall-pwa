@@ -131,7 +131,7 @@ export default abstract class SupabaseRepository<T> {
     const queryRunner = this.from.select("*", { count: "exact" });
 
     const user: UserData = await this.getUser();
-    const tenantId = user.user_metadata.tenant.id;
+    const tenantId = user.user_metadata?.tenant?.id || user.id;
     queryRunner.or(`user_id.eq.${tenantId}, id.eq.${tenantId}`);
 
     const textSearch = this.fulltextSearchQuery(query.tsv_search);
