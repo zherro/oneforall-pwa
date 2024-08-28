@@ -1,11 +1,12 @@
+import { SupabaseClient } from "@supabase/supabase-js";
 import { BusinessException } from "@supabaseutils/bussines.exception";
 import SupabaseRepository from "@supabaseutils/types/repository";
 import HttpStatusCode from "@utils/http/HttpStatusCode";
 import { LOG } from "@utils/log";
 
 export default class ProfileOnboardRepository extends SupabaseRepository<any> {
-  constructor() {
-    super("profiles_onboard");
+  constructor(supabase?: SupabaseClient) {
+    super("profiles_onboard", supabase);
   }
 
   getByEmail(email: string | undefined) {

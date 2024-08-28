@@ -2,7 +2,6 @@ import { CrudService } from "@supabaseutils/Crud.service";
 import CategoriesRepository from "@supabaseutils/repositories/catalog/Categories.repository";
 import ProductRepository from "@supabaseutils/repositories/catalog/Product.repository";
 import ClaimRepository from "@supabaseutils/repositories/Claim.repository";
-import TenantRepository from "@supabaseutils/repositories/Tenant.repository";
 import httpResponse from "@utils/http/HttpResponse";
 import { LOG } from "@utils/log";
 import { NextRequest } from "next/server";

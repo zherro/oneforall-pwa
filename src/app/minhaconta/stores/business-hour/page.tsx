@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
-  Box,
   FormControl,
   FormLabel,
   Input,
@@ -10,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Divider from "@component/Divider";
-import Typography, { H3, SemiSpan } from "@component/Typography";
+import Typography, { H2, H3, H4, SemiSpan } from "@component/Typography";
 import { Button } from "@component/buttons";
 import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
@@ -22,6 +21,8 @@ import useHandleError from "@hook/useHandleError";
 import useNotify from "@hook/useNotify";
 import Grid from "@component/grid/Grid";
 import { useSession } from "@supabaseutils/supabase.provider";
+import Box from "@component/Box";
+import { mask } from "@lib/mask/lib/mask";
 
 const initialBusinessHours: BusinessHours = {
   monday: [],
@@ -42,6 +43,23 @@ const businessHoursSort = (value: BusinessHours): BusinessHours => ({
   saturday: value.saturday,
   sunday: value.sunday,
 });
+
+const validateAndCorrectTime = (input) => {
+  // Regular expression to match HH:MM format
+  const timeRegex = /^([01]?\d|2[0-3]):([0-5]\d)$/;
+
+  // Function to check if the input matches the time format
+  function isValidTime(str) {
+    return timeRegex.test(str);
+  }
+
+  // Loop to remove the last character until a valid time is found
+  while (!isValidTime(input) && input.length >= 5) {
+    input = input.slice(0, -1); // Remove the last character
+  }
+
+  return input;
+};
 
 const BusinessHoursPage = () => {
   const { tenant } = useSession();
@@ -141,6 +159,23 @@ const BusinessHoursPage = () => {
             mt="0.35rem"
             mb="2rem"
           />
+          <Box
+            border="1px solid"
+            borderRadius="6px"
+            p="0.75rem"
+            shadow={6}
+            borderColor="gray.400"
+            mb="2rem"
+          >
+            <H4 mb="0.75rem" color="gray.700">
+              Aqui você gerencia os horários de atendimento da sua loja!
+            </H4>
+            <SemiSpan>
+              Aqui você gerência os horários de atendimento da sua loja. Caso a
+              sua loja tenha pausas durante o dia, você pode configurar mais de
+              um horário.
+            </SemiSpan>
+          </Box>
         </Grid>
       </Grid>
       <Grid container splited>
@@ -180,14 +215,18 @@ const BusinessHoursPage = () => {
                     <FormControl id={`${day}-open-${index}`}>
                       <FormLabel>Abre às</FormLabel>
                       <Input
-                        type="time"
+                        width="10rem"
+                        type="text"
                         value={slot.open}
                         onChange={(e) =>
                           handleTimeSlotChange(
                             day,
                             index,
                             "open",
-                            e.target.value
+                            mask(
+                              validateAndCorrectTime(e.target.value),
+                              "99:99"
+                            )
                           )
                         }
                       />
@@ -195,14 +234,18 @@ const BusinessHoursPage = () => {
                     <FormControl id={`${day}-close-${index}`}>
                       <FormLabel>Fecha às</FormLabel>
                       <Input
-                        type="time"
+                        width="10rem"
+                        type="text"
                         value={slot.close}
                         onChange={(e) =>
                           handleTimeSlotChange(
                             day,
                             index,
                             "close",
-                            e.target.value
+                            mask(
+                              validateAndCorrectTime(e.target.value),
+                              "99:99"
+                            )
                           )
                         }
                       />

@@ -10,7 +10,6 @@ CREATE TABLE public.tenants (
 	updated_at timestamp NULL,
 	status varchar DEFAULT 'A'::character varying NOT NULL,
 	deleted bool DEFAULT false NOT NULL,
-	tenant_id uuid NULL,
 	user_id uuid NULL,
 	owner_id uuid DEFAULT auth.uid() NULL,
 	CONSTRAINT tenants_pkey PRIMARY KEY (id)
@@ -24,8 +23,8 @@ CREATE OR REPLACE FUNCTION public.auto_insert_tenant()
 AS $function$
 BEGIN
 	INSERT INTO public.tenants
-	(id, created_at, updated_at, status, deleted, tenant_id, user_id, owner_id)
-	VALUES(new.id, now(), now(), 'A', false, new.tenant_id, auth.uid(), auth.uid());
+	(id, created_at, updated_at, status, deleted, user_id, owner_id)
+	VALUES(new.id, now(), now(), 'A', false, auth.uid(), auth.uid());
 
     RETURN new;
 END;

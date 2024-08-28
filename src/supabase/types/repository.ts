@@ -80,7 +80,7 @@ export default abstract class SupabaseRepository<T> {
 
   async getTenantId(): Promise<string> {
     const user: any = await this.getUser();
-    return user.user_metadata.tenant.id;
+    return user?.user_metadata?.tenant?.id;
   }
 
   paginated(

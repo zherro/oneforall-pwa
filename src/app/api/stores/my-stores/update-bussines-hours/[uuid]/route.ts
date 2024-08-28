@@ -46,6 +46,8 @@ export async function POST(
       return httpResponse.error();
     }
 
+    await repository.updateOnboard("configure_bussines_hour");
+
     return httpResponse.accepted();
   } catch (error) {
     LOG.error("Error processing request:", error);

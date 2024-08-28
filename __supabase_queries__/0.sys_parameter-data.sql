@@ -42,6 +42,14 @@ VALUES(1, '2024-08-21 04:31:18.581', 'A', false, 'ONBOARD_STEPS', NULL, NULL, NU
     "completedAt": null,
     "description": "Preparamos uma forma especial para cadastrar e organizar seus itens/produtos. Divirta-se!",
     "id": "start_catalog_new_item"
+  },
+  {
+    "link": "/minhaconta/stores/business-hour",
+    "title": "Configure o horário de atendimento da sua loja!",
+    "completed": false,
+    "completedAt": null,
+    "description": "Essa informação é importante para que seus clientes saibam qual o melhor horário para fazer seus pedidos!",
+    "id": "configure_bussines_hour"
   }
 ]'::jsonb, NULL);
 

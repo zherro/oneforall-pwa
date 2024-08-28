@@ -331,6 +331,7 @@ const linkList = [
   {
     rules: {
       ...defaultRules,
+      adminOnly: true,
     },
     title: "SUPORTE",
     list: [

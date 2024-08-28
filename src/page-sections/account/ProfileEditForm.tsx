@@ -21,6 +21,8 @@ import useNotify from "@hook/useNotify";
 import useHandleError from "@hook/useHandleError";
 import DB_KEYS from "@utils/db/keys";
 import storageUtil from "@utils/db/LocalStorageUtil";
+import ProfileOnboardRepository from "@supabaseutils/repositories/profileOnboard.repository";
+import { LOG } from "@utils/log";
 
 let INITIAL_VALUES: ProfileModel = {
   full_name: "",
@@ -78,6 +80,7 @@ export default function ProfileEditForm() {
         updated_at: new Date().toISOString(),
         avatar_url: values.avatar_url,
         phone: values?.phone,
+        onboard: true,
       });
       if (error) throw error;
 
@@ -87,6 +90,17 @@ export default function ProfileEditForm() {
           first_name: values.full_name.split(" ")[0],
         },
       });
+
+      const { error : onboardError } = await supabase.rpc("fun_update_welcome_task", {
+        p_user_id: profile?.id,
+        p_task_id: "complete_your_profile",
+      });
+
+      console.log( profile?.id)
+
+      if(onboardError) {
+        throw onboardError;
+      }
 
       dispatch({
         type: "NOTIFY",
@@ -99,6 +113,7 @@ export default function ProfileEditForm() {
       if (path !== APP_ROUTES.DASHBOARD.PROFILE)
         router.push("/profile-completed");
     } catch (error) {
+      LOG.debug(error);
       dispatch({
         type: "NOTIFY",
         payload: {

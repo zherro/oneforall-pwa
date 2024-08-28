@@ -7,6 +7,5 @@ export interface CompanyTenantyDTO {
     market_type: string;
     status: StatusEntity;
     user_id?: string;
-    tenant_id?: string;
     type: "user" | "store";
 }

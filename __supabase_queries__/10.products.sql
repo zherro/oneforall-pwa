@@ -32,6 +32,8 @@ CREATE TABLE public.products (
 	CONSTRAINT products_uid_key UNIQUE (uid)
 );
 
+ALTER TABLE public.products ADD tsv_search tsvector NULL;
+
 alter table "products" enable row level security;
 
 CREATE INDEX idx_products_tsv ON public.products USING gin (tsv_search);

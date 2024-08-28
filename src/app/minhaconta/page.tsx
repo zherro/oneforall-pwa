@@ -81,7 +81,7 @@ const MyAccountHomePage = () => {
                 borderColor="gray.300"
                 pb="0.5rem"
               >
-                <Link href={step.completed ? "#" : step.link}>
+                <Link href={step.link}>
                   <FlexBox>
                     {step.completed ? (
                       <Icon size={14} mt="4px" mr="0.5rem" color="success">
@@ -109,20 +109,27 @@ const MyAccountHomePage = () => {
                   </FlexBox>
                   <SemiSpan>{step.description}</SemiSpan>
 
-                  <FlexBox justifyContent="end" mb="0.5rem">
-                    <SemiSpan
-                      textAlign="right"
-                      color="primary.main"
-                      borderBottom="1px solid"
-                      fontSize="0.85rem"
-                    >
-                      {"configurar >>"}
-                    </SemiSpan>
-                  </FlexBox>
+                  {!step.completed && (
+                    <FlexBox justifyContent="end" mb="0.5rem">
+                      <SemiSpan
+                        textAlign="right"
+                        color="primary.main"
+                        borderBottom="1px solid"
+                        fontSize="0.85rem"
+                      >
+                        {"configurar >>"}
+                      </SemiSpan>
+                    </FlexBox>
+                  )}
                 </Link>
               </Box>
             ))}
           </Box>
+          <FlexBox justifyContent="center">
+            <Icon my="3.5rem" size="230">
+              story-set/Accept-tasks-amico
+            </Icon>
+          </FlexBox>
         </Grid>
       </Grid>
     </>
