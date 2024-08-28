@@ -24,6 +24,7 @@ export interface UserData {
 
 export interface UserMetaData {
   name?: string;
+  first_name?: string;
   signature: string;
   completed: boolean;
   onboardCompleted?: boolean;
