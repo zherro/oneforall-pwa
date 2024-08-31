@@ -15,9 +15,12 @@ import Typography, { H3, H6, SemiSpan } from "@component/Typography";
 import { StyledRoot } from "./styles";
 import Box from "@component/Box";
 import { useLaraTheme } from "@context/app-context/AppContext";
+import { Collapse, ScaleFade, useDisclosure } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 export default function Login({ formAction }: { formAction: any }) {
   const theme = useLaraTheme();
+  const { isOpen, onToggle } = useDisclosure()
 
   const router = useRouter();
   const query = useSearchParams();
@@ -45,83 +48,91 @@ export default function Login({ formAction }: { formAction: any }) {
       validationSchema: formSchema,
     });
 
-  return (
-    <StyledRoot mx="auto" my="4rem" boxShadow="large" borderRadius={8}>
-      <form className="content">
-        <H3 textAlign="center" mb="2.5rem">
-          Seja bem vindo 🥳
-        </H3>
-        {query != null && query.get("retry") == "true" && (
-          <Box>
-            <Typography
-              textAlign="center"
-              backgroundColor={theme.colors.error.light}
-              fontSize="0.95rem"
-              p="0.75rem"
-              mb="1rem"
-            >
-              Login ou senha incorretos
-            </Typography>
-          </Box>
-        )}
+    useEffect(() => {
+      setTimeout(() => onToggle(), 100);
+    }, []);
 
-        {/* <H5 fontWeight="600" fontSize="12px" color="gray.800" textAlign="center" mb="2.25rem">
+  return (
+    <Collapse
+        in={isOpen}
+        animateOpacity
+      >
+      <StyledRoot mx="auto" my="4rem" boxShadow="large" borderRadius={8}>
+        <form className="content">
+          <H3 textAlign="center" mb="2.5rem">
+            Seja bem vindo 🥳
+          </H3>
+          {query != null && query.get("retry") == "true" && (
+            <Box>
+              <Typography
+                textAlign="center"
+                backgroundColor={theme.colors.error.light}
+                fontSize="0.95rem"
+                p="0.75rem"
+                mb="1rem"
+              >
+                Login ou senha incorretos
+              </Typography>
+            </Box>
+          )}
+
+          {/* <H5 fontWeight="600" fontSize="12px" color="gray.800" textAlign="center" mb="2.25rem">
           Faça seu login
         </H5> */}
 
-        <TextField
-          fullwidth
-          mb="0.75rem"
-          id="email"
-          name="email"
-          type="email"
-          onBlur={handleBlur}
-          value={values.email}
-          onChange={handleChange}
-          placeholder="meu_email@exemplo.com"
-          label="Seu email"
-          errorText={touched.email && errors.email}
-        />
+          <TextField
+            fullwidth
+            mb="0.75rem"
+            id="email"
+            name="email"
+            type="email"
+            onBlur={handleBlur}
+            value={values.email}
+            onChange={handleChange}
+            placeholder="meu_email@exemplo.com"
+            label="Seu email"
+            errorText={touched.email && errors.email}
+          />
 
-        <TextField
-          mb="1rem"
-          fullwidth
-          id="id"
-          name="password"
-          label="Senha"
-          autoComplete="on"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          placeholder="*********"
-          value={values.password}
-          errorText={touched.password && errors.password}
-          type={passwordVisibility ? "text" : "password"}
-          endAdornment={
-            <IconButton
-              p="0.25rem"
-              mr="0.25rem"
-              type="button"
-              onClick={togglePasswordVisibility}
-              color={passwordVisibility ? "gray.700" : "gray.600"}
-            >
-              <Icon variant="small" defaultcolor="currentColor">
-                {passwordVisibility ? "eye-alt" : "eye"}
-              </Icon>
-            </IconButton>
-          }
-        />
+          <TextField
+            mb="1rem"
+            fullwidth
+            id="id"
+            name="password"
+            label="Senha"
+            autoComplete="on"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            placeholder="*********"
+            value={values.password}
+            errorText={touched.password && errors.password}
+            type={passwordVisibility ? "text" : "password"}
+            endAdornment={
+              <IconButton
+                p="0.25rem"
+                mr="0.25rem"
+                type="button"
+                onClick={togglePasswordVisibility}
+                color={passwordVisibility ? "gray.700" : "gray.600"}
+              >
+                <Icon variant="small" defaultcolor="currentColor">
+                  {passwordVisibility ? "eye-alt" : "eye"}
+                </Icon>
+              </IconButton>
+            }
+          />
 
-        <Button
-          mb="1.65rem"
-          mt="2rem"
-          variant="contained"
-          color="primary"
-          formAction={formAction}
-          fullwidth
-        >
-          Entrar
-        </Button>
-        {/* 
+          <Button
+            mb="1.65rem"
+            mt="2rem"
+            variant="contained"
+            color="primary"
+            formAction={formAction}
+            fullwidth
+          >
+            Entrar
+          </Button>
+          {/* 
         <Box mb="1rem">
           <Divider width="200px" mx="auto" />
           <FlexBox justifyContent="center" mt="-14px">
@@ -163,34 +174,34 @@ export default function Login({ formAction }: { formAction: any }) {
           <Small fontWeight="600">Continue with Google</Small>
         </FlexBox> */}
 
-        <FlexBox justifyContent="center" mb="1.25rem">
-          <SemiSpan>Ainda não tem uma conta?</SemiSpan>
-          <Link href="/signup">
+          <FlexBox justifyContent="center" mb="1.25rem">
+            <SemiSpan>Ainda não tem uma conta?</SemiSpan>
+            <Link href="/signup">
+              <H6
+                ml="0.5rem"
+                borderBottom="1px solid"
+                borderColor="primary.main"
+                color="primary.main"
+              >
+                Criar Conta
+              </H6>
+            </Link>
+          </FlexBox>
+        </form>
+        <FlexBox justifyContent="center" bg="gray.200" py="19px">
+          <SemiSpan>Esqueceu sua senha?</SemiSpan>
+          <Link href={`/recovery?email=${values.email}`}>
             <H6
               ml="0.5rem"
               borderBottom="1px solid"
               borderColor="primary.main"
               color="primary.main"
             >
-              Criar Conta
+              Recuperar Senha
             </H6>
           </Link>
         </FlexBox>
-      </form>
-
-      <FlexBox justifyContent="center" bg="gray.200" py="19px">
-        <SemiSpan>Esqueceu sua senha?</SemiSpan>
-        <Link href={`/recovery?email=${values.email}`}>
-          <H6
-            ml="0.5rem"
-            borderBottom="1px solid"
-            borderColor="primary.main"
-            color="primary.main"
-          >
-            Recuperar Senha
-          </H6>
-        </Link>
-      </FlexBox>
-    </StyledRoot>
+      </StyledRoot>
+    </Collapse>
   );
 }

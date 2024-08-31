@@ -126,4 +126,8 @@ const nextConfig = {
 // });
 // // export default nextConfig;
 
-module.exports = withPWA(removeImports(nextConfig));
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer(withPWA(removeImports(nextConfig)));
