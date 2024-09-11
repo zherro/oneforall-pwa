@@ -48,7 +48,7 @@ const CardapioWelcome = ({setStartOwn}: any) => {
 
             <Box mt="1rem" mb="1rem">
               <SemiSpan color="secondary.main" borderBottom="1px solid">
-                ENIAR MEU CARDAPIO{" >>"}
+                ENVIAR MEU CARDAPIO{" >>"}
               </SemiSpan>
             </Box>
           </LinkCard>

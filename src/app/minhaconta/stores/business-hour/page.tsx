@@ -15,7 +15,7 @@ import Icon from "@component/icon/Icon";
 import FlexBox from "@component/FlexBox";
 import BusinessHours from "@supabaseutils/model/BusinessHours";
 import { fetchGet, fetchPost } from "@hook/useFetch2";
-import { API_ROUTES } from "@routes/app.routes";
+import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import { useRouter } from "next/navigation";
 import useHandleError from "@hook/useHandleError";
 import useNotify from "@hook/useNotify";
@@ -23,6 +23,8 @@ import Grid from "@component/grid/Grid";
 import { useSession } from "@supabaseutils/supabase.provider";
 import Box from "@component/Box";
 import { mask } from "@lib/mask/lib/mask";
+import StringUtils from "@utils/helpers/String.utils";
+import Link from "next/link";
 
 const initialBusinessHours: BusinessHours = {
   monday: [],
@@ -74,7 +76,7 @@ const BusinessHoursPage = () => {
   const [updated, setUpdated] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tenant != undefined) {
+    if (!StringUtils.isEmpty(tenant?.id)) {
       fetchGet(URI + `/${tenant?.id}`, {
         handleData: (data) => {
           setBusinessHours(data?.monday ? data : initialBusinessHours);
@@ -146,158 +148,208 @@ const BusinessHoursPage = () => {
   };
 
   return (
-    <>
-      <Grid container splited>
-        <Grid item xs={12}>
-          <DashboardPageHeader
-            title="Horário de Funcionamento"
-            iconName="clock-circular-outline"
-          />
-          <Divider
-            width="100%"
-            backgroundColor="gray.400"
-            mt="0.35rem"
-            mb="2rem"
-          />
-          <Box
-            border="1px solid"
-            borderRadius="6px"
-            p="0.75rem"
-            shadow={6}
-            borderColor="gray.400"
-            mb="2rem"
-          >
-            <H4 mb="0.75rem" color="gray.700">
-              Aqui você gerencia os horários de atendimento da sua loja!
-            </H4>
-            <SemiSpan>
-              Aqui você gerência os horários de atendimento da sua loja. Caso a
-              sua loja tenha pausas durante o dia, você pode configurar mais de
-              um horário.
-            </SemiSpan>
-          </Box>
-        </Grid>
-      </Grid>
-      <Grid container splited>
-        <Grid item xs={12}>
-          {Object.keys(businessHoursSort(businessHours)).map((day) => (
-            <>
-              <FlexBox mt="0.25rem">
-                <Box>{getWeekeDay(day)}:</Box>
-                <FlexBox flexDirection="column">
-                  {businessHours[day].map((slot, index) => (
-                    <FlexBox justifyContent="">
-                      <Typography ml="1rem" fontWeight="bold">
-                        {slot.open}
-                      </Typography>
-                      <Typography px="1rem">{" até "}</Typography>
-                      <Typography fontWeight="bold">{slot.close}</Typography>
-                    </FlexBox>
-                  ))}
-                </FlexBox>
-              </FlexBox>
-            </>
-          ))}
-        </Grid>
-      </Grid>
-      <Divider mb="2.5rem" />
-      <Grid container splited>
-        <Grid item xs={12}>
-          {Object.keys(businessHoursSort(businessHours)).map((day) => (
-            <Box key={day} mb={5}>
-              <H3 size="md" mt="1.5rem" fontWeight="600">
-                {getWeekeDay(day)}
-              </H3>
-              <Divider width="100%" bg="gray.400" mb="2rem" />
-              <VStack spacing={3} align="start">
-                {businessHours[day].map((slot, index) => (
-                  <HStack key={index} spacing={3}>
-                    <FormControl id={`${day}-open-${index}`}>
-                      <FormLabel>Abre às</FormLabel>
-                      <Input
-                        width="10rem"
-                        type="text"
-                        value={slot.open}
-                        onChange={(e) =>
-                          handleTimeSlotChange(
-                            day,
-                            index,
-                            "open",
-                            mask(
-                              validateAndCorrectTime(e.target.value),
-                              "99:99"
-                            )
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <FormControl id={`${day}-close-${index}`}>
-                      <FormLabel>Fecha às</FormLabel>
-                      <Input
-                        width="10rem"
-                        type="text"
-                        value={slot.close}
-                        onChange={(e) =>
-                          handleTimeSlotChange(
-                            day,
-                            index,
-                            "close",
-                            mask(
-                              validateAndCorrectTime(e.target.value),
-                              "99:99"
-                            )
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <Button
-                      mt="2rem"
-                      ml="1rem"
-                      onClick={() => removeTimeSlot(day, index)}
-                      color="error"
-                      variant="outlined"
-                      width="38px"
-                      height="38px"
-                    >
-                      <Icon>minus</Icon>
-                    </Button>
-                  </HStack>
-                ))}
+    (StringUtils.isEmpty(tenant?.id) && (
+      <>
+        <Grid container splited>
+          <Grid item xs={12}>
+            <DashboardPageHeader
+              title="Horário de Funcionamento"
+              iconName="clock-circular-outline"
+            />
+            <Divider
+              width="100%"
+              backgroundColor="gray.400"
+              mt="0.35rem"
+              mb="2rem"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <H2 mt="1.5rem" textAlign="center" color="gray.600">
+              Oops!
+            </H2>
+            <FlexBox
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <Typography
+                mt="1rem"
+                fontSize="1rem"
+                textAlign="center"
+                maxWidth="500px"
+              >
+                Selecione uma loja! Para configurar o horário de funcionamento,
+                primeiro você precisa selecionar uma loja.
+              </Typography>
+              <Link href={APP_ROUTES.DASHBOARD.STORE.MY_STORE}>
                 <Button
-                  onClick={() => addTimeSlot(day)}
-                  variant="outlined"
+                  mt="2rem"
+                  variant="contained"
+                  width="160px"
                   color="primary"
                 >
-                  <Icon>plus</Icon>
+                  Gerenciar Loja
                 </Button>
-              </VStack>
-            </Box>
-          ))}
-          <FlexBox justifyContent="center" mb="1.5rem" pt="2.5rem">
-            <Button
-              disabled={loading}
-              color="primary"
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              <Icon mr="1rem">fa/solid/floppy-disk</Icon> Salvar Alterações
-            </Button>
-          </FlexBox>
-          <FlexBox justifyContent="center" pb="4rem">
-            {updated && (
-              <Typography
-                fontSize="1.25rem"
-                fontWeight="600"
-                textAlign="center"
-                color="success.main"
-              >
-                Horários atualizados com sucesso!
-              </Typography>
-            )}
-          </FlexBox>
+              </Link>
+            </FlexBox>
+          </Grid>
         </Grid>
-      </Grid>
-    </>
+      </>
+    )) || (
+      <>
+        <Grid container splited>
+          <Grid item xs={12}>
+            <DashboardPageHeader
+              title="Horário de Funcionamento"
+              iconName="clock-circular-outline"
+            />
+            <Divider
+              width="100%"
+              backgroundColor="gray.400"
+              mt="0.35rem"
+              mb="2rem"
+            />
+            <Box
+              border="1px solid"
+              borderRadius="6px"
+              p="0.75rem"
+              shadow={6}
+              borderColor="gray.400"
+              mb="2rem"
+            >
+              <H4 mb="0.75rem" color="gray.700">
+                Aqui você gerencia os horários de atendimento da sua loja!
+              </H4>
+              <SemiSpan>
+                Aqui você gerência os horários de atendimento da sua loja. Caso
+                a sua loja tenha pausas durante o dia, você pode configurar mais
+                de um horário.
+              </SemiSpan>
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container splited>
+          <Grid item xs={12}>
+            {Object.keys(businessHoursSort(businessHours)).map((day) => (
+              <>
+                <FlexBox mt="0.25rem">
+                  <Box>{getWeekeDay(day)}:</Box>
+                  <FlexBox flexDirection="column">
+                    {businessHours[day].map((slot, index) => (
+                      <FlexBox justifyContent="">
+                        <Typography ml="1rem" fontWeight="bold">
+                          {slot.open}
+                        </Typography>
+                        <Typography px="1rem">{" até "}</Typography>
+                        <Typography fontWeight="bold">{slot.close}</Typography>
+                      </FlexBox>
+                    ))}
+                  </FlexBox>
+                </FlexBox>
+              </>
+            ))}
+          </Grid>
+        </Grid>
+        <Divider mb="2.5rem" />
+        <Grid container splited>
+          <Grid item xs={12}>
+            {Object.keys(businessHoursSort(businessHours)).map((day) => (
+              <Box key={day} mb={5}>
+                <H3 size="md" mt="1.5rem" fontWeight="600">
+                  {getWeekeDay(day)}
+                </H3>
+                <Divider width="100%" bg="gray.400" mb="2rem" />
+                <VStack spacing={3} align="start">
+                  {businessHours[day].map((slot, index) => (
+                    <HStack key={index} spacing={3}>
+                      <FormControl id={`${day}-open-${index}`}>
+                        <FormLabel>Abre às</FormLabel>
+                        <Input
+                          width="10rem"
+                          type="text"
+                          value={slot.open}
+                          onChange={(e) =>
+                            handleTimeSlotChange(
+                              day,
+                              index,
+                              "open",
+                              mask(
+                                validateAndCorrectTime(e.target.value),
+                                "99:99"
+                              )
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormControl id={`${day}-close-${index}`}>
+                        <FormLabel>Fecha às</FormLabel>
+                        <Input
+                          width="10rem"
+                          type="text"
+                          value={slot.close}
+                          onChange={(e) =>
+                            handleTimeSlotChange(
+                              day,
+                              index,
+                              "close",
+                              mask(
+                                validateAndCorrectTime(e.target.value),
+                                "99:99"
+                              )
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <Button
+                        mt="2rem"
+                        ml="1rem"
+                        onClick={() => removeTimeSlot(day, index)}
+                        color="error"
+                        variant="outlined"
+                        width="38px"
+                        height="38px"
+                      >
+                        <Icon>minus</Icon>
+                      </Button>
+                    </HStack>
+                  ))}
+                  <Button
+                    onClick={() => addTimeSlot(day)}
+                    variant="outlined"
+                    color="primary"
+                  >
+                    <Icon>plus</Icon>
+                  </Button>
+                </VStack>
+              </Box>
+            ))}
+            <FlexBox justifyContent="center" mb="1.5rem" pt="2.5rem">
+              <Button
+                disabled={loading}
+                color="primary"
+                variant="contained"
+                onClick={handleSubmit}
+              >
+                <Icon mr="1rem">fa/solid/floppy-disk</Icon> Salvar Alterações
+              </Button>
+            </FlexBox>
+            <FlexBox justifyContent="center" pb="4rem">
+              {updated && (
+                <Typography
+                  fontSize="1.25rem"
+                  fontWeight="600"
+                  textAlign="center"
+                  color="success.main"
+                >
+                  Horários atualizados com sucesso!
+                </Typography>
+              )}
+            </FlexBox>
+          </Grid>
+        </Grid>
+      </>
+    )
   );
 };
 

@@ -99,7 +99,7 @@ const CardapioEnviarArquivo = () => {
               </Button>
             </Link>
             <SemiSpan marginTop="1.5rem" fontSize="1rem" textAlign="center">
-              Em até 12 horras uteis seu cardápio estará configurado.
+              Em até 12 horas úteis seu cardápio estará configurado.
             </SemiSpan>
           </FlexBox>
         </Grid>

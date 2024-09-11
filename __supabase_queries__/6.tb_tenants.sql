@@ -12,6 +12,7 @@ CREATE TABLE public.tenants (
 	deleted bool DEFAULT false NOT NULL,
 	user_id uuid NULL,
 	owner_id uuid DEFAULT auth.uid() NULL,
+	tenant_id uuid DEFAULT gen_random_uuid() NOT NULL,
 	CONSTRAINT tenants_pkey PRIMARY KEY (id)
 );
 
