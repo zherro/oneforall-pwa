@@ -7,13 +7,11 @@ import TitleCard from "@component/cards/TitleCard";
 import TipCard from "@component/cards/TipCard";
 import Stepper from "@component/Stepper";
 import {
-  Flex,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Spacer,
   Stack,
   Switch,
   Text,
@@ -21,7 +19,6 @@ import {
 import Link from "next/link";
 import { Button } from "@component/buttons";
 import Icon from "@component/icon/Icon";
-import { Accordion, AccordionHeader } from "@component/accordion";
 import { SemiSpan } from "@component/Typography";
 import Divider from "@component/Divider";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -31,10 +28,11 @@ import DeliveryCatalog from "./DeliveryCatalog";
 import useFetch from "@hook/useFetch";
 import useNotify from "@hook/useNotify";
 import { StatusEntity } from "@supabaseutils/model/types/Status.type";
-import { fetchGet } from "@hook/useFetch2";
+import { fetchGet, fetchPost } from "@hook/useFetch2";
 import TipBox from "@component/tips/TipBox";
 import CardapioWelcome from "../CardapioWelcome";
 import { maskMoney } from "@lib/mask/lib/mask";
+import useHandleError from "@hook/useHandleError";
 
 // ======================================================
 type Props = { children: ReactNode };
@@ -43,6 +41,8 @@ type Props = { children: ReactNode };
 const PageCatalogFood = ({ start = false }) => {
   const query = useSearchParams();
   const API_URI_CARDAPIO = API_ROUTES.CUSTOMER.CATALOG.MY_CARDAPIO;
+  const API_URI_CARDAPIO_UPDATE_STATUS_CATEGORY =
+    API_ROUTES.CUSTOMER.CATALOG.CATEGORY_CHANGE_STATUS;
 
   const [category, handleDataCategory] = useState<any>();
   const [errorCategory, handleErrorCategory] = useState<any>();
@@ -73,10 +73,36 @@ const PageCatalogFood = ({ start = false }) => {
       notify: true,
       headers: {},
       handleData: handleDataCategory,
-      handleError: handleErrorCategory,
+      handleError: useHandleError(notify),
       onLoading: onLoadingCategory,
     });
   }, [refresh]);
+
+  const updateStatusCategory = (checked: boolean, categoryId: string) => {
+    const status = checked ? StatusEntity.ACTIVE : StatusEntity.SUSPENSE;
+
+    const handleSuccessStatusCategory = (data) =>
+      handleDataCategory((all) =>
+        all.map((c) => {
+          if (c.category_id == categoryId) c.category_status = status;
+          return c;
+        })
+      );
+
+    fetchPost(
+      API_URI_CARDAPIO_UPDATE_STATUS_CATEGORY,
+      {
+        categoryId,
+        status,
+      },
+      {
+        notify: true,
+        headers: {},
+        handleData: handleSuccessStatusCategory,
+        handleError: useHandleError(notify),
+      }
+    );
+  };
 
   const checkoutSchema = yup.object().shape({
     name: yup.string().required("Informe o nome da categoria"),
@@ -186,6 +212,7 @@ const PageCatalogFood = ({ start = false }) => {
           {(category?.length > 0 &&
             category?.map((cat: any) => (
               <Box
+                key={cat.category_id}
                 mt="1.5rem"
                 width="100%"
                 border="1px solid"
@@ -204,6 +231,7 @@ const PageCatalogFood = ({ start = false }) => {
                         fontWeight="600"
                       >
                         {cat.category}
+                        {cat.category_id}
                       </SemiSpan>
                     </Box>
                   </Grid>
@@ -243,7 +271,10 @@ const PageCatalogFood = ({ start = false }) => {
                         size="md"
                         isChecked={cat.category_status == StatusEntity.ACTIVE}
                         onChange={(event) => {
-                          cat.status = StatusEntity.ACTIVE;
+                          updateStatusCategory(
+                            event.target.checked,
+                            cat.category_id
+                          );
                         }}
                       />
                       {cat.category_status == StatusEntity.ACTIVE && (

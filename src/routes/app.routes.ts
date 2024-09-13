@@ -73,6 +73,7 @@ export const API_ROUTES = {
       MY_CARDAPIO: "/api/catalog/cardapio",
       PRODUCT: "/api/catalog/product",
       CATEGORY: "/api/catalog/category",
+      CATEGORY_CHANGE_STATUS: "/api/catalog/category/change/status",
       SEND_CATALOG_FILE: "/api/catalog/upload-menu",
     },
   },

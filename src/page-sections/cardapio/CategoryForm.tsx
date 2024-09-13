@@ -1,4 +1,4 @@
-"use client";
+"use client";;
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Select from "@component/Select";
@@ -14,11 +14,8 @@ import { StatusEntity } from "@supabaseutils/model/types/Status.type";
 import Link from "next/link";
 import APP_ROUTES, { API_ROUTES } from "@routes/app.routes";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { fetchGet, fetchPost } from "@hook/useFetch2";
-import StringUtils from "@utils/helpers/String.utils";
-import useHandleError from "@hook/useHandleError";
-import useNotify from "@hook/useNotify";
+import { useState } from "react";
+import { fetchPost } from "@hook/useFetch2";
 
 const initialValues = {
   name: "",
@@ -156,7 +153,7 @@ const CategoryForm = ({ uuid, data }: { uuid?: string; data?: any }) => {
                     "status",
                     event.target.checked
                       ? StatusEntity.ACTIVE
-                      : StatusEntity.INATIVE
+                      : StatusEntity.SUSPENSE
                   )
                 }
               />

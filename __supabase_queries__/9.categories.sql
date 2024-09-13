@@ -15,7 +15,8 @@ CREATE TABLE public.categories (
 	name varchar NOT NULL,
 	category_type varchar NOT NULL,
 	info text NULL,
-	disponibility jsonb NULL
+	disponibility jsonb,	
+	CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 
 
