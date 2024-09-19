@@ -24,6 +24,7 @@ import { fetchGet, fetchPost } from "@hook/useFetch2";
 import { productType } from "@data/productTypes";
 import FormToolbox from "@sections/forms/FormToolbox";
 import NumberUtils from "@utils/helpers/Number.utils";
+import CodeUtils from "@utils/code/codeUtils";
 
 // ======================================================
 type screens = "home" | "price" | "complements" | "image" | "disponibility";
@@ -77,6 +78,7 @@ const screenContentInitialUpdated = (started: boolean): ScreenContentProps => {
 };
 
 const initialState: ProductModel = {
+  id: CodeUtils.uuid(),
   product_type: "",
   name: "",
   description: "",
@@ -336,6 +338,7 @@ const NewProductPage = ({ productId }: { productId?: string }) => {
             }
           }}
           saveCallback={(product: any, f?: any) => {
+            onLoading(true);
             saveProduct(product);
           }}
         />

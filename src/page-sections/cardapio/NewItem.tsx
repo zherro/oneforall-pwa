@@ -63,8 +63,9 @@ const NewProductItem = ({
   );
 
   const handleFormSubmit = async (values: any) => {
-    console.log(values);
-    saveCallback(values);
+    if (!submited) {
+      saveCallback(values);
+    }
   };
 
   const refreshCompList = (c: any) => setComplements([...c]);
@@ -241,6 +242,7 @@ const NewProductItem = ({
                 )}
                 {page !== "home" && selectedStep == 4 && (
                   <Button
+                    disabled={submited}
                     onClick={(e) => {
                       saveCallback(values, files);
                       setFiles([]);
